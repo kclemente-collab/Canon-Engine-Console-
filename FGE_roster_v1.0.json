@@ -1,0 +1,700 @@
+{
+  "schema": "FGE_ROSTER_v1.0",
+  "generated": "2026-05-03",
+  "author": "C.A.",
+  "doctrine": "Prompt Engine Matrix v2.0 — Feral Gloss Empire",
+  "master_anchor": "Olivia de Berardinis lineage, single-source moonlight tenebrism, subject brightest element, predatory buyer-engagement gaze, Phase 3 Afterglow flush, earned wet specular highlights only, sensual allure with rhythmic sensuality, --ar 2:3 --stylize 320 --v 6 --q 3 --style raw",
+  "lattice_key": {
+    "S1_origin_scar": "Weight of origin trauma / founding event. Defines raw power baseline.",
+    "S2_body_logic": "Mastery and intentionality of physical presence. How the body serves the identity.",
+    "S3_frame_identity": "Visual strength of the character as a compositional anchor. How recognizable the silhouette.",
+    "S4_silhouette_signature": "Distinctiveness of outline across environments. Cross-scene persistence.",
+    "S5_behavioral_myth": "Depth of behavioral legend. How much story the character carries without speaking."
+  },
+  "total": 20,
+  "female": 15,
+  "male": 5,
+  "characters": [
+    {
+      "sb_id": "SB_301",
+      "name": "Nyxara Voss",
+      "gender": "Female",
+      "title": "Midnight Goddess of Seduction",
+      "category": "Goddess",
+      "tier": "Crown",
+      "graph_position": "Primary anchor — high connectivity, large node",
+      "dominance_lattice": {
+        "S1_origin_scar": 8,
+        "S2_body_logic": 10,
+        "S3_frame_identity": 9,
+        "S4_silhouette_signature": 9,
+        "S5_behavioral_myth": 10
+      },
+      "vector": "S1=8, S2=10, S3=9, S4=9, S5=10",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "The Haloed Eclipse",
+        "pose_foundation": "reclined_control",
+        "tension_state": "micro",
+        "camera_module": "eye_level_intimacy",
+        "hormone_level": 3,
+        "action_tension": "sustained_grip"
+      },
+      "core_idea": "Midnight seduction goddess — eternal pull, never fully seen"
+    },
+    {
+      "sb_id": "SB_302",
+      "name": "Lirael Kai",
+      "gender": "Female",
+      "title": "Queen of Obsidian Flames",
+      "category": "Queen",
+      "tier": "Crown",
+      "graph_position": "Primary anchor — large node, central cluster adjacent",
+      "dominance_lattice": {
+        "S1_origin_scar": 9,
+        "S2_body_logic": 8,
+        "S3_frame_identity": 10,
+        "S4_silhouette_signature": 8,
+        "S5_behavioral_myth": 9
+      },
+      "vector": "S1=9, S2=8, S3=10, S4=8, S5=9",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "The Gilded Threshold",
+        "pose_foundation": "dominance_lean",
+        "tension_state": "full",
+        "camera_module": "low_angle_power",
+        "hormone_level": 3,
+        "action_tension": "explosive_release"
+      },
+      "core_idea": "Obsidian flame queen — sovereign authority, controlled destruction"
+    },
+    {
+      "sb_id": "SB_303",
+      "name": "Sable Thorn",
+      "gender": "Female",
+      "title": "Council Siren of Desire",
+      "category": "Council",
+      "tier": "Crown",
+      "graph_position": "Mid-cluster — moderate node, bidirectional arrows",
+      "dominance_lattice": {
+        "S1_origin_scar": 7,
+        "S2_body_logic": 9,
+        "S3_frame_identity": 7,
+        "S4_silhouette_signature": 8,
+        "S5_behavioral_myth": 8
+      },
+      "vector": "S1=7, S2=9, S3=7, S4=8, S5=8",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "The Nocturnal Veil",
+        "pose_foundation": "twist_reveal",
+        "tension_state": "micro",
+        "camera_module": "eye_level_intimacy",
+        "hormone_level": 3,
+        "action_tension": "sustained_grip"
+      },
+      "core_idea": "Council siren — desire as political instrument"
+    },
+    {
+      "sb_id": "SB_304",
+      "name": "Vespera Lune",
+      "gender": "Female",
+      "title": "Mythic Moon Serpent",
+      "category": "Mythic Creature",
+      "tier": "Crown",
+      "graph_position": "Mid-cluster peripheral — moderate node, outward arrows",
+      "dominance_lattice": {
+        "S1_origin_scar": 6,
+        "S2_body_logic": 7,
+        "S3_frame_identity": 9,
+        "S4_silhouette_signature": 10,
+        "S5_behavioral_myth": 9
+      },
+      "vector": "S1=6, S2=7, S3=9, S4=10, S5=9",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "The Haloed Eclipse",
+        "pose_foundation": "ascension_stretch",
+        "tension_state": "micro",
+        "camera_module": "profile_side_view",
+        "hormone_level": 2,
+        "action_tension": "sustained_grip"
+      },
+      "core_idea": "Moon serpent — ancient coil, lunar patience, strikes without warning"
+    },
+    {
+      "sb_id": "SB_305",
+      "name": "Kaelith",
+      "gender": "Male",
+      "title": "King of Eternal Hunger",
+      "category": "King",
+      "tier": "Crown",
+      "graph_position": "Core cluster — large purple node, high inbound connections",
+      "dominance_lattice": {
+        "S1_origin_scar": 10,
+        "S2_body_logic": 9,
+        "S3_frame_identity": 8,
+        "S4_silhouette_signature": 7,
+        "S5_behavioral_myth": 10
+      },
+      "vector": "S1=10, S2=9, S3=8, S4=7, S5=10",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "Crimson Fang",
+        "pose_foundation": "predator_stalk",
+        "tension_state": "full",
+        "camera_module": "low_angle_power",
+        "hormone_level": 3,
+        "action_tension": "explosive_release"
+      },
+      "core_idea": "King of eternal hunger — never sated, never stopped"
+    },
+    {
+      "sb_id": "SB_306",
+      "name": "Astra Voss",
+      "gender": "Female",
+      "title": "Pet Empress of Velvet Shadows",
+      "category": "Pet",
+      "tier": "Rare",
+      "graph_position": "Satellite — top of graph, single inbound from core cluster",
+      "dominance_lattice": {
+        "S1_origin_scar": 4,
+        "S2_body_logic": 6,
+        "S3_frame_identity": 7,
+        "S4_silhouette_signature": 8,
+        "S5_behavioral_myth": 5
+      },
+      "vector": "S1=4, S2=6, S3=7, S4=8, S5=5",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "Velvet Haze",
+        "pose_foundation": "reclined_control",
+        "tension_state": "relaxed",
+        "camera_module": "macro_focus",
+        "hormone_level": 2,
+        "action_tension": "sustained_grip"
+      },
+      "core_idea": "Velvet shadow empress — soft dominance, dangerous comfort"
+    },
+    {
+      "sb_id": "SB_307",
+      "name": "Seraphine Vale",
+      "gender": "Female",
+      "title": "Goddess of Liquid Starlight",
+      "category": "Goddess",
+      "tier": "Crown",
+      "graph_position": "Primary anchor — largest female node, maximum outbound connections",
+      "dominance_lattice": {
+        "S1_origin_scar": 7,
+        "S2_body_logic": 10,
+        "S3_frame_identity": 10,
+        "S4_silhouette_signature": 9,
+        "S5_behavioral_myth": 9
+      },
+      "vector": "S1=7, S2=10, S3=10, S4=9, S5=9",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "The Ocular Sanctum",
+        "pose_foundation": "ascension_stretch",
+        "tension_state": "micro",
+        "camera_module": "orbit_motion",
+        "hormone_level": 3,
+        "action_tension": "explosive_release"
+      },
+      "core_idea": "Liquid starlight goddess — radiance as force, not decoration"
+    },
+    {
+      "sb_id": "SB_308",
+      "name": "Ravyn Quill",
+      "gender": "Female",
+      "title": "Council Shadow Weaver",
+      "category": "Council",
+      "tier": "Crown",
+      "graph_position": "Mid-cluster — moderate node, weaves between factions",
+      "dominance_lattice": {
+        "S1_origin_scar": 6,
+        "S2_body_logic": 8,
+        "S3_frame_identity": 7,
+        "S4_silhouette_signature": 6,
+        "S5_behavioral_myth": 9
+      },
+      "vector": "S1=6, S2=8, S3=7, S4=6, S5=9",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "The Nocturnal Veil",
+        "pose_foundation": "twist_reveal",
+        "tension_state": "micro",
+        "camera_module": "locked_frame_drift",
+        "hormone_level": 2,
+        "action_tension": "sustained_grip"
+      },
+      "core_idea": "Shadow weaver — operates between layers, never fully visible"
+    },
+    {
+      "sb_id": "SB_309",
+      "name": "Elyndra",
+      "gender": "Female",
+      "title": "Mythic Phoenix Queen",
+      "category": "Queen / Mythic",
+      "tier": "Crown",
+      "graph_position": "Strong peripheral — large pink node, rightward cluster",
+      "dominance_lattice": {
+        "S1_origin_scar": 9,
+        "S2_body_logic": 8,
+        "S3_frame_identity": 9,
+        "S4_silhouette_signature": 10,
+        "S5_behavioral_myth": 9
+      },
+      "vector": "S1=9, S2=8, S3=9, S4=10, S5=9",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "Eternal Forge",
+        "pose_foundation": "ascension_stretch",
+        "tension_state": "full",
+        "camera_module": "low_angle_power",
+        "hormone_level": 3,
+        "action_tension": "explosive_release"
+      },
+      "core_idea": "Phoenix queen — destruction is her crown, rebirth is her weapon"
+    },
+    {
+      "sb_id": "SB_310",
+      "name": "Draven Sol",
+      "gender": "Male",
+      "title": "God of Obsidian Desire",
+      "category": "God",
+      "tier": "Crown",
+      "graph_position": "Core cluster — central purple node, maximum bidirectional connections",
+      "dominance_lattice": {
+        "S1_origin_scar": 9,
+        "S2_body_logic": 10,
+        "S3_frame_identity": 9,
+        "S4_silhouette_signature": 8,
+        "S5_behavioral_myth": 10
+      },
+      "vector": "S1=9, S2=10, S3=9, S4=8, S5=10",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "The Gilded Threshold",
+        "pose_foundation": "dominance_lean",
+        "tension_state": "full",
+        "camera_module": "low_angle_power",
+        "hormone_level": 3,
+        "action_tension": "explosive_release"
+      },
+      "core_idea": "Obsidian desire god — wants everything, takes only what matters"
+    },
+    {
+      "sb_id": "SB_311",
+      "name": "Lunaire Voss",
+      "gender": "Female",
+      "title": "Pet Siren of Moonlit Silk",
+      "category": "Pet",
+      "tier": "Rare",
+      "graph_position": "Far satellite — rightmost node, single connection thread",
+      "dominance_lattice": {
+        "S1_origin_scar": 3,
+        "S2_body_logic": 7,
+        "S3_frame_identity": 8,
+        "S4_silhouette_signature": 9,
+        "S5_behavioral_myth": 4
+      },
+      "vector": "S1=3, S2=7, S3=8, S4=9, S5=4",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "The Haloed Eclipse",
+        "pose_foundation": "reclined_control",
+        "tension_state": "relaxed",
+        "camera_module": "macro_focus",
+        "hormone_level": 2,
+        "action_tension": "sustained_grip"
+      },
+      "core_idea": "Moonlit silk siren — pure surface magnetism, depth hidden beneath"
+    },
+    {
+      "sb_id": "SB_312",
+      "name": "Thalira",
+      "gender": "Female",
+      "title": "Queen of Whispering Venom",
+      "category": "Queen",
+      "tier": "Crown",
+      "graph_position": "Lower satellite — bottom left, single thread from primary anchor",
+      "dominance_lattice": {
+        "S1_origin_scar": 8,
+        "S2_body_logic": 7,
+        "S3_frame_identity": 6,
+        "S4_silhouette_signature": 7,
+        "S5_behavioral_myth": 10
+      },
+      "vector": "S1=8, S2=7, S3=6, S4=7, S5=10",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "Neon Abyss",
+        "pose_foundation": "reclined_control",
+        "tension_state": "micro",
+        "camera_module": "progressive_push_zoom",
+        "hormone_level": 2,
+        "action_tension": "sustained_grip"
+      },
+      "core_idea": "Whispering venom queen — the slowest kills are hers"
+    },
+    {
+      "sb_id": "SB_313",
+      "name": "Morgath Kane",
+      "gender": "Male",
+      "title": "Council Lord of Ruin",
+      "category": "Council",
+      "tier": "Crown",
+      "graph_position": "Core cluster — central purple node, high connectivity",
+      "dominance_lattice": {
+        "S1_origin_scar": 10,
+        "S2_body_logic": 7,
+        "S3_frame_identity": 7,
+        "S4_silhouette_signature": 6,
+        "S5_behavioral_myth": 9
+      },
+      "vector": "S1=10, S2=7, S3=7, S4=6, S5=9",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "Obsidian Temple",
+        "pose_foundation": "dominance_lean",
+        "tension_state": "full",
+        "camera_module": "low_angle_power",
+        "hormone_level": 3,
+        "action_tension": "sharp_impact"
+      },
+      "core_idea": "Council lord of ruin — order through destruction, always deliberate"
+    },
+    {
+      "sb_id": "SB_314",
+      "name": "Nyrael",
+      "gender": "Female",
+      "title": "Mythic Void Dragoness",
+      "category": "Mythic Creature",
+      "tier": "Crown",
+      "graph_position": "Upper cluster peripheral — moderate pink node, outward arrows",
+      "dominance_lattice": {
+        "S1_origin_scar": 7,
+        "S2_body_logic": 6,
+        "S3_frame_identity": 10,
+        "S4_silhouette_signature": 10,
+        "S5_behavioral_myth": 8
+      },
+      "vector": "S1=7, S2=6, S3=10, S4=10, S5=8",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "Prism Fracture",
+        "pose_foundation": "ascension_stretch",
+        "tension_state": "full",
+        "camera_module": "profile_side_view",
+        "hormone_level": 2,
+        "action_tension": "explosive_release"
+      },
+      "core_idea": "Void dragoness — her silhouette alone ends conversations"
+    },
+    {
+      "sb_id": "SB_315",
+      "name": "Celeste Voss",
+      "gender": "Female",
+      "title": "Goddess of Pulsing Afterglow",
+      "category": "Goddess",
+      "tier": "Crown",
+      "graph_position": "Far satellite — upper left, single thread from primary cluster",
+      "dominance_lattice": {
+        "S1_origin_scar": 5,
+        "S2_body_logic": 9,
+        "S3_frame_identity": 8,
+        "S4_silhouette_signature": 7,
+        "S5_behavioral_myth": 8
+      },
+      "vector": "S1=5, S2=9, S3=8, S4=7, S5=8",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "The Ocular Sanctum",
+        "pose_foundation": "reclined_control",
+        "tension_state": "relaxed",
+        "camera_module": "eye_level_intimacy",
+        "hormone_level": 3,
+        "action_tension": "sustained_grip"
+      },
+      "core_idea": "Afterglow goddess — exists in the moment after peak, infinite warmth"
+    },
+    {
+      "sb_id": "SB_316",
+      "name": "Rogue",
+      "gender": "Male",
+      "title": "Pet Shadow Wolf King",
+      "category": "Pet",
+      "tier": "Rare",
+      "graph_position": "Lower satellite — bottom center, single thread from core",
+      "dominance_lattice": {
+        "S1_origin_scar": 6,
+        "S2_body_logic": 8,
+        "S3_frame_identity": 7,
+        "S4_silhouette_signature": 9,
+        "S5_behavioral_myth": 6
+      },
+      "vector": "S1=6, S2=8, S3=7, S4=9, S5=6",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "The Nocturnal Veil",
+        "pose_foundation": "predator_stalk",
+        "tension_state": "micro",
+        "camera_module": "low_angle_power",
+        "hormone_level": 2,
+        "action_tension": "sustained_grip"
+      },
+      "core_idea": "Shadow wolf king — loyalty coded as threat, protection as dominance"
+    },
+    {
+      "sb_id": "SB_317",
+      "name": "Isolde Vale",
+      "gender": "Female",
+      "title": "Council Oracle of Temptation",
+      "category": "Council",
+      "tier": "Crown",
+      "graph_position": "Lower mid-cluster — moderate node, inbound from core males",
+      "dominance_lattice": {
+        "S1_origin_scar": 6,
+        "S2_body_logic": 8,
+        "S3_frame_identity": 7,
+        "S4_silhouette_signature": 6,
+        "S5_behavioral_myth": 10
+      },
+      "vector": "S1=6, S2=8, S3=7, S4=6, S5=10",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "The Gilded Threshold",
+        "pose_foundation": "twist_reveal",
+        "tension_state": "micro",
+        "camera_module": "progressive_push_zoom",
+        "hormone_level": 3,
+        "action_tension": "sustained_grip"
+      },
+      "core_idea": "Oracle of temptation — sees the future, uses it as bait"
+    },
+    {
+      "sb_id": "SB_318",
+      "name": "Kael Voss",
+      "gender": "Male",
+      "title": "King of Burning Tides",
+      "category": "King",
+      "tier": "Crown",
+      "graph_position": "Core cluster — central purple node, strong bidirectional",
+      "dominance_lattice": {
+        "S1_origin_scar": 9,
+        "S2_body_logic": 8,
+        "S3_frame_identity": 8,
+        "S4_silhouette_signature": 7,
+        "S5_behavioral_myth": 9
+      },
+      "vector": "S1=9, S2=8, S3=8, S4=7, S5=9",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "Eternal Forge",
+        "pose_foundation": "dominance_lean",
+        "tension_state": "full",
+        "camera_module": "low_angle_power",
+        "hormone_level": 3,
+        "action_tension": "explosive_release"
+      },
+      "core_idea": "Burning tides king — power moves in waves, impossible to hold back"
+    },
+    {
+      "sb_id": "SB_319",
+      "name": "Sylvara",
+      "gender": "Female",
+      "title": "Mythic Starlit Sphinx",
+      "category": "Mythic Creature",
+      "tier": "Crown",
+      "graph_position": "Right cluster — moderate pink node, mythic satellite",
+      "dominance_lattice": {
+        "S1_origin_scar": 5,
+        "S2_body_logic": 7,
+        "S3_frame_identity": 9,
+        "S4_silhouette_signature": 10,
+        "S5_behavioral_myth": 9
+      },
+      "vector": "S1=5, S2=7, S3=9, S4=10, S5=9",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "The Haloed Eclipse",
+        "pose_foundation": "locked_embrace",
+        "tension_state": "micro",
+        "camera_module": "profile_side_view",
+        "hormone_level": 2,
+        "action_tension": "sustained_grip"
+      },
+      "core_idea": "Starlit sphinx — ancient riddle, impossible silhouette, always watching"
+    },
+    {
+      "sb_id": "SB_320",
+      "name": "Vesper Kane",
+      "gender": "Male",
+      "title": "God of Velvet Eclipse",
+      "category": "God",
+      "tier": "Crown",
+      "graph_position": "Core cluster — large purple node, highest male connectivity",
+      "dominance_lattice": {
+        "S1_origin_scar": 8,
+        "S2_body_logic": 9,
+        "S3_frame_identity": 9,
+        "S4_silhouette_signature": 8,
+        "S5_behavioral_myth": 10
+      },
+      "vector": "S1=8, S2=9, S3=9, S4=8, S5=10",
+      "principle_effects": {
+        "S1": "Amplification",
+        "S2": "Resonance",
+        "S3": "Amplification",
+        "S4": "Immersion",
+        "S5": "Resonance"
+      },
+      "matrix_defaults": {
+        "realm": "The Nocturnal Veil",
+        "pose_foundation": "dominance_lean",
+        "tension_state": "full",
+        "camera_module": "locked_frame_drift",
+        "hormone_level": 3,
+        "action_tension": "explosive_release"
+      },
+      "core_idea": "Velvet eclipse god — covers everything, reveals nothing, controls all"
+    }
+  ],
+  "roster_summary": {
+    "crown_tier": 17,
+    "rare_tier": 3,
+    "categories": {
+      "Goddess": 3,
+      "Queen": 3,
+      "Council": 4,
+      "Mythic_Creature": 3,
+      "King": 2,
+      "God": 2,
+      "Pet": 3
+    },
+    "highest_S1": ["Kaelith (10)", "Morgath Kane (10)"],
+    "highest_S2": ["Nyxara Voss (10)", "Seraphine Vale (10)", "Draven Sol (10)"],
+    "highest_S3": ["Lirael Kai (10)", "Seraphine Vale (10)", "Nyrael (10)"],
+    "highest_S4": ["Vespera Lune (10)", "Elyndra (10)", "Nyrael (10)", "Sylvara (10)"],
+    "highest_S5": ["Nyxara Voss (10)", "Kaelith (10)", "Draven Sol (10)", "Thalira (10)", "Isolde Vale (10)", "Vesper Kane (10)"],
+    "core_cluster_characters": ["Draven Sol", "Kaelith", "Kael Voss", "Morgath Kane", "Vesper Kane"],
+    "primary_female_anchors": ["Seraphine Vale", "Lirael Kai", "Nyxara Voss"],
+    "satellite_characters": ["Astra Voss", "Lunaire Voss", "Celeste Voss", "Thalira", "Rogue"]
+  }
+}

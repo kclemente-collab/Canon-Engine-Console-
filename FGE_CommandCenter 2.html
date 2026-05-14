@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>FGE — Command Center</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lora:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --void: #060608;
+    --deep: #0e0c12;
+    --card: #141218;
+    --lift: #1e1a24;
+    --hover: #262030;
+    --gold: #c9a84c;
+    --gold-dim: rgba(201,168,76,0.15);
+    --gold-line: rgba(201,168,76,0.25);
+    --ivory: #e2dce8;
+    --bone: #b8b0c4;
+    --muted: rgba(184,176,196,0.5);
+    --sacred: #d4cfc8;
+    --feral: #8b3a3a;
+    --freq: #7a6fa0;
+    --safe: #2a6644;
+    --rank-i: #4a4060;
+    --rank-ii: #3a5060;
+    --rank-iii: #2a5848;
+    --rank-iv: #5a4820;
+    --rank-v: #6a3820;
+    --rank-vi: #7a2820;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    height: 100%;
+    background: var(--void);
+    color: var(--ivory);
+    font-family: 'Lora', serif;
+    overflow: hidden;
+  }
+
+  /* APP SHELL */
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--deep);
+    border-bottom: 1px solid var(--gold-line);
+    padding: 14px 20px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+  }
+
+  .topbar-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.12em;
+    color: var(--ivory);
+  }
+
+  .topbar-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    margin-top: 1px;
+  }
+
+  .topbar-badge {
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-line);
+    padding: 4px 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+  }
+
+  /* SCREENS */
+  .screen {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .screen.active { display: block; }
+
+  /* BOTTOM NAV */
+  .bottomnav {
+    background: var(--deep);
+    border-top: 1px solid var(--gold-line);
+    display: flex;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+  }
+
+  .nav-btn {
+    flex: 1;
+    padding: 12px 4px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-top: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .nav-btn.active {
+    border-top-color: var(--gold);
+    background: var(--gold-dim);
+  }
+
+  .nav-icon {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .nav-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.2em;
+    color: var(--bone);
+    text-transform: uppercase;
+  }
+
+  .nav-btn.active .nav-label { color: var(--gold); }
+
+  /* ===== HOME SCREEN ===== */
+  .home-hero {
+    background: linear-gradient(180deg, rgba(201,168,76,0.06) 0%, transparent 60%);
+    padding: 28px 20px 20px;
+    border-bottom: 1px solid var(--gold-line);
+  }
+
+  .empire-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    line-height: 0.9;
+    letter-spacing: 0.04em;
+    color: var(--ivory);
+  }
+
+  .empire-name span {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(201,168,76,0.3);
+  }
+
+  .empire-tagline {
+    font-style: italic;
+    font-size: 13px;
+    color: var(--bone);
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+
+  .home-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    margin-top: 20px;
+    background: var(--gold-line);
+  }
+
+  .stat-cell {
+    background: var(--card);
+    padding: 14px 12px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+
+  /* MODULE TILES */
+  .section-header {
+    padding: 20px 20px 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .module-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    padding: 0 0 1px;
+    background: var(--gold-dim);
+    margin: 0 0 24px;
+  }
+
+  .module-tile {
+    background: var(--card);
+    padding: 20px 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-left: 3px solid transparent;
+    active-scale: 0.97;
+  }
+
+  .module-tile:active { background: var(--hover); transform: scale(0.98); }
+
+  .module-tile.con { border-left-color: #7a6fa0; }
+  .module-tile.asc { border-left-color: #c9a84c; }
+  .module-tile.col { border-left-color: #8b3a3a; }
+  .module-tile.ker { border-left-color: #2a6644; }
+
+  .tile-code {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .tile-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.06em;
+    color: var(--ivory);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .tile-desc {
+    font-size: 11px;
+    font-style: italic;
+    color: var(--bone);
+    line-height: 1.5;
+  }
+
+  .tile-arrow {
+    margin-top: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+  }
+
+  /* RANK LADDER ON HOME */
+  .rank-strip {
+    margin: 0 0 24px;
+  }
+
+  .rank-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(201,168,76,0.06);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .rank-bar:active { background: var(--lift); }
+
+  .rank-pip {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .r1 { background: var(--rank-i); }
+  .r2 { background: var(--rank-ii); }
+  .r3 { background: var(--rank-iii); }
+  .r4 { background: var(--rank-iv); }
+  .r5 { background: var(--rank-v); }
+  .r6 { background: var(--gold); }
+
+  .rank-bar-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    color: var(--ivory);
+    flex: 1;
+  }
+
+  .rank-bar-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+  }
+
+  /* ===== CHARACTERS SCREEN ===== */
+  .char-list {
+    padding: 16px 0 80px;
+  }
+
+  .char-card {
+    margin: 0 16px 12px;
+    background: var(--card);
+    border-left: 3px solid var(--gold-line);
+    padding: 18px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .char-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--gold);
+    transform: scaleY(0);
+    transition: transform 0.2s;
+    transform-origin: bottom;
+  }
+
+  .char-card:active { background: var(--lift); transform: scale(0.99); }
+  .char-card:active::before { transform: scaleY(1); }
+
+  .char-rank-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    margin-bottom: 6px;
+  }
+
+  .char-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.06em;
+    color: var(--ivory);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .char-kernel {
+    font-style: italic;
+    font-size: 13px;
+    color: var(--bone);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .char-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    background: var(--lift);
+    border: 1px solid var(--gold-line);
+    padding: 3px 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.15em;
+    color: var(--bone);
+    text-transform: uppercase;
+  }
+
+  .pill.gold { border-color: var(--gold); color: var(--gold); }
+
+  /* ADD CHARACTER BUTTON */
+  .add-char-btn {
+    margin: 0 16px 24px;
+    background: none;
+    border: 1px dashed var(--gold-line);
+    width: calc(100% - 32px);
+    padding: 20px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .add-char-btn:active { border-color: var(--gold); color: var(--gold); }
+
+  /* ===== MODULES SCREEN ===== */
+  .modules-list {
+    padding: 16px 0 80px;
+  }
+
+  .module-full-card {
+    margin: 0 16px 12px;
+    background: var(--card);
+    padding: 20px 18px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-top: 2px solid transparent;
+  }
+
+  .module-full-card.con { border-top-color: var(--freq); }
+  .module-full-card.asc { border-top-color: var(--gold); }
+  .module-full-card.col { border-top-color: var(--feral); }
+  .module-full-card.ker { border-top-color: var(--safe); }
+  .module-full-card.tbd { border-top-color: rgba(201,168,76,0.2); opacity: 0.5; }
+
+  .module-full-card:active { background: var(--lift); }
+
+  .mod-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .mod-code {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.35em;
+    color: var(--muted);
+  }
+
+  .mod-status {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    padding: 2px 8px;
+  }
+
+  .mod-status.live { color: var(--safe); border: 1px solid var(--safe); }
+  .mod-status.next { color: var(--gold); border: 1px solid var(--gold-line); }
+  .mod-status.planned { color: var(--muted); border: 1px solid rgba(201,168,76,0.1); }
+
+  .mod-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 0.06em;
+    color: var(--ivory);
+    margin-bottom: 6px;
+  }
+
+  .mod-function {
+    font-style: italic;
+    font-size: 13px;
+    color: var(--bone);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .mod-law {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    line-height: 1.8;
+  }
+
+  /* ===== DETAIL OVERLAY ===== */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--void);
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+    max-width: 480px;
+    margin: 0 auto;
+    animation: slideUp 0.25s ease;
+  }
+
+  .overlay.open { display: flex; }
+
+  @keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .overlay-header {
+    background: var(--deep);
+    border-bottom: 1px solid var(--gold-line);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: var(--gold);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    padding: 6px 0;
+  }
+
+  .overlay-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    color: var(--ivory);
+    flex: 1;
+  }
+
+  .overlay-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 20px 48px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* DETAIL CONTENT */
+  .detail-kernel {
+    background: var(--card);
+    border-left: 3px solid var(--gold);
+    padding: 20px 18px;
+    margin-bottom: 20px;
+  }
+
+  .detail-kernel-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .detail-kernel-text {
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ivory);
+    line-height: 1.5;
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--gold-dim);
+    margin-bottom: 20px;
+  }
+
+  .detail-cell {
+    background: var(--card);
+    padding: 16px 14px;
+  }
+
+  .detail-cell-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .detail-cell-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.05em;
+    color: var(--ivory);
+    line-height: 1.1;
+  }
+
+  .detail-cell-sub {
+    font-style: italic;
+    font-size: 11px;
+    color: var(--bone);
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+
+  .detail-material {
+    background: var(--card);
+    padding: 16px 18px;
+    margin-bottom: 20px;
+  }
+
+  .detail-material-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .material-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .material-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--bone);
+    font-style: italic;
+  }
+
+  .material-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .material-dot.empty { background: none; border: 1px solid var(--gold-line); }
+
+  /* MODULE DETAIL */
+  .mod-detail-section {
+    margin-bottom: 20px;
+  }
+
+  .mod-detail-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--gold-dim);
+  }
+
+  .law-item-small {
+    background: var(--card);
+    padding: 14px 16px;
+    margin-bottom: 1px;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--bone);
+    line-height: 1.6;
+    border-left: 2px solid var(--gold-dim);
+  }
+
+  .law-item-small strong {
+    color: var(--ivory);
+    font-style: normal;
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    margin-bottom: 4px;
+    color: var(--gold);
+  }
+
+  /* RANK DETAIL */
+  .rank-detail-card {
+    background: var(--card);
+    padding: 20px 18px;
+    margin-bottom: 1px;
+  }
+
+  .rank-detail-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.06em;
+    color: var(--ivory);
+    margin-bottom: 4px;
+  }
+
+  .rank-detail-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .rank-detail-desc {
+    font-style: italic;
+    font-size: 13px;
+    color: var(--bone);
+    line-height: 1.6;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 2px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gold-line); }
+
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">FGE</div>
+      <div class="topbar-sub">COMMAND CENTER</div>
+    </div>
+    <div class="topbar-badge">v1.0 LIVE</div>
+  </div>
+
+  <!-- HOME SCREEN -->
+  <div class="screen active" id="screen-home">
+    <div class="home-hero">
+      <div class="empire-name">FERAL<br><span>GLOSS</span><br>EMPIRE</div>
+      <div class="empire-tagline">Beauty attracts attention.<br>History creates obsession.</div>
+      <div class="home-stats">
+        <div class="stat-cell">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Modules</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num">6</div>
+          <div class="stat-label">Rank Tiers</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num">8</div>
+          <div class="stat-label">Characters</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header">THE STACK — TAP TO EXPLORE</div>
+    <div class="module-grid">
+      <div class="module-tile con" onclick="openModuleDetail('constitution')">
+        <div class="tile-code">CON-000</div>
+        <div class="tile-name">CONSTI-TUTION</div>
+        <div class="tile-desc">What they are. The foundation law.</div>
+        <div class="tile-arrow">TAP →</div>
+      </div>
+      <div class="module-tile asc" onclick="openModuleDetail('ascend')">
+        <div class="tile-code">ASCEND-001</div>
+        <div class="tile-name">ASCEN-SION</div>
+        <div class="tile-desc">What they become. Rank + earning.</div>
+        <div class="tile-arrow">TAP →</div>
+      </div>
+      <div class="module-tile col" onclick="openModuleDetail('collide')">
+        <div class="tile-code">COLLIDE-001</div>
+        <div class="tile-name">COLLI-SION</div>
+        <div class="tile-desc">Why no two feel the same.</div>
+        <div class="tile-arrow">TAP →</div>
+      </div>
+      <div class="module-tile ker" onclick="openModuleDetail('kernel')">
+        <div class="tile-code">KERNEL-001</div>
+        <div class="tile-name">VIBE KERNEL</div>
+        <div class="tile-desc">What the room feels first.</div>
+        <div class="tile-arrow">TAP →</div>
+      </div>
+    </div>
+
+    <div class="section-header">RANK LADDER</div>
+    <div class="rank-strip">
+      <div class="rank-bar" onclick="openRankDetail(1)">
+        <div class="rank-pip r1"></div>
+        <div class="rank-bar-name">INITIATE</div>
+        <div class="rank-bar-tag">RANK I →</div>
+      </div>
+      <div class="rank-bar" onclick="openRankDetail(2)">
+        <div class="rank-pip r2"></div>
+        <div class="rank-bar-name">ATTENDANT</div>
+        <div class="rank-bar-tag">RANK II →</div>
+      </div>
+      <div class="rank-bar" onclick="openRankDetail(3)">
+        <div class="rank-pip r3"></div>
+        <div class="rank-bar-name">TRUSTED HAND</div>
+        <div class="rank-bar-tag">RANK III →</div>
+      </div>
+      <div class="rank-bar" onclick="openRankDetail(4)">
+        <div class="rank-pip r4"></div>
+        <div class="rank-bar-name">INNER CIRCLE</div>
+        <div class="rank-bar-tag">RANK IV →</div>
+      </div>
+      <div class="rank-bar" onclick="openRankDetail(5)">
+        <div class="rank-pip r5"></div>
+        <div class="rank-bar-name">APEX PRESENCE</div>
+        <div class="rank-bar-tag">RANK V →</div>
+      </div>
+      <div class="rank-bar" onclick="openRankDetail(6)">
+        <div class="rank-pip r6"></div>
+        <div class="rank-bar-name">SOVEREIGN CLASS</div>
+        <div class="rank-bar-tag">RANK VI →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARACTERS SCREEN -->
+  <div class="screen" id="screen-characters">
+    <div class="char-list" id="char-list">
+      <!-- populated by JS -->
+    </div>
+    <button class="add-char-btn" onclick="showAddChar()">+ ADD CHARACTER</button>
+  </div>
+
+  <!-- MODULES SCREEN -->
+  <div class="screen" id="screen-modules">
+    <div class="modules-list">
+
+      <div class="section-header" style="padding-top:20px">LIVE MODULES</div>
+
+      <div class="module-full-card con" onclick="openModuleDetail('constitution')">
+        <div class="mod-header">
+          <div class="mod-code">CON-000 — ARTICLE I</div>
+          <div class="mod-status live">LIVE</div>
+        </div>
+        <div class="mod-title">CONSTITUTION</div>
+        <div class="mod-function">The foundation law. What every character is, how the Empire is governed, what can never change.</div>
+        <div class="mod-law">OWNS → identity · canon · sacred law</div>
+      </div>
+
+      <div class="module-full-card asc" onclick="openModuleDetail('ascend')">
+        <div class="mod-header">
+          <div class="mod-code">ASCEND-001 — ARTICLE XIII</div>
+          <div class="mod-status live">LIVE</div>
+        </div>
+        <div class="mod-title">ASCENSION LAW</div>
+        <div class="mod-function">How characters earn rank. Ink, rare pets, diamonds as the material record of advancement.</div>
+        <div class="mod-law">OWNS → rank · material · collapse law</div>
+      </div>
+
+      <div class="module-full-card col" onclick="openModuleDetail('collide')">
+        <div class="mod-header">
+          <div class="mod-code">COLLIDE-001 — ARTICLE XIV</div>
+          <div class="mod-status live">LIVE</div>
+        </div>
+        <div class="mod-title">COLLISION LAW</div>
+        <div class="mod-function">Why no two characters feel the same. 7 axes, collision scoring, wild card doctrine.</div>
+        <div class="mod-law">OWNS → divergence · variety · wild cards</div>
+      </div>
+
+      <div class="module-full-card ker" onclick="openModuleDetail('kernel')">
+        <div class="mod-header">
+          <div class="mod-code">KERNEL-001 — ARTICLE XV</div>
+          <div class="mod-status live">LIVE</div>
+        </div>
+        <div class="mod-title">VIBE KERNEL</div>
+        <div class="mod-function">The pre-verbal signal. One sentence per character. What the room feels before knowing why.</div>
+        <div class="mod-law">OWNS → frequency · signal · pre-verbal law</div>
+      </div>
+
+      <div class="section-header">NEXT BUILDS</div>
+
+      <div class="module-full-card tbd">
+        <div class="mod-header">
+          <div class="mod-code">LEDGER-001 — ARTICLE XVI</div>
+          <div class="mod-status next">NEXT</div>
+        </div>
+        <div class="mod-title">CHARACTER LEDGER</div>
+        <div class="mod-function">Living record per character. Rank, triggers hit, materials, kernel, billet — all in one card.</div>
+        <div class="mod-law">OWNS → character records · progression history</div>
+      </div>
+
+      <div class="module-full-card tbd">
+        <div class="mod-header">
+          <div class="mod-code">SCENE-001 — ARTICLE XVII</div>
+          <div class="mod-status planned">PLANNED</div>
+        </div>
+        <div class="mod-title">SCENE LAW</div>
+        <div class="mod-function">How two characters share space. Law of encounter. Sacred/feral tension in the same room.</div>
+        <div class="mod-law">OWNS → encounters · scene integrity</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottomnav">
+    <button class="nav-btn active" onclick="switchScreen('home', this)">
+      <div class="nav-icon">◈</div>
+      <div class="nav-label">Home</div>
+    </button>
+    <button class="nav-btn" onclick="switchScreen('characters', this)">
+      <div class="nav-icon">◆</div>
+      <div class="nav-label">Characters</div>
+    </button>
+    <button class="nav-btn" onclick="switchScreen('modules', this)">
+      <div class="nav-icon">▣</div>
+      <div class="nav-label">Modules</div>
+    </button>
+  </div>
+
+</div>
+
+<!-- DETAIL OVERLAY -->
+<div class="overlay" id="overlay">
+  <div class="overlay-header">
+    <button class="back-btn" onclick="closeOverlay()">← BACK</button>
+    <div class="overlay-title" id="overlay-title">—</div>
+  </div>
+  <div class="overlay-body" id="overlay-body">
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+
+const characters = [
+  {
+    id: 1,
+    name: "CHARACTER 01",
+    kernel: "Warmth that the room suspects is a weapon.",
+    rank: "III",
+    rankName: "Trusted Hand",
+    billet: "Keeper of Secrets",
+    register: "Sacred / Feral",
+    materials: ["Second ink — visible placement", "First rare animal", "No diamonds yet"],
+    collapse: "Keeps the wound"
+  },
+  {
+    id: 2,
+    name: "CHARACTER 02",
+    kernel: "Stillness so complete it reads as a threat.",
+    rank: "V",
+    rankName: "Apex Presence",
+    billet: "Diplomatic Blade",
+    register: "Apex / Sacred",
+    materials: ["Full ink system — complete narrative", "Signature diamond — named", "Rare pet — recognized on sight"],
+    collapse: "Wears the shame"
+  },
+  {
+    id: 3,
+    name: "CHARACTER 03",
+    kernel: "Beauty that arrived from somewhere difficult.",
+    rank: "II",
+    rankName: "Attendant",
+    billet: "Emotional Anchor",
+    register: "Feral / Earned",
+    materials: ["Second ink — larger, public", "First small rare animal", "—"],
+    collapse: "Strips everything"
+  },
+  {
+    id: 4,
+    name: "CHARACTER 04",
+    kernel: "The kind of calm that only follows a decision.",
+    rank: "IV",
+    rankName: "Inner Circle",
+    billet: "Memory Holder",
+    register: "Sovereign / Feral",
+    materials: ["Ink system — coherent language", "2 named diamonds", "Rare pet with known lineage"],
+    collapse: "Character decides"
+  },
+  {
+    id: 5,
+    name: "CHARACTER 05",
+    kernel: "Softness that has already survived the worst.",
+    rank: "IV",
+    rankName: "Inner Circle",
+    billet: "Emotional Anchor",
+    register: "Sacred / Deep",
+    materials: ["Ink system forming", "First diamond — provenance known", "Rare animal — upgraded"],
+    collapse: "Keeps the wound"
+  },
+  {
+    id: 6,
+    name: "CHARACTER 06",
+    kernel: "Precision that feels like it has a preference for you.",
+    rank: "VI",
+    rankName: "Sovereign Class",
+    billet: "Succession Guardian",
+    register: "Apex / Sovereign",
+    materials: ["Full ink biography — body as archive", "Diamond legacy — historical weight", "Creature is itself a legend"],
+    collapse: "Wears the shame"
+  },
+  {
+    id: 7,
+    name: "CHARACTER 07",
+    kernel: "Danger wearing the face of someone's answered prayer.",
+    rank: "V",
+    rankName: "Apex Presence",
+    billet: "Social Predator",
+    register: "Feral / Sacred",
+    materials: ["Ink tells complete story", "Signature diamond above all others", "Rare pet — others recognize on sight"],
+    collapse: "Character decides"
+  },
+  {
+    id: 8,
+    name: "CHARACTER 08",
+    kernel: "The silence before she speaks is already a verdict.",
+    rank: "VI",
+    rankName: "Sovereign Class",
+    billet: "Keeper of Secrets",
+    register: "Sovereign / Pure",
+    materials: ["Full ink biography", "Diamond legacy collection", "Creature — Empire legend"],
+    collapse: "Strips everything"
+  }
+];
+
+const rankData = [
+  { num: 1, name: "INITIATE", sub: "She has arrived", room: "New. Interesting. Unproven.", material: "First ink mark — small, personal. No pet. No diamonds.", trigger: "She entered the Empire." },
+  { num: 2, name: "ATTENDANT", sub: "She has survived something", room: "Capable. Worth watching.", material: "Second ink (visible). First small rare animal.", trigger: "Act of Restraint — she had power and chose not to use it." },
+  { num: 3, name: "TRUSTED HAND", sub: "She knows something you don't", room: "Dangerous to disappoint.", material: "Third ink. First named diamond. Rare pet upgraded.", trigger: "The Public Test — she was tested and did not perform." },
+  { num: 4, name: "INNER CIRCLE", sub: "She has been chosen and chose back", room: "Someone with leverage she hasn't used yet.", material: "Ink as system. 2–3 named diamonds. Rare pet with lineage.", trigger: "The Cost Paid — she gave up what others thought she'd protect." },
+  { num: 5, name: "APEX PRESENCE", sub: "She does not need the room's approval", room: "The standard everyone is measured against.", material: "Ink tells complete story. Signature diamond. Recognizable rare pet.", trigger: "The Knowledge Held — others sense she carries something unsaid." },
+  { num: 6, name: "SOVEREIGN CLASS", sub: "The room was built for her", room: "Inevitable.", material: "Full ink biography. Diamond legacy. Creature is a legend.", trigger: "The Room Remembered — a room she left is still talking about her." }
+];
+
+const moduleData = {
+  constitution: {
+    title: "CONSTITUTION",
+    code: "CON-000",
+    function: "The foundation law of the Feral Gloss Empire. Everything that can never change — identity, canon, sacred doctrine.",
+    laws: [
+      { title: "IDENTITY LAW", text: "Every character has a Core Identity Lock — a statement of what can never change regardless of rank, billet, or collapse." },
+      { title: "CANON LAW", text: "Once canonized, a character's foundational truth cannot be revised. It can only be built upon." },
+      { title: "SACRED LAW", text: "The tension between sacred and feral is the Empire's most protected asset. Neither pole can be eliminated." },
+      { title: "DRIFT LAW", text: "Any output that causes a character to feel like someone else is a drift violation — regardless of intent." }
+    ]
+  },
+  ascend: {
+    title: "ASCENSION LAW",
+    code: "ASCEND-001",
+    function: "How characters earn rank. The Material Trinity — ink, rare pets, diamonds — is the visible record of advancement.",
+    laws: [
+      { title: "INK LAW", text: "Tattoos chosen at each rank threshold. Irreversible. The body becomes a ledger of what she has survived and decided." },
+      { title: "PET LAW", text: "Rare animals are rank-gated, not purchasable. The rarer the animal, the higher the rank required to keep it." },
+      { title: "DIAMOND LAW", text: "Each stone has named provenance. Diamonds are a silent autobiography worn on the body." },
+      { title: "COLLAPSE LAW", text: "Rank regression through betrayal or collapse only. The character decides what to keep — and that decision is itself a rank signal." }
+    ]
+  },
+  collide: {
+    title: "COLLISION LAW",
+    code: "COLLIDE-001",
+    function: "Why no two characters feel the same. Seven divergence axes. Collision scoring. Wild card deployment doctrine.",
+    laws: [
+      { title: "SEVEN AXES", text: "Every character is plotted on 7 axes: Power Mode, Field Density, Material Language, Sacred/Feral, Ascension Mode, Gravity Type, Collapse Response." },
+      { title: "COLLISION SCORE", text: "0–2 axes shared = Clear. 3–4 = Watch. 5–7 = Collision. Mandatory divergence intervention at 5+." },
+      { title: "WILD CARD LAW", text: "At 20+ characters, one wild card per 5 new entries is mandatory. Wild cards break dominant collision clusters." },
+      { title: "LEGACY OVERRIDE", text: "If a character passes the Legacy Test, collision scores become advisory only. Legendary characters define their own category." }
+    ]
+  },
+  kernel: {
+    title: "VIBE KERNEL",
+    code: "KERNEL-001",
+    function: "The pre-verbal signal. One sentence per character. Ten words maximum. What the room feels before it knows why.",
+    laws: [
+      { title: "ONE SENTENCE LAW", text: "Ten words maximum. If it takes more, it is a description — not a Kernel." },
+      { title: "SURVIVAL TEST", text: "The Kernel must be true when the character has lost everything. If it only works when she is powerful, it is status — not frequency." },
+      { title: "NO COLLISION", text: "No two Kernels may carry the same structural tension. Kernel collision is the deepest form of archetype cannibalism." },
+      { title: "EXTRACTION LAW", text: "The Kernel is written last, not first. It is discovered from what is already true — never imposed from outside." }
+    ]
+  }
+};
+
+// ===== NAVIGATION =====
+
+function switchScreen(name, btn) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'characters') renderChars();
+}
+
+// ===== CHARACTERS =====
+
+function renderChars() {
+  const list = document.getElementById('char-list');
+  list.innerHTML = characters.map(c => `
+    <div class="char-card" onclick="openCharDetail(${c.id})">
+      <div class="char-rank-tag" style="color: var(--gold)">RANK ${c.rank} — ${c.rankName.toUpperCase()}</div>
+      <div class="char-name">${c.name}</div>
+      <div class="char-kernel">"${c.kernel}"</div>
+      <div class="char-pills">
+        <div class="pill gold">${c.billet}</div>
+        <div class="pill">${c.register}</div>
+        <div class="pill">${c.collapse}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openCharDetail(id) {
+  const c = characters.find(x => x.id === id);
+  document.getElementById('overlay-title').textContent = c.name;
+  document.getElementById('overlay-body').innerHTML = `
+    <div class="detail-kernel">
+      <div class="detail-kernel-label">VIBE KERNEL</div>
+      <div class="detail-kernel-text">"${c.kernel}"</div>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-cell">
+        <div class="detail-cell-label">Rank</div>
+        <div class="detail-cell-value">RANK ${c.rank}</div>
+        <div class="detail-cell-sub">${c.rankName}</div>
+      </div>
+      <div class="detail-cell">
+        <div class="detail-cell-label">Billet</div>
+        <div class="detail-cell-value" style="font-size:14px">${c.billet}</div>
+        <div class="detail-cell-sub">${c.register}</div>
+      </div>
+      <div class="detail-cell">
+        <div class="detail-cell-label">Collapse Decision</div>
+        <div class="detail-cell-value" style="font-size:14px">${c.collapse}</div>
+      </div>
+      <div class="detail-cell">
+        <div class="detail-cell-label">Register</div>
+        <div class="detail-cell-value" style="font-size:14px">${c.register}</div>
+      </div>
+    </div>
+
+    <div class="detail-material">
+      <div class="detail-material-label">MATERIAL RECORD</div>
+      <div class="material-items">
+        ${c.materials.map(m => `
+          <div class="material-item">
+            <div class="material-dot ${m === '—' ? 'empty' : ''}"></div>
+            <span>${m}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  document.getElementById('overlay').classList.add('open');
+}
+
+// ===== MODULE DETAIL =====
+
+function openModuleDetail(key) {
+  const m = moduleData[key];
+  if (!m) return;
+  document.getElementById('overlay-title').textContent = m.title;
+  document.getElementById('overlay-body').innerHTML = `
+    <div class="mod-detail-section">
+      <div class="mod-detail-label">FUNCTION</div>
+      <div class="law-item-small" style="font-size:15px; color: var(--ivory)">${m.function}</div>
+    </div>
+    <div class="mod-detail-section">
+      <div class="mod-detail-label">CORE LAWS</div>
+      ${m.laws.map(l => `
+        <div class="law-item-small">
+          <strong>${l.title}</strong>
+          ${l.text}
+        </div>
+      `).join('')}
+    </div>
+  `;
+  document.getElementById('overlay').classList.add('open');
+}
+
+// ===== RANK DETAIL =====
+
+function openRankDetail(num) {
+  const r = rankData[num - 1];
+  document.getElementById('overlay-title').textContent = `RANK ${r.num} — ${r.name}`;
+  document.getElementById('overlay-body').innerHTML = `
+    <div class="rank-detail-card">
+      <div class="rank-detail-tag">RANK ${r.num}</div>
+      <div class="rank-detail-name">${r.name}</div>
+      <div class="rank-detail-tag" style="margin-bottom:12px; font-style:italic; color: var(--bone)">"${r.sub}"</div>
+      <div class="rank-detail-desc"><strong style="color:var(--gold); font-style:normal; font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.3em;">ROOM READS HER AS</strong><br>${r.room}</div>
+    </div>
+    <div class="rank-detail-card" style="margin-top:1px">
+      <div class="rank-detail-tag">MATERIAL AT THIS RANK</div>
+      <div class="rank-detail-desc">${r.material}</div>
+    </div>
+    <div class="rank-detail-card" style="margin-top:1px">
+      <div class="rank-detail-tag">ASCENSION TRIGGER</div>
+      <div class="rank-detail-desc">${r.trigger}</div>
+    </div>
+  `;
+  document.getElementById('overlay').classList.add('open');
+}
+
+// ===== OVERLAY =====
+
+function closeOverlay() {
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function showAddChar() {
+  document.getElementById('overlay-title').textContent = 'NEW CHARACTER';
+  document.getElementById('overlay-body').innerHTML = `
+    <div class="law-item-small" style="margin-bottom:16px">
+      <strong>LEDGER-001 COMING SOON</strong>
+      Full character creation with rank assignment, kernel extraction, billet selection, and material record will live in the next module build.
+    </div>
+    <div class="rank-detail-card">
+      <div class="rank-detail-tag">KERNEL FIRST LAW</div>
+      <div class="rank-detail-desc">Before adding a character, extract their Vibe Kernel. One sentence. Ten words maximum. What does the room feel before they speak?</div>
+    </div>
+  `;
+  document.getElementById('overlay').classList.add('open');
+}
+
+// Init
+renderChars();
+</script>
+</body>
+</html>

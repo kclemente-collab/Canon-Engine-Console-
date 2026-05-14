@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COLLIDE-001 — FERAL GLOSS EMPIRE</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap');
+
+  :root {
+    --void: #060608;
+    --deep: #0c0b10;
+    --carbon: #13121a;
+    --ash: #1a1820;
+    --smoke: #252330;
+    --bone: #c4baa8;
+    --ivory: #e6ddd0;
+    --gold: #c9a84c;
+    --sacred: #e8e0d4;
+    --feral: #8b3a3a;
+    --collision: #c44a2a;
+    --safe: #2a6644;
+    --warning: #8b6a1a;
+    --pure: #d4cfc8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--ivory);
+    font-family: 'IM Fell English', serif;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* SACRED GEOMETRY BACKGROUND */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 80px,
+        rgba(201,168,76,0.02) 80px,
+        rgba(201,168,76,0.02) 81px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 80px,
+        rgba(201,168,76,0.02) 80px,
+        rgba(201,168,76,0.02) 81px
+      );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 80px 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding-bottom: 28px;
+    margin-bottom: 80px;
+  }
+
+  .module-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    line-height: 2.2;
+  }
+
+  .house-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: rgba(201,168,76,0.4);
+    text-align: right;
+    line-height: 2.2;
+  }
+
+  /* TITLE */
+  .title-block {
+    margin-bottom: 80px;
+    position: relative;
+  }
+
+  .title-verse {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(201,168,76,0.6);
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 11vw, 110px);
+    line-height: 0.88;
+    letter-spacing: 0.03em;
+    color: var(--ivory);
+    margin-bottom: 4px;
+  }
+
+  h1 .ghost {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(201,168,76,0.3);
+  }
+
+  .title-doctrine {
+    font-size: 17px;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--bone);
+    max-width: 520px;
+    margin-top: 28px;
+  }
+
+  /* THE SACRED/FERAL AXIS — core concept */
+  .axis-block {
+    margin-bottom: 80px;
+    background: var(--carbon);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .axis-header {
+    background: linear-gradient(90deg, rgba(232,224,212,0.06) 0%, transparent 100%);
+    padding: 28px 40px;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .axis-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.1em;
+    color: var(--ivory);
+  }
+
+  .axis-header p {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--bone);
+    margin-top: 6px;
+    line-height: 1.7;
+  }
+
+  .axis-spectrum {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    gap: 0;
+  }
+
+  .axis-pole {
+    padding: 36px 36px;
+  }
+
+  .axis-pole.sacred {
+    border-right: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .axis-pole-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+  }
+
+  .axis-pole.sacred .axis-pole-label { color: var(--sacred); }
+  .axis-pole.feral .axis-pole-label { color: var(--feral); }
+
+  .axis-pole ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .axis-pole ul li {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: rgba(196,186,168,0.6);
+    padding-left: 12px;
+    position: relative;
+  }
+
+  .axis-pole ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+  }
+
+  .axis-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--gold);
+    border-left: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .axis-law {
+    padding: 20px 36px;
+    border-top: 1px solid rgba(201,168,76,0.1);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--gold);
+    text-align: center;
+    background: rgba(201,168,76,0.03);
+  }
+
+  /* SECTION */
+  section {
+    margin-bottom: 90px;
+    position: relative;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 36px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .section-verse {
+    font-style: italic;
+    font-size: 11px;
+    color: rgba(201,168,76,0.4);
+    letter-spacing: 0.05em;
+  }
+
+  /* THE 7 AXES */
+  .axes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 32px;
+  }
+
+  .axis-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    gap: 0;
+    background: var(--ash);
+    overflow: hidden;
+  }
+
+  .axis-left, .axis-right {
+    padding: 20px 24px;
+    font-size: 13px;
+    font-style: italic;
+    color: rgba(196,186,168,0.7);
+    line-height: 1.5;
+  }
+
+  .axis-left { border-right: 1px solid rgba(201,168,76,0.1); }
+  .axis-right { border-left: 1px solid rgba(201,168,76,0.1); color: rgba(196,186,168,0.5); }
+
+  .axis-mid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 20px;
+    text-align: center;
+    gap: 6px;
+  }
+
+  .axis-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+  }
+
+  .axis-bar {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--sacred), var(--gold), var(--feral));
+    opacity: 0.4;
+    border-radius: 1px;
+  }
+
+  .axis-id {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    color: rgba(201,168,76,0.4);
+    letter-spacing: 0.2em;
+  }
+
+  /* COLLISION SCORE */
+  .collision-explain {
+    background: var(--carbon);
+    border: 1px solid rgba(196, 74, 42, 0.3);
+    padding: 36px 40px;
+    margin-bottom: 36px;
+  }
+
+  .collision-explain h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--collision);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+
+  .collision-explain p {
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--bone);
+    font-style: italic;
+  }
+
+  .score-zones {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+    margin-top: 24px;
+  }
+
+  .score-zone {
+    padding: 20px 24px;
+    background: var(--ash);
+  }
+
+  .zone-range {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  .score-zone.clear .zone-range { color: var(--safe); }
+  .score-zone.watch .zone-range { color: var(--warning); }
+  .score-zone.collision .zone-range { color: var(--collision); }
+
+  .zone-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    margin-bottom: 10px;
+  }
+
+  .score-zone.clear .zone-label { color: var(--safe); }
+  .score-zone.watch .zone-label { color: var(--warning); }
+  .score-zone.collision .zone-label { color: var(--collision); }
+
+  .zone-desc {
+    font-size: 12px;
+    font-style: italic;
+    color: rgba(196,186,168,0.6);
+    line-height: 1.6;
+  }
+
+  /* VARIETY LAWS */
+  .law-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .law-item {
+    background: var(--ash);
+    padding: 24px 32px;
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    gap: 24px;
+    align-items: start;
+    border-left: 3px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .law-item:hover { border-left-color: var(--gold); }
+
+  .law-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: rgba(201,168,76,0.2);
+    line-height: 1;
+  }
+
+  .law-body h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    color: var(--ivory);
+    margin-bottom: 8px;
+  }
+
+  .law-body p {
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.8;
+    color: rgba(196,186,168,0.7);
+  }
+
+  .law-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    white-space: nowrap;
+    padding-top: 6px;
+  }
+
+  /* THE WILD CARD DOCTRINE */
+  .wildcard-block {
+    background: linear-gradient(135deg, #0e0e08 0%, var(--ash) 100%);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 52px 48px;
+    margin-bottom: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .wildcard-block::before {
+    content: '✦';
+    position: absolute;
+    top: -20px;
+    right: 40px;
+    font-size: 140px;
+    color: rgba(201,168,76,0.03);
+    pointer-events: none;
+  }
+
+  .wildcard-block h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    letter-spacing: 0.05em;
+    color: var(--ivory);
+    margin-bottom: 8px;
+  }
+
+  .wildcard-block .sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    margin-bottom: 28px;
+  }
+
+  .wildcard-block p {
+    font-size: 16px;
+    font-style: italic;
+    line-height: 1.9;
+    color: var(--bone);
+    margin-bottom: 16px;
+    max-width: 600px;
+  }
+
+  .wildcard-types {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 32px;
+  }
+
+  .wc-type {
+    background: rgba(0,0,0,0.3);
+    padding: 24px 28px;
+  }
+
+  .wc-type h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+
+  .wc-type p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(196,186,168,0.65);
+    margin-bottom: 0;
+  }
+
+  .wc-type .mechanic {
+    margin-top: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: rgba(201,168,76,0.6);
+    letter-spacing: 0.1em;
+    font-style: normal;
+  }
+
+  /* BIBLICAL LAYER */
+  .biblical-block {
+    background: var(--carbon);
+    padding: 48px 48px;
+    border-top: 2px solid var(--sacred);
+    margin-bottom: 80px;
+    position: relative;
+  }
+
+  .biblical-block::after {
+    content: '"';
+    position: absolute;
+    bottom: -40px;
+    right: 40px;
+    font-family: 'IM Fell English', serif;
+    font-size: 200px;
+    color: rgba(232,224,212,0.03);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .biblical-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    color: var(--sacred);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .biblical-block h2 {
+    font-family: 'IM Fell English', serif;
+    font-size: 36px;
+    color: var(--sacred);
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
+  .biblical-block p {
+    font-size: 16px;
+    font-style: italic;
+    line-height: 1.9;
+    color: var(--bone);
+    margin-bottom: 16px;
+    max-width: 620px;
+  }
+
+  .tension-pairs {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 32px;
+  }
+
+  .tension-pair {
+    display: grid;
+    grid-template-columns: 1fr 40px 1fr;
+    gap: 0;
+    background: var(--ash);
+    overflow: hidden;
+  }
+
+  .tension-pole {
+    padding: 18px 24px;
+    font-size: 14px;
+    font-style: italic;
+    color: rgba(196,186,168,0.75);
+    line-height: 1.6;
+  }
+
+  .tension-pole.a { border-right: 1px solid rgba(201,168,76,0.1); }
+
+  .tension-mid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: rgba(201,168,76,0.3);
+  }
+
+  /* PULL QUOTE */
+  .pull {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 5vw, 56px);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(201,168,76,0.2);
+    letter-spacing: 0.04em;
+    line-height: 1.05;
+    margin: 60px 0;
+  }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid rgba(201,168,76,0.2);
+    padding-top: 36px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: end;
+  }
+
+  .footer-benediction {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--bone);
+    line-height: 1.8;
+  }
+
+  .footer-stamp {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    color: rgba(201,168,76,0.35);
+    text-align: right;
+    line-height: 2.2;
+  }
+
+  /* ANIMATE */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .page > * {
+    animation: rise 0.7s ease forwards;
+    opacity: 0;
+  }
+
+  .page > *:nth-child(n) { animation-delay: calc(0.08s * var(--i, 1)); }
+  .page > *:nth-child(1) { animation-delay: 0.05s; }
+  .page > *:nth-child(2) { animation-delay: 0.1s; }
+  .page > *:nth-child(3) { animation-delay: 0.15s; }
+  .page > *:nth-child(4) { animation-delay: 0.2s; }
+  .page > *:nth-child(5) { animation-delay: 0.25s; }
+  .page > *:nth-child(6) { animation-delay: 0.3s; }
+  .page > *:nth-child(7) { animation-delay: 0.35s; }
+  .page > *:nth-child(8) { animation-delay: 0.4s; }
+  .page > *:nth-child(9) { animation-delay: 0.45s; }
+  .page > *:nth-child(10) { animation-delay: 0.5s; }
+
+  @media (max-width: 680px) {
+    .page { padding: 48px 24px; }
+    .axis-row, .score-zones, .wildcard-types, .tension-pair { grid-template-columns: 1fr; }
+    .axis-spectrum { grid-template-columns: 1fr; }
+    .axis-center { display: none; }
+    .footer { grid-template-columns: 1fr; }
+    .law-item { grid-template-columns: 40px 1fr; }
+    .law-tag { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="module-tag">
+      MODULE — COLLIDE-001 — v1.0<br>
+      COLLISION MAP + VARIETY ENFORCEMENT<br>
+      COMPANION TO ASCEND-001
+    </div>
+    <div class="house-tag">
+      FERAL GLOSS EMPIRE<br>
+      CONSTITUTIONAL LAW<br>
+      ARTICLE XIV
+    </div>
+  </header>
+
+  <!-- TITLE -->
+  <div class="title-block">
+    <div class="title-verse">— "Do not give what is holy to dogs" — Mt 7:6 — protect what is singular —</div>
+    <h1>COLLI<br><span class="ghost">SION</span></h1>
+    <p class="title-doctrine">At high volume, characters drift. The system homogenizes. Thirty faces become five faces in thirty outfits. This module is the immune response — the law that enforces divergence, protects singularity, and uses contradiction as a design weapon.</p>
+  </div>
+
+  <!-- THE SACRED/FERAL AXIS -->
+  <div class="axis-block">
+    <div class="axis-header">
+      <h2>The Sacred / Feral Axis</h2>
+      <p>FGE's most powerful anti-collision tool is the tension it was built on. Biblical purity and feral presence are not opposites that cancel. They are the exact contradiction that creates gravity no single-note system can produce.</p>
+    </div>
+    <div class="axis-spectrum">
+      <div class="axis-pole sacred">
+        <div class="axis-pole-label">SACRED</div>
+        <ul>
+          <li>restraint as power</li>
+          <li>silence before speech</li>
+          <li>purity as inaccessibility</li>
+          <li>stillness that commands</li>
+          <li>light that blinds gently</li>
+          <li>devotion as architecture</li>
+        </ul>
+      </div>
+      <div class="axis-center">✦</div>
+      <div class="axis-pole feral">
+        <div class="axis-pole-label">FERAL</div>
+        <ul>
+          <li>appetite as identity</li>
+          <li>presence that unsettles</li>
+          <li>beauty with danger inside</li>
+          <li>motion that destabilizes</li>
+          <li>warmth that consumes</li>
+          <li>instinct over institution</li>
+        </ul>
+      </div>
+    </div>
+    <div class="axis-law">No character should sit at either extreme. The tension between poles is where gravity lives.</div>
+  </div>
+
+  <div class="pull">THE SYSTEM DRIFTS TOWARD AVERAGE. THIS LAW PREVENTS IT.</div>
+
+  <!-- THE 7 DIVERGENCE AXES -->
+  <section>
+    <div class="section-label">
+      Section I — The Seven Divergence Axes
+      <span class="section-verse">"Each one had a different face" — Ezek 10:14</span>
+    </div>
+    <p style="font-size:15px; font-style:italic; line-height:1.9; color:rgba(196,186,168,0.7); margin-bottom:32px;">Every character is plotted on all seven axes. Collision is detected when two characters share the same quadrant on four or more axes simultaneously. The fix is never to change the character — it is to find where they diverged and amplify that difference into a signature.</p>
+
+    <div class="axes-grid">
+      <div class="axis-row">
+        <div class="axis-left">She controls through warmth. Others feel held, not commanded.</div>
+        <div class="axis-mid">
+          <div class="axis-name">POWER MODE</div>
+          <div class="axis-bar"></div>
+          <div class="axis-id">AX-01</div>
+        </div>
+        <div class="axis-right">She controls through cold. Others feel assessed, not seen.</div>
+      </div>
+      <div class="axis-row">
+        <div class="axis-left">She is present everywhere. The room fills with her energy.</div>
+        <div class="axis-mid">
+          <div class="axis-name">FIELD DENSITY</div>
+          <div class="axis-bar"></div>
+          <div class="axis-id">AX-02</div>
+        </div>
+        <div class="axis-right">She is present in one point. The room contracts toward her.</div>
+      </div>
+      <div class="axis-row">
+        <div class="axis-left">Ink is narrative — her body tells a story publicly.</div>
+        <div class="axis-mid">
+          <div class="axis-name">MATERIAL LANGUAGE</div>
+          <div class="axis-bar"></div>
+          <div class="axis-id">AX-03</div>
+        </div>
+        <div class="axis-right">Diamonds speak — her history is compressed into stones.</div>
+      </div>
+      <div class="axis-row">
+        <div class="axis-left">Sacred register — restraint, purity, light-source quality.</div>
+        <div class="axis-mid">
+          <div class="axis-name">SACRED / FERAL</div>
+          <div class="axis-bar"></div>
+          <div class="axis-id">AX-04</div>
+        </div>
+        <div class="axis-right">Feral register — appetite, instinct, heat-source quality.</div>
+      </div>
+      <div class="axis-row">
+        <div class="axis-left">She earns through acts of restraint and knowledge held.</div>
+        <div class="axis-mid">
+          <div class="axis-name">ASCENSION MODE</div>
+          <div class="axis-bar"></div>
+          <div class="axis-id">AX-05</div>
+        </div>
+        <div class="axis-right">She earns through acts of cost paid and rooms remembered.</div>
+      </div>
+      <div class="axis-row">
+        <div class="axis-left">She is the most memorable person in the room.</div>
+        <div class="axis-mid">
+          <div class="axis-name">GRAVITY TYPE</div>
+          <div class="axis-bar"></div>
+          <div class="axis-id">AX-06</div>
+        </div>
+        <div class="axis-right">She is the person others become more memorable beside.</div>
+      </div>
+      <div class="axis-row">
+        <div class="axis-left">Collapse would strip her — she would begin again bare.</div>
+        <div class="axis-mid">
+          <div class="axis-name">COLLAPSE RESPONSE</div>
+          <div class="axis-bar"></div>
+          <div class="axis-id">AX-07</div>
+        </div>
+        <div class="axis-right">Collapse would harden her — she would wear the wound openly.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLISION SCORING -->
+  <section>
+    <div class="section-label">
+      Section II — Collision Score System
+      <span class="section-verse">"Distinguish between the holy and the common" — Lev 10:10</span>
+    </div>
+
+    <div class="collision-explain">
+      <h3>How Collision Is Measured</h3>
+      <p>Compare any two characters across all seven axes. Count how many axes share the same quadrant. That number is their Collision Score. The higher the score, the less distinct they are from each other — and the more the system must intervene.</p>
+      <p>Collision is not failure. It is information. It tells you exactly where the characters are too close and which axis needs amplification to restore distinction.</p>
+
+      <div class="score-zones">
+        <div class="score-zone clear">
+          <div class="zone-range">0–2</div>
+          <div class="zone-label">CLEAR</div>
+          <p class="zone-desc">Strong divergence. These two characters could share a scene and the room would feel both of them separately.</p>
+        </div>
+        <div class="score-zone watch">
+          <div class="zone-range">3–4</div>
+          <div class="zone-label">WATCH</div>
+          <p class="zone-desc">Overlap forming. Amplify one divergent axis into a signature before these characters appear together.</p>
+        </div>
+        <div class="score-zone collision">
+          <div class="zone-range">5–7</div>
+          <div class="zone-label">COLLISION</div>
+          <p class="zone-desc">Archetype cannibalism. One character is consuming the other. Mandatory divergence intervention required.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WILD CARD DOCTRINE -->
+  <div class="wildcard-block">
+    <h2>THE WILD CARD DOCTRINE</h2>
+    <div class="sub">Anti-Homogenization Protocol — High Volume Operations</div>
+    <p>At high numbers — 20, 30, 40 characters — systems drift toward a mean. The safe middle. The average of all prior decisions. Wild cards are not chaos injected randomly. They are deliberate extreme-contrast entries designed to break the gravity well of accumulated similarity.</p>
+    <p>A wild card does not need to fit. It needs to pull. Its divergence from the existing cluster forces the characters near it to become more themselves — because proximity to something truly different sharpens identity.</p>
+
+    <div class="wildcard-types">
+      <div class="wc-type">
+        <h4>Sacred Disruption Card</h4>
+        <p>A character so far toward the sacred pole that her presence makes every feral character in the cluster seem more feral by contrast. She does not compete. She reveals.</p>
+        <div class="mechanic">DEPLOY WHEN: 4+ characters clustering in feral register</div>
+      </div>
+      <div class="wc-type">
+        <h4>Feral Disruption Card</h4>
+        <p>A character whose appetite and instinct are so unrestrained that every sacred character near her seems more sacred by contrast. She is not a villain. She is a calibration instrument.</p>
+        <div class="mechanic">DEPLOY WHEN: 4+ characters clustering in sacred register</div>
+      </div>
+      <div class="wc-type">
+        <h4>Gravity Inversion Card</h4>
+        <p>A character whose gravity type is opposite to the dominant cluster. If most characters are individually memorable, she is the one who makes others memorable beside her. The room changes around her differently.</p>
+        <div class="mechanic">DEPLOY WHEN: AX-06 collision score exceeds 3</div>
+      </div>
+      <div class="wc-type">
+        <h4>Material Break Card</h4>
+        <p>A character whose material language is entirely different from the cluster norm. If the system has trended toward diamonds, she is all ink. If the system has trended toward ink, she is all creature presence.</p>
+        <div class="mechanic">DEPLOY WHEN: AX-03 shows 5+ characters in same quadrant</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIBLICAL / PURE LAYER -->
+  <div class="biblical-block">
+    <div class="biblical-eyebrow">The Potency Layer — Sacred Contrast as Design Weapon</div>
+    <h2>On Biblical Flavor and the Mixed Honesty</h2>
+    <p>The house that operates with biblical purity alongside feral presence is not confused. It is compounding. The sacred layer is not decoration — it is the force that makes the feral elements feel earned rather than gratuitous.</p>
+    <p>Every character exists somewhere on the sacred-feral continuum. But the system as a whole must contain both poles simultaneously. Without the sacred register, feral presence becomes noise. Without the feral register, sacred presence becomes decoration.</p>
+    <p>The mixed honesty is the product. Not one or the other. Both — in deliberate, governed tension.</p>
+
+    <div class="tension-pairs">
+      <div class="tension-pair">
+        <div class="tension-pole a">Restraint that the room can feel as dangerous</div>
+        <div class="tension-mid">+</div>
+        <div class="tension-pole">Appetite that the room can feel as sacred</div>
+      </div>
+      <div class="tension-pair">
+        <div class="tension-pole a">Purity that has survived something dark</div>
+        <div class="tension-mid">+</div>
+        <div class="tension-pole">Darkness that has preserved something pure</div>
+      </div>
+      <div class="tension-pair">
+        <div class="tension-pole a">Biblical stillness — she does not move toward power</div>
+        <div class="tension-mid">+</div>
+        <div class="tension-pole">Feral certainty — power moves toward her</div>
+      </div>
+      <div class="tension-pair">
+        <div class="tension-pole a">The lamb that knows it is also a lion</div>
+        <div class="tension-mid">+</div>
+        <div class="tension-pole">The lion that still remembers being a lamb</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VARIETY ENFORCEMENT LAWS -->
+  <section>
+    <div class="section-label">
+      Section III — The Seven Variety Enforcement Laws
+      <span class="section-verse">"Each face was unique" — Ezek 1:10</span>
+    </div>
+
+    <div class="law-list">
+      <div class="law-item">
+        <div class="law-num">01</div>
+        <div class="law-body">
+          <h4>No Two Characters May Share Both Billet And Collapse Response</h4>
+          <p>A Keeper of Secrets who strips everything in collapse and a Keeper of Secrets who wears the shame openly are still two different people. But if they share billet, collapse response, and rank tier — they have become the same person. Collapse response is the final differentiator when all else converges.</p>
+        </div>
+        <div class="law-tag">LAW-V-01</div>
+      </div>
+      <div class="law-item">
+        <div class="law-num">02</div>
+        <div class="law-body">
+          <h4>Sacred Pole Must Be Represented At Every Rank Tier</h4>
+          <p>If every Sovereign Class character trends feral, the tier loses its range. Each rank tier must contain at least one character whose primary register is sacred. This is not a quota — it is structural integrity. Without it, rank becomes a single story told louder.</p>
+        </div>
+        <div class="law-tag">LAW-V-02</div>
+      </div>
+      <div class="law-item">
+        <div class="law-num">03</div>
+        <div class="law-body">
+          <h4>The Dominant Material Must Not Exceed 40% Of Active Characters</h4>
+          <p>If more than 40% of active characters carry diamonds as their primary material signal, the diamond loses gravity. Rarity is structural. When everything is rare, nothing is. Material distribution must be actively governed — not left to accumulate by default.</p>
+        </div>
+        <div class="law-tag">LAW-V-03</div>
+      </div>
+      <div class="law-item">
+        <div class="law-num">04</div>
+        <div class="law-body">
+          <h4>Gravity Type Must Alternate In Any Group Of Five</h4>
+          <p>No five consecutive characters introduced may share the same gravity type. If four characters in sequence are individually memorable, the fifth must be a gravity inverter — one who makes others more memorable in her presence. Variety in gravity type is what makes ensemble scenes feel alive.</p>
+        </div>
+        <div class="law-tag">LAW-V-04</div>
+      </div>
+      <div class="law-item">
+        <div class="law-num">05</div>
+        <div class="law-body">
+          <h4>Wild Cards Are Mandatory Above 20 Active Characters</h4>
+          <p>At 20+ active characters, one wild card deployment is mandatory for every five new characters introduced. Wild cards are not random — they are selected to break the dominant collision cluster. The system generates them, does not discover them.</p>
+        </div>
+        <div class="law-tag">LAW-V-05</div>
+      </div>
+      <div class="law-item">
+        <div class="law-num">06</div>
+        <div class="law-body">
+          <h4>Collision Score Must Be Run Before Any Scene Pairing</h4>
+          <p>Before two characters share a scene, their Collision Score must be calculated. If the score is 5+, the scene cannot proceed until a divergence amplification has been applied to at least one character on the overlapping axes. Scenes collapse when characters feel like echoes of each other.</p>
+        </div>
+        <div class="law-tag">LAW-V-06</div>
+      </div>
+      <div class="law-item">
+        <div class="law-num">07</div>
+        <div class="law-body">
+          <h4>The Legacy Test Overrides All Collision Scores</h4>
+          <p>If a character passes the Legacy Test — "would she be remembered in 20 years of cinema history?" — her collision score is advisory only. Legendary characters define their own category. The Collision Map exists to protect the system from mediocrity, not to constrain what is already inevitable.</p>
+        </div>
+        <div class="law-tag">LAW-V-07</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-benediction">
+      "The eye is not satisfied with seeing,<br>
+      nor the ear filled with hearing."<br>
+      — Ecclesiastes 1:8<br><br>
+      Build characters the eye cannot finish seeing.<br>
+      That is the only law that matters.
+    </div>
+    <div class="footer-stamp">
+      COLLIDE-001 — FERAL GLOSS EMPIRE<br>
+      ARTICLE XIV — COLLISION LAW<br>
+      COMPANION: ASCEND-001<br>
+      AUTHORITY: ET-CON-000001<br>
+      2026 — THE HOUSE HOLDS
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

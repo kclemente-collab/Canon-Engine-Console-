@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASCEND-001 — FERAL GLOSS EMPIRE</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap');
+
+  :root {
+    --black: #080808;
+    --deep: #0e0c0a;
+    --carbon: #141210;
+    --ash: #1c1916;
+    --smoke: #2a2520;
+    --bone: #c8b89a;
+    --ivory: #e8dcc8;
+    --gold: #c9a84c;
+    --diamond: #d4eaf7;
+    --ink-blue: #1a2744;
+    --ink-red: #8b1a1a;
+    --scar: #5c3a2e;
+    --glow: rgba(201, 168, 76, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--ivory);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* GRAIN OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 40px;
+  }
+
+  /* HEADER */
+  .empire-header {
+    border-top: 1px solid var(--gold);
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding: 32px 0 28px;
+    margin-bottom: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .module-id {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .empire-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.5em;
+    color: var(--bone);
+    text-align: right;
+  }
+
+  /* TITLE BLOCK */
+  .title-block {
+    margin-bottom: 100px;
+  }
+
+  .title-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 12vw, 120px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: var(--ivory);
+    margin-bottom: 8px;
+  }
+
+  h1 span.ghost {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(201,168,76,0.4);
+  }
+
+  .title-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--bone);
+    margin-top: 24px;
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  /* DOCTRINE BLOCK */
+  .doctrine {
+    border-left: 2px solid var(--gold);
+    padding: 28px 32px;
+    margin-bottom: 80px;
+    background: linear-gradient(90deg, rgba(201,168,76,0.05) 0%, transparent 100%);
+  }
+
+  .doctrine p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: var(--ivory);
+    font-style: italic;
+  }
+
+  .doctrine p + p {
+    margin-top: 16px;
+  }
+
+  /* SECTION HEADERS */
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .section-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: rgba(201,168,76,0.06);
+    position: absolute;
+    right: 0;
+    top: -20px;
+    letter-spacing: 0.05em;
+    pointer-events: none;
+  }
+
+  section {
+    position: relative;
+    margin-bottom: 100px;
+  }
+
+  /* TRINITY */
+  .trinity {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 60px;
+  }
+
+  .trinity-item {
+    background: var(--ash);
+    padding: 40px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .trinity-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .trinity-item.ink::before { background: var(--ink-blue); }
+  .trinity-item.rare::before { background: #2d5a27; }
+  .trinity-item.diamond::before { background: var(--diamond); }
+
+  .trinity-symbol {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .trinity-item.ink .trinity-symbol { color: #4a6fa5; }
+  .trinity-item.rare .trinity-symbol { color: #4a8a44; }
+  .trinity-item.diamond .trinity-symbol { color: var(--diamond); }
+
+  .trinity-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--bone);
+    margin-bottom: 12px;
+  }
+
+  .trinity-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(232,220,200,0.7);
+    font-style: italic;
+  }
+
+  .trinity-law {
+    margin-top: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    line-height: 1.6;
+  }
+
+  /* RANK LADDER */
+  .rank-ladder {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .rank-row {
+    display: grid;
+    grid-template-columns: 180px 1fr auto;
+    gap: 24px;
+    align-items: start;
+    padding: 24px 28px;
+    background: var(--ash);
+    border-left: 3px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+    cursor: default;
+  }
+
+  .rank-row:hover {
+    background: var(--smoke);
+    border-left-color: var(--gold);
+  }
+
+  .rank-row.sovereign { border-left-color: var(--gold); background: linear-gradient(90deg, rgba(201,168,76,0.08) 0%, var(--ash) 60%); }
+
+  .rank-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.05em;
+    color: var(--ivory);
+    line-height: 1.1;
+  }
+
+  .rank-subtitle {
+    font-size: 11px;
+    color: var(--bone);
+    font-style: italic;
+    margin-top: 2px;
+  }
+
+  .rank-unlocks {
+    font-size: 13px;
+    color: rgba(232,220,200,0.65);
+    line-height: 1.7;
+  }
+
+  .rank-unlocks strong {
+    color: var(--bone);
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  .rank-marker {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    white-space: nowrap;
+    text-align: right;
+    padding-top: 4px;
+  }
+
+  /* GRAVITY SYSTEM */
+  .gravity-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 40px;
+  }
+
+  .gravity-cell {
+    background: var(--ash);
+    padding: 32px 28px;
+  }
+
+  .gravity-cell-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.05em;
+    color: var(--ivory);
+    margin-bottom: 12px;
+  }
+
+  .gravity-cell p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: rgba(232,220,200,0.7);
+    font-style: italic;
+  }
+
+  .gravity-cell .mechanics {
+    margin-top: 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    line-height: 2;
+    font-style: normal;
+  }
+
+  /* ASCENSION TRIGGERS */
+  .trigger-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .trigger-item {
+    background: var(--ash);
+    padding: 20px 28px;
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .trigger-glyph {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .trigger-content h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bone);
+    margin-bottom: 6px;
+  }
+
+  .trigger-content p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(232,220,200,0.7);
+    font-style: italic;
+  }
+
+  /* COLLAPSE LAW */
+  .collapse-block {
+    background: linear-gradient(135deg, #1a0a0a 0%, var(--ash) 100%);
+    border: 1px solid rgba(139,26,26,0.4);
+    padding: 48px 40px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .collapse-block::before {
+    content: 'COLLAPSE';
+    position: absolute;
+    top: 20px;
+    right: 28px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.5em;
+    color: rgba(139,26,26,0.5);
+  }
+
+  .collapse-block h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: #c45a5a;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+  }
+
+  .collapse-block p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: rgba(232,220,200,0.8);
+    font-style: italic;
+    margin-bottom: 16px;
+  }
+
+  .decision-trio {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+    margin-top: 32px;
+  }
+
+  .decision-card {
+    background: rgba(0,0,0,0.4);
+    padding: 24px 20px;
+  }
+
+  .decision-card h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--bone);
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  .decision-card p {
+    font-size: 12px;
+    line-height: 1.7;
+    color: rgba(200,184,154,0.6);
+    font-style: italic;
+    margin-bottom: 0;
+  }
+
+  .decision-card .signal {
+    margin-top: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: #c45a5a;
+    letter-spacing: 0.15em;
+  }
+
+  /* BILLET SYSTEM */
+  .billet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+  }
+
+  .billet-card {
+    background: var(--ash);
+    padding: 28px 24px;
+    position: relative;
+  }
+
+  .billet-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-style: italic;
+    color: var(--gold);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .billet-desc {
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(232,220,200,0.6);
+  }
+
+  /* LEGACY TEST */
+  .legacy-block {
+    background: var(--deep);
+    border-top: 2px solid var(--gold);
+    padding: 60px 48px;
+    text-align: center;
+    margin-bottom: 80px;
+  }
+
+  .legacy-question {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 4vw, 36px);
+    font-style: italic;
+    color: var(--ivory);
+    line-height: 1.5;
+    margin-bottom: 32px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .legacy-answer {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  /* FOOTER */
+  .empire-footer {
+    border-top: 1px solid rgba(201,168,76,0.3);
+    padding-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-law {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--bone);
+    max-width: 400px;
+    line-height: 1.6;
+  }
+
+  .footer-stamp {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: rgba(201,168,76,0.5);
+    text-align: right;
+    line-height: 2;
+  }
+
+  /* DIVIDER */
+  .rule {
+    border: none;
+    border-top: 1px solid rgba(201,168,76,0.15);
+    margin: 60px 0;
+  }
+
+  /* PULL QUOTE */
+  .pull-quote {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 6vw, 64px);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(201,168,76,0.25);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin: 60px 0;
+  }
+
+  /* ANIMATE ON LOAD */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .page > * {
+    animation: fadeUp 0.8s ease forwards;
+    opacity: 0;
+  }
+
+  .page > *:nth-child(1) { animation-delay: 0.1s; }
+  .page > *:nth-child(2) { animation-delay: 0.2s; }
+  .page > *:nth-child(3) { animation-delay: 0.3s; }
+  .page > *:nth-child(4) { animation-delay: 0.4s; }
+  .page > *:nth-child(5) { animation-delay: 0.5s; }
+  .page > *:nth-child(6) { animation-delay: 0.55s; }
+  .page > *:nth-child(7) { animation-delay: 0.6s; }
+  .page > *:nth-child(8) { animation-delay: 0.65s; }
+  .page > *:nth-child(9) { animation-delay: 0.7s; }
+  .page > *:nth-child(10) { animation-delay: 0.75s; }
+
+  @media (max-width: 700px) {
+    .page { padding: 48px 24px; }
+    .trinity, .gravity-grid, .decision-trio, .billet-grid { grid-template-columns: 1fr; }
+    .rank-row { grid-template-columns: 1fr; gap: 8px; }
+    .empire-footer { flex-direction: column; gap: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="empire-header">
+    <div class="module-id">MODULE — ASCEND-001 — v1.0 — 2026</div>
+    <div class="empire-name">FERAL GLOSS EMPIRE<br>ASCENSION LAW</div>
+  </header>
+
+  <!-- TITLE -->
+  <div class="title-block">
+    <div class="title-eyebrow">Constitutional Amendment — Article XIII</div>
+    <h1>ASCEN<br><span class="ghost">SION</span></h1>
+    <p class="title-sub">Characters do not begin legendary. They become it. This module governs how they earn rank, accumulate gravity, and survive — or define — their own collapse.</p>
+  </div>
+
+  <!-- DOCTRINE -->
+  <div class="doctrine">
+    <p>Beauty is assigned. History is earned.</p>
+    <p>A character at Rank I and a character at Rank VI may wear the same face. But the room does not treat them the same. The difference lives in their ink, their animals, their stones — and in the silence that follows them when they enter.</p>
+    <p>This law governs that silence.</p>
+  </div>
+
+  <!-- I. THE MATERIAL TRINITY -->
+  <section>
+    <span class="section-number">I</span>
+    <div class="section-label">Section I — The Material Trinity</div>
+    <p style="font-size:16px; line-height:1.9; color:rgba(232,220,200,0.75); font-style:italic; margin-bottom:40px;">Rank in FGE is not declared. It is visible. Three materials carry the record of a character's advancement. They cannot be faked. They cannot be borrowed. They can only be earned — or lost through collapse.</p>
+
+    <div class="trinity">
+      <div class="trinity-item ink">
+        <div class="trinity-symbol">INK</div>
+        <div class="trinity-title">Permanent Identity</div>
+        <p class="trinity-desc">Tattoos chosen at each rank threshold. Irreversible. The body becomes a ledger of what she has survived, decided, and become. Ink is the most honest material — it cannot be removed without leaving a scar of the removal.</p>
+        <div class="trinity-law">
+          RULE 01 — ink is chosen, never assigned<br>
+          RULE 02 — each mark has a specific meaning<br>
+          RULE 03 — marks accumulate visibly per rank<br>
+          RULE 04 — collapse-ink inverts in meaning, not removal
+        </div>
+      </div>
+      <div class="trinity-item rare">
+        <div class="trinity-symbol">PET</div>
+        <div class="trinity-title">Living Proof</div>
+        <p class="trinity-desc">Rare animals that require resources, trust, and knowledge to keep alive. The presence of a rare pet signals access — to networks, to funding, to expertise others cannot reach. They are not accessories. They are living proof of station.</p>
+        <div class="trinity-law">
+          RULE 01 — pets are rank-gated, not purchasable<br>
+          RULE 02 — the rarer the animal, the higher required rank<br>
+          RULE 03 — if the pet dies, rank signal weakens<br>
+          RULE 04 — collapse may require the pet's return
+        </div>
+      </div>
+      <div class="trinity-item diamond">
+        <div class="trinity-symbol">◆</div>
+        <div class="trinity-title">Compressed History</div>
+        <p class="trinity-desc">Diamonds are portable sovereignty. Each stone has a provenance — where it came from, what event it marks, who gave it or what it was traded for. A character's diamonds are a silent autobiography worn on the body.</p>
+        <div class="trinity-law">
+          RULE 01 — diamonds have named provenance<br>
+          RULE 02 — gifts carry the giver's gravity<br>
+          RULE 03 — traded diamonds carry transaction memory<br>
+          RULE 04 — collapse diamonds become shame trophies or proof
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="pull-quote">RANK IS NOT WORN. IT IS READ.</div>
+
+  <!-- II. THE RANK LADDER -->
+  <section>
+    <span class="section-number">II</span>
+    <div class="section-label">Section II — The Six Ranks of Ascension</div>
+    <p style="font-size:16px; line-height:1.9; color:rgba(232,220,200,0.75); font-style:italic; margin-bottom:40px;">Six ranks. Each one a different relationship to power. The room responds differently to each. Advancement is not automatic — it requires a Trigger Event and the accumulation of all prior material marks.</p>
+
+    <div class="rank-ladder">
+
+      <div class="rank-row">
+        <div>
+          <div class="rank-title">INITIATE</div>
+          <div class="rank-subtitle">Rank I — She has arrived</div>
+        </div>
+        <div class="rank-unlocks">
+          <strong>Material:</strong> First ink mark (chosen, small, personal). No pet. No diamonds yet.<br>
+          <strong>Gravity:</strong> None assigned — she is still learning what the room expects.<br>
+          <strong>Room reads her as:</strong> New. Interesting. Unproven.
+        </div>
+        <div class="rank-marker">R — I</div>
+      </div>
+
+      <div class="rank-row">
+        <div>
+          <div class="rank-title">ATTENDANT</div>
+          <div class="rank-subtitle">Rank II — She has survived something</div>
+        </div>
+        <div class="rank-unlocks">
+          <strong>Material:</strong> Second ink (larger, visible in public). First small rare animal.<br>
+          <strong>Gravity:</strong> Quiet presence — others notice she does not perform.<br>
+          <strong>Room reads her as:</strong> Capable. Worth watching.
+        </div>
+        <div class="rank-marker">R — II</div>
+      </div>
+
+      <div class="rank-row">
+        <div>
+          <div class="rank-title">TRUSTED HAND</div>
+          <div class="rank-subtitle">Rank III — She knows something you don't</div>
+        </div>
+        <div class="rank-unlocks">
+          <strong>Material:</strong> Third ink (signature placement). First diamond (provenance known). Rare pet upgraded.<br>
+          <strong>Gravity:</strong> Others lower their voices when she enters. Not fear. Respect with edges.<br>
+          <strong>Room reads her as:</strong> Dangerous to disappoint.
+        </div>
+        <div class="rank-marker">R — III</div>
+      </div>
+
+      <div class="rank-row">
+        <div>
+          <div class="rank-title">INNER CIRCLE</div>
+          <div class="rank-subtitle">Rank IV — She has been chosen and chose back</div>
+        </div>
+        <div class="rank-unlocks">
+          <strong>Material:</strong> Ink becomes a system (coherent visual language). Diamond collection (2–3 stones, each named). Rare pet with known lineage.<br>
+          <strong>Gravity:</strong> She changes the energy of a room by entering it. Visual field shifts.<br>
+          <strong>Room reads her as:</strong> Someone with leverage she hasn't used yet.
+        </div>
+        <div class="rank-marker">R — IV</div>
+      </div>
+
+      <div class="rank-row">
+        <div>
+          <div class="rank-title">APEX PRESENCE</div>
+          <div class="rank-subtitle">Rank V — She does not need the room's approval</div>
+        </div>
+        <div class="rank-unlocks">
+          <strong>Material:</strong> Ink tells a complete story (readable as narrative). Signature diamond (one stone above all others). Rare pet that others recognize on sight.<br>
+          <strong>Gravity:</strong> Conversation shifts when she speaks. Silence when she stops.<br>
+          <strong>Room reads her as:</strong> The standard everyone else is measured against.
+        </div>
+        <div class="rank-marker">R — V</div>
+      </div>
+
+      <div class="rank-row sovereign">
+        <div>
+          <div class="rank-title">SOVEREIGN CLASS</div>
+          <div class="rank-subtitle">Rank VI — The room was built for her</div>
+        </div>
+        <div class="rank-unlocks">
+          <strong>Material:</strong> Full ink biography (body as complete record). Diamond legacy (collection with historical weight). Rare pet that is itself a legend in the Empire.<br>
+          <strong>Gravity:</strong> Others dress differently knowing she will be present. The aesthetic field of the room reorganizes around her.<br>
+          <strong>Room reads her as:</strong> Inevitable.
+        </div>
+        <div class="rank-marker">R — VI ◆</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- III. GRAVITY ARCHITECTURE -->
+  <section>
+    <span class="section-number">III</span>
+    <div class="section-label">Section III — Visual Gravity Architecture</div>
+    <p style="font-size:16px; line-height:1.9; color:rgba(232,220,200,0.75); font-style:italic; margin-bottom:40px;">Gravity in FGE is visual. The room does not feel her — it sees her differently. This section defines exactly what changes, aesthetically, as rank increases.</p>
+
+    <div class="gravity-grid">
+      <div class="gravity-cell">
+        <div class="gravity-cell-title">SILHOUETTE WEIGHT</div>
+        <p>Higher rank characters occupy more visual space — not physically larger, but their clothing, their ink, their animal create a silhouette that commands peripheral attention. The eye finds them first.</p>
+        <div class="mechanics">
+          R1–R2 → simple lines, body as canvas<br>
+          R3–R4 → layered presence, ink visible<br>
+          R5–R6 → silhouette is immediately iconic
+        </div>
+      </div>
+      <div class="gravity-cell">
+        <div class="gravity-cell-title">MATERIAL DENSITY</div>
+        <p>Diamonds catch light differently in high-rank characters — not because of the stones themselves, but because of what they represent. Provenance makes light feel heavier. The room registers this without knowing why.</p>
+        <div class="mechanics">
+          R1–R2 → no diamonds or unprovenanced<br>
+          R3–R4 → one or two named stones<br>
+          R5–R6 → collection with historical weight
+        </div>
+      </div>
+      <div class="gravity-cell">
+        <div class="gravity-cell-title">INK NARRATIVE</div>
+        <p>At low ranks, ink is decoration. At high ranks, ink is biography. Others who know the Empire can read rank directly from placement, scale, and accumulation of marks. Ink transforms the body into a public record.</p>
+        <div class="mechanics">
+          R1 → one mark, personal meaning<br>
+          R3 → marks visible, placement intentional<br>
+          R6 → full narrative, body as archive
+        </div>
+      </div>
+      <div class="gravity-cell">
+        <div class="gravity-cell-title">CREATURE PRESENCE</div>
+        <p>A rare pet at Rank V is not a pet. It is a credential. Others recognize the animal before they place the face. The creature signals network access, financial reach, and knowledge depth that no diamond or ink can replicate.</p>
+        <div class="mechanics">
+          R2 → small rare animal, personal bond<br>
+          R4 → rare animal with known lineage<br>
+          R6 → creature is itself a legend
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IV. ASCENSION TRIGGERS -->
+  <section>
+    <span class="section-number">IV</span>
+    <div class="section-label">Section IV — Ascension Trigger Events</div>
+    <p style="font-size:16px; line-height:1.9; color:rgba(232,220,200,0.75); font-style:italic; margin-bottom:40px;">Rank does not advance by time served. It advances through Trigger Events — specific acts that cannot be faked and cannot be repeated. Each trigger unlocks one rank threshold.</p>
+
+    <div class="trigger-list">
+      <div class="trigger-item">
+        <div class="trigger-glyph">◈</div>
+        <div class="trigger-content">
+          <h4>The Act of Restraint</h4>
+          <p>She had the power to destroy someone or something — and chose not to. Not from weakness. From decision. Others witnessed the restraint and understood the power behind it. This is the most common first trigger.</p>
+        </div>
+      </div>
+      <div class="trigger-item">
+        <div class="trigger-glyph">◈</div>
+        <div class="trigger-content">
+          <h4>The Public Test</h4>
+          <p>She was tested in a room full of people who wanted her to fail. She did not fail. She did not perform. She simply was — and the room recalibrated. No announcement. Just the aftermath.</p>
+        </div>
+      </div>
+      <div class="trigger-item">
+        <div class="trigger-glyph">◈</div>
+        <div class="trigger-content">
+          <h4>The Cost Paid</h4>
+          <p>She gave something up that others assumed she would protect at all costs. The sacrifice was real. The loss was visible. What she gained in gravity was worth more than what she surrendered.</p>
+        </div>
+      </div>
+      <div class="trigger-item">
+        <div class="trigger-glyph">◈</div>
+        <div class="trigger-content">
+          <h4>The Knowledge Held</h4>
+          <p>She knows something that, if spoken, would change everything for everyone in the room. She has never spoken it. Others sense she holds something. They do not know what. The not-knowing is the source of her gravity.</p>
+        </div>
+      </div>
+      <div class="trigger-item">
+        <div class="trigger-glyph">◈</div>
+        <div class="trigger-content">
+          <h4>The Room Remembered</h4>
+          <p>A room she left is still talking about her. Not about what she did — about what she was. This trigger is discovered, not achieved. One day the evidence arrives: she has become a reference point for others.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- V. COLLAPSE LAW -->
+  <section>
+    <span class="section-number">V</span>
+    <div class="section-label">Section V — The Law of Collapse</div>
+
+    <div class="collapse-block">
+      <h3>Betrayal &amp; Collapse</h3>
+      <p>Rank regression occurs only through Betrayal or Collapse. These are not mistakes. They are structural failures — the kind that change what others believe is possible from her.</p>
+      <p>When collapse occurs, the character faces the single most revealing decision in her arc:</p>
+      <p style="font-size:20px; color:var(--ivory); font-style:normal; font-weight:600;">What does she keep?</p>
+      <p>The choice of what to retain, return, or display inverted is not a personal preference. It is a rank signal visible to everyone who knows the Empire's language.</p>
+
+      <div class="decision-trio">
+        <div class="decision-card">
+          <h4>STRIP EVERYTHING</h4>
+          <p>She returns the diamonds. She covers the ink. She releases the animal. She starts again from nothing — but from a position of dignity.</p>
+          <div class="signal">SIGNAL: HONOR OVER HISTORY</div>
+        </div>
+        <div class="decision-card">
+          <h4>KEEP THE WOUND</h4>
+          <p>She keeps one mark — the one that cost her everything. Wears it openly. Inverted or not, it is hers. She has decided that her collapse is part of her record, not a deletion of it.</p>
+          <div class="signal">SIGNAL: TRUTH OVER COMFORT</div>
+        </div>
+        <div class="decision-card">
+          <h4>WEAR THE SHAME</h4>
+          <p>She keeps everything. Lets others read the inverted meaning. Refuses to hide what happened. The marks now mean something different — and she knows it, and walks anyway.</p>
+          <div class="signal">SIGNAL: POWER OVER APPROVAL</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VI. BILLET SYSTEM -->
+  <section>
+    <span class="section-number">VI</span>
+    <div class="section-label">Section VI — Billet Assignment</div>
+    <p style="font-size:16px; line-height:1.9; color:rgba(232,220,200,0.75); font-style:italic; margin-bottom:40px;">Rank is vertical. Billets are horizontal. Two characters at the same rank can have entirely different functional power based on their billet. Billets prevent archetype collision — they are the reason no two Sovereign Class characters feel the same.</p>
+
+    <div class="billet-grid">
+      <div class="billet-card">
+        <div class="billet-name">Keeper of Secrets</div>
+        <p class="billet-desc">She holds information that changes the gravity of everyone near her. Her power is in what she has never said.</p>
+      </div>
+      <div class="billet-card">
+        <div class="billet-name">Diplomatic Blade</div>
+        <p class="billet-desc">She moves between rooms that would otherwise never communicate. Her presence is the bridge — and the threat that keeps the bridge intact.</p>
+      </div>
+      <div class="billet-card">
+        <div class="billet-name">Emotional Anchor</div>
+        <p class="billet-desc">Others orient toward her in crisis. Not because she solves problems — because her stillness makes panic feel temporary.</p>
+      </div>
+      <div class="billet-card">
+        <div class="billet-name">Memory Holder</div>
+        <p class="billet-desc">She remembers everything. What was said, what was meant, what was promised and broken. Her memory is her leverage.</p>
+      </div>
+      <div class="billet-card">
+        <div class="billet-name">Social Predator</div>
+        <p class="billet-desc">She reads a room faster than anyone. She knows who needs what from whom. She is three moves ahead before the introduction ends.</p>
+      </div>
+      <div class="billet-card">
+        <div class="billet-name">Succession Guardian</div>
+        <p class="billet-desc">She decides who rises. Not loudly. Through patience, placement, and the strategic withholding of her endorsement until the right moment.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEGACY TEST -->
+  <div class="legacy-block">
+    <p class="legacy-question">"If this character walked into cinema history, would people remember her in 20 years?"</p>
+    <div class="legacy-answer">If no — rebuild. That is the only benchmark that matters.</div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="empire-footer">
+    <div class="footer-law">"Beauty attracts attention. History creates obsession. Build for obsession."</div>
+    <div class="footer-stamp">
+      ASCEND-001 — FERAL GLOSS EMPIRE<br>
+      ARTICLE XIII — ASCENSION LAW<br>
+      AUTHORITY: ET-CON-000001<br>
+      2026 — FINAL SALE — NO REFUNDS
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

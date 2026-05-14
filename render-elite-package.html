@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Render Elite — Constraint-Governed Creative OS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap');
+
+  :root {
+    --gold: #c8a96e;
+    --gold-dim: #8a6f3e;
+    --black: #050505;
+    --void: #080808;
+    --surface: #0c0c0a;
+    --surface2: #11110e;
+    --border: #1e1e18;
+    --border2: #2a2a22;
+    --text: #e8e4dc;
+    --text-dim: #888880;
+    --text-ghost: #333330;
+    --red: #8b2020;
+    --green: #1a4a2a;
+    --green-bright: #4aff88;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(5,5,5,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+  }
+
+  .nav-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .nav-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold-dim);
+    padding: 4px 10px;
+    border-radius: 2px;
+    opacity: 0.7;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 48px 80px 48px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 8vw, 112px);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .hero-title span {
+    color: var(--gold);
+    display: block;
+  }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--text-dim);
+    font-weight: 300;
+    margin-bottom: 48px;
+    line-height: 1.5;
+    max-width: 480px;
+  }
+
+  .hero-descriptor {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-ghost);
+    line-height: 2.2;
+    margin-bottom: 56px;
+  }
+
+  .hero-descriptor span {
+    color: var(--gold-dim);
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .btn-primary {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    border: none;
+    padding: 14px 32px;
+    cursor: not-allowed;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+  }
+
+  .btn-secondary {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: transparent;
+    border: 1px solid var(--gold-dim);
+    padding: 14px 32px;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .coming-soon-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--text-ghost);
+    margin-top: 16px;
+  }
+
+  .hero-right {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 48px 80px 0;
+  }
+
+  /* ── PIPELINE DIAGRAM ── */
+  .pipeline-diagram {
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+  }
+
+  .pipeline-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .pipeline-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .layer-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 80px;
+    gap: 8px;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid transparent;
+    transition: all 0.3s;
+    animation: layerIn 0.6s ease forwards;
+    opacity: 0;
+  }
+
+  .layer-row:nth-child(1) { animation-delay: 0.1s; border-left-color: #c8a96e; }
+  .layer-row:nth-child(2) { animation-delay: 0.2s; border-left-color: #8a6f3e; }
+  .layer-row:nth-child(3) { animation-delay: 0.3s; border-left-color: #c8a96e; }
+  .layer-row:nth-child(4) { animation-delay: 0.4s; border-left-color: #5a4a2e; }
+  .layer-row:nth-child(5) { animation-delay: 0.5s; border-left-color: #8a6f3e; }
+  .layer-row:nth-child(6) { animation-delay: 0.6s; border-left-color: #c8a96e; }
+  .layer-row:nth-child(7) { animation-delay: 0.7s; border-left-color: #4aff88; }
+
+  @keyframes layerIn {
+    from { opacity: 0; transform: translateX(-16px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .layer-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--text-ghost);
+    letter-spacing: 0.1em;
+  }
+
+  .layer-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .layer-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--gold);
+    text-align: right;
+    letter-spacing: 0.08em;
+  }
+
+  .layer-status.active { color: var(--green-bright); }
+
+  .pipeline-footer {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: rgba(200, 169, 110, 0.06);
+    border: 1px solid var(--gold-dim);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pipeline-footer-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .pipeline-footer-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+  }
+
+  /* ── HERO GRID LINES ── */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,169,110,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,169,110,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+
+  .hero-divider {
+    position: absolute;
+    left: 50%;
+    top: 80px;
+    bottom: 80px;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--border2), transparent);
+  }
+
+  /* ── SECTION BASE ── */
+  section {
+    padding: 120px 48px;
+    position: relative;
+  }
+
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 5vw, 72px);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+
+  /* ── INFOGRAPHIC SECTION ── */
+  .infographic {
+    background: var(--void);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .infographic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 64px;
+  }
+
+  .info-cell {
+    background: var(--surface);
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .info-cell::before {
+    content: attr(data-num);
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: rgba(200,169,110,0.04);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .info-cell-icon {
+    font-size: 24px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .info-cell-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .info-cell-body {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+
+  .info-cell-mono {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--text-ghost);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 16px;
+    line-height: 2;
+  }
+
+  /* ── DOMINANCE LATTICE VISUAL ── */
+  .lattice-section {
+    background: var(--black);
+  }
+
+  .lattice-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    margin-top: 64px;
+    align-items: center;
+  }
+
+  .lattice-visual {
+    position: relative;
+  }
+
+  .lattice-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .lattice-bar-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 32px;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .lattice-bar-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: right;
+  }
+
+  .lattice-bar-track {
+    height: 4px;
+    background: var(--border2);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .lattice-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    border-radius: 2px;
+    transform-origin: left;
+    animation: barFill 1.2s ease forwards;
+    transform: scaleX(0);
+  }
+
+  @keyframes barFill {
+    to { transform: scaleX(1); }
+  }
+
+  .lattice-bar-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+  }
+
+  .lattice-title-block {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--gold);
+    letter-spacing: 0.06em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .lattice-sub {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--text-dim);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .lattice-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-ghost);
+    border: 1px solid var(--border2);
+    padding: 4px 10px;
+  }
+
+  .tag.active {
+    color: var(--gold);
+    border-color: var(--gold-dim);
+    background: rgba(200,169,110,0.05);
+  }
+
+  /* ── PIPELINE FLOW INFOGRAPHIC ── */
+  .flow-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  .flow-diagram {
+    margin-top: 64px;
+    position: relative;
+  }
+
+  .flow-nodes {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    position: relative;
+  }
+
+  .flow-nodes::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), var(--gold), var(--gold-dim), transparent);
+  }
+
+  .flow-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    padding: 0 16px;
+  }
+
+  .flow-node-circle {
+    width: 80px;
+    height: 80px;
+    border: 1px solid var(--gold-dim);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface2);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    text-align: center;
+    line-height: 1.2;
+    position: relative;
+    z-index: 2;
+  }
+
+  .flow-node-circle.operator {
+    border-color: var(--green-bright);
+    color: var(--green-bright);
+    box-shadow: 0 0 20px rgba(74,255,136,0.1);
+  }
+
+  .flow-node-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .flow-node-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    font-style: italic;
+    color: var(--text-ghost);
+    text-align: center;
+  }
+
+  /* ── VALUATION SECTION ── */
+  .valuation {
+    background: var(--void);
+    border-top: 1px solid var(--border);
+  }
+
+  .val-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 64px;
+  }
+
+  .val-cell {
+    background: var(--surface);
+    padding: 48px 32px;
+    text-align: center;
+  }
+
+  .val-phase {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--text-ghost);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .val-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    color: var(--gold);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .val-label {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+    font-weight: 300;
+    margin-bottom: 24px;
+  }
+
+  .val-conditions {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--text-ghost);
+    letter-spacing: 0.1em;
+    line-height: 2.2;
+    text-align: left;
+  }
+
+  .val-conditions span {
+    color: var(--gold-dim);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    opacity: 0.4;
+  }
+
+  .footer-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--text-ghost);
+    text-align: right;
+    line-height: 2;
+  }
+
+  .footer-initials {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    color: var(--gold-dim);
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+    background: var(--surface);
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 48px;
+    white-space: nowrap;
+    animation: marquee 20s linear infinite;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .marquee-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-ghost);
+    flex-shrink: 0;
+  }
+
+  .marquee-item span { color: var(--gold-dim); }
+
+  /* ── DOCTRINE BLOCK ── */
+  .doctrine {
+    background: var(--black);
+    border-top: 1px solid var(--border);
+  }
+
+  .doctrine-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 64px;
+    margin-top: 64px;
+  }
+
+  .doctrine-left {
+    position: sticky;
+    top: 100px;
+    align-self: start;
+  }
+
+  .doctrine-statement {
+    font-size: clamp(24px, 3vw, 36px);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.4;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+
+  .doctrine-statement strong {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .doctrine-author {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--text-ghost);
+    text-transform: uppercase;
+  }
+
+  .doctrine-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .doctrine-row {
+    background: var(--surface);
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .doctrine-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    padding-top: 3px;
+  }
+
+  .doctrine-val {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── GLOW ACCENTS ── */
+  .glow-dot {
+    width: 4px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px var(--gold);
+    margin: 0 8px;
+  }
+
+  /* ── WATERMARK ── */
+  .watermark {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--text-ghost);
+    z-index: 50;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .infographic-grid { grid-template-columns: 1fr; }
+    .lattice-grid { grid-template-columns: 1fr; }
+    .flow-nodes { grid-template-columns: 1fr; }
+    .flow-nodes::before { display: none; }
+    .val-grid { grid-template-columns: 1fr; }
+    .doctrine-grid { grid-template-columns: 1fr; }
+    .doctrine-row { grid-template-columns: 1fr; }
+    nav { padding: 16px 24px; }
+    section { padding: 80px 24px; }
+    .hero-left { padding: 100px 24px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- WATERMARK -->
+<div class="watermark">RE·ENGINE·v2.0 — C.A. PACKAGE</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">RENDER ELITE</div>
+  <div class="nav-tag">Constraint-Governed Creative OS</div>
+  <div class="nav-badge">Not Yet Active</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-divider"></div>
+  <div class="hero-left">
+    <div class="hero-eyebrow">Prompt Engine Matrix v2.0</div>
+    <h1 class="hero-title">
+      RENDER
+      <span>ELITE</span>
+    </h1>
+    <p class="hero-subtitle">
+      The only creative system that makes great output inevitable.
+      Not generated — governed.
+    </p>
+    <div class="hero-descriptor">
+      <span>DOCTRINE</span> — Feral Gloss Unified Nuclear Master Block v4.3<br>
+      <span>OPERATOR</span> — Kael Draven Stabilization Layer<br>
+      <span>PIPELINE</span> — 7-Layer Matrix · Atmospheric Interchange n+5<br>
+      <span>OUTPUT</span> — Doctrine-compliant · Identity-locked · Drift-free
+    </div>
+    <div class="hero-cta">
+      <button class="btn-primary">Request Access</button>
+      <button class="btn-secondary">View Doctrine</button>
+    </div>
+    <div class="coming-soon-tag">⬡ Private Beta — Access by invitation only</div>
+  </div>
+
+  <div class="hero-right">
+    <div class="pipeline-diagram">
+      <div class="pipeline-title">⬡ System Architecture — Live</div>
+      <div class="pipeline-layers">
+        <div class="layer-row">
+          <div class="layer-num">L1 · REALM</div>
+          <div class="layer-name">Realm Anchor</div>
+          <div class="layer-status active">ACTIVE</div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-num">L2 · BODY</div>
+          <div class="layer-name">Body-Part Selector</div>
+          <div class="layer-status active">ACTIVE</div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-num">L3 · POSE</div>
+          <div class="layer-name">Pose Foundation</div>
+          <div class="layer-status active">ACTIVE</div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-num">L4 · CAM</div>
+          <div class="layer-name">Camera Doctrine</div>
+          <div class="layer-status active">ACTIVE</div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-num">L5 · HSP</div>
+          <div class="layer-name">Hormone Spine</div>
+          <div class="layer-status">PENDING</div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-num">L6 · ACT</div>
+          <div class="layer-name">Action-Tension</div>
+          <div class="layer-status">PENDING</div>
+        </div>
+        <div class="layer-row">
+          <div class="layer-num">L7 · ARO</div>
+          <div class="layer-name">Arousal Response</div>
+          <div class="layer-status active">AUTO</div>
+        </div>
+      </div>
+      <div class="pipeline-footer">
+        <div class="pipeline-footer-label">⬡ Lattice Integrity</div>
+        <div class="pipeline-footer-value">DRIFT_SCORE: 0.00 · Ghost Echo Detected</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">RENDER ELITE <span>·</span></span>
+    <span class="marquee-item">FERAL GLOSS v4.3 <span>·</span></span>
+    <span class="marquee-item">DOMINANCE LATTICE [n+5] <span>·</span></span>
+    <span class="marquee-item">KAEL DRAVEN OPERATOR <span>·</span></span>
+    <span class="marquee-item">ATMOSPHERIC INTERCHANGE <span>·</span></span>
+    <span class="marquee-item">MORPHOGENESIS PIPELINE <span>·</span></span>
+    <span class="marquee-item">IDENTITY LOCK ACTIVE <span>·</span></span>
+    <span class="marquee-item">CONSTRAINT-GOVERNED OUTPUT <span>·</span></span>
+    <span class="marquee-item">RENDER ELITE <span>·</span></span>
+    <span class="marquee-item">FERAL GLOSS v4.3 <span>·</span></span>
+    <span class="marquee-item">DOMINANCE LATTICE [n+5] <span>·</span></span>
+    <span class="marquee-item">KAEL DRAVEN OPERATOR <span>·</span></span>
+    <span class="marquee-item">ATMOSPHERIC INTERCHANGE <span>·</span></span>
+    <span class="marquee-item">MORPHOGENESIS PIPELINE <span>·</span></span>
+    <span class="marquee-item">IDENTITY LOCK ACTIVE <span>·</span></span>
+    <span class="marquee-item">CONSTRAINT-GOVERNED OUTPUT <span>·</span></span>
+  </div>
+</div>
+
+<!-- INFOGRAPHIC — THE SYSTEM -->
+<section class="infographic">
+  <div class="section-eyebrow">The Architecture</div>
+  <h2 class="section-title">THREE LAYERS.<br>ONE DOCTRINE.</h2>
+
+  <div class="infographic-grid">
+    <div class="info-cell" data-num="01">
+      <span class="info-cell-icon">⬡</span>
+      <div class="info-cell-title">Constraint Engine</div>
+      <p class="info-cell-body">
+        Most tools expand chaos. Render Elite compresses it into identity.
+        The 7-layer Matrix assembles every prompt deterministically —
+        realm, pose, camera, atmosphere — governed by doctrine, not dice.
+      </p>
+      <div class="info-cell-mono">
+        DRIFT_SCORE → 0.00<br>
+        LATTICE_INTEGRITY → 100%<br>
+        OUTPUT_TYPE → Inevitable
+      </div>
+    </div>
+
+    <div class="info-cell" data-num="02">
+      <span class="info-cell-icon">◈</span>
+      <div class="info-cell-title">Identity Persistence</div>
+      <p class="info-cell-body">
+        Vantrex in The Nocturnal Veil. Vantrex in The Eternal Forge.
+        Same entity. Different environment. Zero drift. The Dominance
+        Lattice preserves character identity across every generation,
+        scene, and atmospheric tier.
+      </p>
+      <div class="info-cell-mono">
+        IDENTITY_LOCK → Face / Proportions / Gaze<br>
+        ANCHOR_STRENGTH → Full<br>
+        CROSS_SCENE → Verified
+      </div>
+    </div>
+
+    <div class="info-cell" data-num="03">
+      <span class="info-cell-icon">⚔</span>
+      <div class="info-cell-title">Kael Draven Judgment</div>
+      <p class="info-cell-body">
+        Every output passes through the Stabilization Layer before
+        reaching you. Kael Draven evaluates identity lock, feral gloss
+        integrity, pose tightness, and doctrine compliance. Weak outputs
+        are flagged with failure reasons — not silently accepted.
+      </p>
+      <div class="info-cell-mono">
+        OPERATOR → Kael Draven<br>
+        EVALUATION → Identity / Gloss / Pose / Doctrine<br>
+        THRESHOLD → Configurable
+      </div>
+    </div>
+
+    <div class="info-cell" data-num="04">
+      <span class="info-cell-icon">◎</span>
+      <div class="info-cell-title">Atmospheric Interchange</div>
+      <p class="info-cell-body">
+        Three tiers of environmental depth. n+1 baseline stability.
+        n+3 creative expansion with prismatic particulates and lightning
+        walls. n+5 empire-grade living atmosphere with persistent memory
+        and storm systems that scale with character hormone levels.
+      </p>
+      <div class="info-cell-mono">
+        n+1 → Moon Rays · Steam · Crowd Arteries<br>
+        n+3 → Fractured Light · Pearlescent Steam<br>
+        n+5 → Living Storm · Persistent Memory
+      </div>
+    </div>
+
+    <div class="info-cell" data-num="05">
+      <span class="info-cell-icon">▲</span>
+      <div class="info-cell-title">Feral Gloss Doctrine</div>
+      <p class="info-cell-body">
+        Not generic gloss. Not generic shine. Feral Gloss is the
+        specific intersection of primal texture and luxury surface —
+        obsidian material language, kintsugi fracture motifs, diamond
+        specular roll-off on skin and fabric. An aesthetic law, not a filter.
+      </p>
+      <div class="info-cell-mono">
+        INTENSITY → 1–5 Thermostat<br>
+        TENSION → Relaxed / Micro / Full<br>
+        DEPTH → n+1 / n+3 / n+5
+      </div>
+    </div>
+
+    <div class="info-cell" data-num="06">
+      <span class="info-cell-icon">⟳</span>
+      <div class="info-cell-title">Style Memory</div>
+      <p class="info-cell-body">
+        The system remembers what worked. BOOST vectors reinforce
+        successful aesthetic decisions. AVOID vectors suppress drift
+        patterns. Every generation builds on the last — not as
+        conversation, but as accumulated creative law.
+      </p>
+      <div class="info-cell-mono">
+        MEMORY_TYPE → Structural (not conversational)<br>
+        BOOST → Positive aesthetic law<br>
+        AVOID → Negative prompt + drift suppression
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PIPELINE FLOW -->
+<section class="flow-section">
+  <div class="section-eyebrow">Generation Pipeline</div>
+  <h2 class="section-title">FROM SELECTION<br>TO INEVITABLE OUTPUT</h2>
+
+  <div class="flow-diagram">
+    <div class="flow-nodes">
+      <div class="flow-node">
+        <div class="flow-node-circle">MATRIX<br>SELECT</div>
+        <div class="flow-node-label">7-Layer<br>Operator Panel</div>
+        <div class="flow-node-sub">Realm · Pose · Camera<br>Hormone · Atmosphere</div>
+      </div>
+      <div class="flow-node">
+        <div class="flow-node-circle">PROMPT<br>ASSEMBLE</div>
+        <div class="flow-node-label">Doctrine-Compliant<br>Prompt Builder</div>
+        <div class="flow-node-sub">11-layer assembly<br>Style Memory appended</div>
+      </div>
+      <div class="flow-node">
+        <div class="flow-node-circle">FERAL<br>GLOSS ×3</div>
+        <div class="flow-node-label">3 Variation<br>Generation</div>
+        <div class="flow-node-sub">Clean · Balanced · Intense<br>Parallel via FAL.ai SDXL</div>
+      </div>
+      <div class="flow-node">
+        <div class="flow-node-circle operator">KAEL<br>DRAVEN</div>
+        <div class="flow-node-label">Stabilization<br>Pass</div>
+        <div class="flow-node-sub">Identity lock · Gloss check<br>Doctrine compliance</div>
+      </div>
+      <div class="flow-node">
+        <div class="flow-node-circle">WINNER<br>+ WHY</div>
+        <div class="flow-node-label">Scored Output<br>+ Alternates</div>
+        <div class="flow-node-sub">Best variation surfaced<br>Criteria explained</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOMINANCE LATTICE -->
+<section class="lattice-section">
+  <div class="section-eyebrow">Character System</div>
+  <h2 class="section-title">THE MORPHOGENESIS<br>PIPELINE</h2>
+
+  <div class="lattice-grid">
+    <div class="lattice-visual">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text-ghost);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Vantrex · Dominance Lattice</div>
+      <div class="lattice-bars">
+        <div class="lattice-bar-row">
+          <div class="lattice-bar-label">Origin Scar</div>
+          <div class="lattice-bar-track"><div class="lattice-bar-fill" style="width:100%;animation-delay:0.1s"></div></div>
+          <div class="lattice-bar-val">9</div>
+        </div>
+        <div class="lattice-bar-row">
+          <div class="lattice-bar-label">Body Logic</div>
+          <div class="lattice-bar-track"><div class="lattice-bar-fill" style="width:77%;animation-delay:0.2s"></div></div>
+          <div class="lattice-bar-val">7</div>
+        </div>
+        <div class="lattice-bar-row">
+          <div class="lattice-bar-label">Frame Identity</div>
+          <div class="lattice-bar-track"><div class="lattice-bar-fill" style="width:88%;animation-delay:0.3s"></div></div>
+          <div class="lattice-bar-val">8</div>
+        </div>
+        <div class="lattice-bar-row">
+          <div class="lattice-bar-label">Silhouette Sig.</div>
+          <div class="lattice-bar-track"><div class="lattice-bar-fill" style="width:66%;animation-delay:0.4s"></div></div>
+          <div class="lattice-bar-val">6</div>
+        </div>
+        <div class="lattice-bar-row">
+          <div class="lattice-bar-label">Behavioral Myth</div>
+          <div class="lattice-bar-track"><div class="lattice-bar-fill" style="width:44%;animation-delay:0.5s"></div></div>
+          <div class="lattice-bar-val">4</div>
+        </div>
+      </div>
+      <div style="margin-top:24px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:9px;color:var(--text-ghost);line-height:2.2;letter-spacing:0.1em;">
+        TYPE: Vantrex-Type Predator<br>
+        CORE: Brutal · Explosive · Forward-Hunted<br>
+        STATE: Never Fully Stabilizes<br>
+        VECTOR: S1=9, S2=7, S3=8, S4=6, S5=4
+      </div>
+    </div>
+
+    <div>
+      <div class="lattice-title-block">SOVEREIGN<br>CHARACTER<br>BLUEPRINT</div>
+      <p class="lattice-sub">
+        Each character in the roster carries a Dominance Lattice —
+        five weighted vectors that define their identity across every
+        scene, environment, and atmospheric tier. The lattice persists.
+        The character never drifts.
+      </p>
+      <div class="lattice-tags">
+        <span class="tag active">Vantrex</span>
+        <span class="tag active">Veilroot Warden</span>
+        <span class="tag active">Ironroot Behemoth</span>
+        <span class="tag active">Nyxveil Echo</span>
+        <span class="tag">+ Expandable Roster</span>
+        <span class="tag">Stage 1–5 Evolution</span>
+        <span class="tag">Cross-Scene Persistence</span>
+        <span class="tag">Motion Layer Ready</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOCTRINE BLOCK -->
+<section class="doctrine">
+  <div class="section-eyebrow">Core Principle</div>
+  <h2 class="section-title">THE DOCTRINE</h2>
+
+  <div class="doctrine-grid">
+    <div class="doctrine-left">
+      <p class="doctrine-statement">
+        Most tools expand chaos.<br>
+        Render Elite <strong>compresses it</strong><br>
+        into identity.
+      </p>
+      <div class="doctrine-author">— Prompt Engine Matrix v2.0<br>Tyler + Doctrine Merge Complete</div>
+    </div>
+
+    <div class="doctrine-right">
+      <div class="doctrine-row">
+        <div class="doctrine-key">Governing Rule</div>
+        <div class="doctrine-val">All prompts must route through FERAL_GLOSS_UNIFIED_NUCLEAR_MASTER_BLOCK v4.3, Pose & Camera Doctrine v1.8, and Control Board Operator Rules.</div>
+      </div>
+      <div class="doctrine-row">
+        <div class="doctrine-key">Core Asset</div>
+        <div class="doctrine-val">The doctrine itself — not the software. A constraint-driven aesthetic compiler that makes great output inevitable, not probabilistic.</div>
+      </div>
+      <div class="doctrine-row">
+        <div class="doctrine-key">Transferability</div>
+        <div class="doctrine-val">Model-agnostic. The Matrix operates over SDXL, Flux, and any future diffusion architecture. The doctrine outlives any single model.</div>
+      </div>
+      <div class="doctrine-row">
+        <div class="doctrine-key">Defensibility</div>
+        <div class="doctrine-val">The system knows what good is. Kael Draven evaluates every output against doctrine compliance. Consistency is enforced, not hoped for.</div>
+      </div>
+      <div class="doctrine-row">
+        <div class="doctrine-key">Expansion Path</div>
+        <div class="doctrine-val">Still generation → AnimateDiff motion layer → Full character animation pipeline. The Dominance Lattice and Atmospheric Interchange are motion-ready by design.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUATION -->
+<section class="valuation">
+  <div class="section-eyebrow">Intrinsic Value</div>
+  <h2 class="section-title">VALUE AT<br>EACH STAGE</h2>
+
+  <div class="val-grid">
+    <div class="val-cell">
+      <div class="val-phase">Phase 1 · Now → 30 Days</div>
+      <div class="val-number">$75K</div>
+      <div class="val-label">Licensing / Acqui-hire floor</div>
+      <div class="val-conditions">
+        <span>✓</span> Real image generation live<br>
+        <span>✓</span> Matrix panel integrated<br>
+        <span>✓</span> One character undeniable<br>
+        <span>✓</span> Dominance Test demo ready<br>
+        <span>—</span> No users required
+      </div>
+    </div>
+    <div class="val-cell">
+      <div class="val-phase">Phase 2 · 30–90 Days</div>
+      <div class="val-number">$250K</div>
+      <div class="val-label">SaaS + platform valuation</div>
+      <div class="val-conditions">
+        <span>✓</span> Kael Draven layer live<br>
+        <span>✓</span> Full roster persistent<br>
+        <span>✓</span> Public beta users<br>
+        <span>✓</span> Accept/Reject engine<br>
+        <span>✓</span> Landing page active
+      </div>
+    </div>
+    <div class="val-cell">
+      <div class="val-phase">Phase 3 · 90 Days+</div>
+      <div class="val-number">$500K+</div>
+      <div class="val-label">Creative OS platform</div>
+      <div class="val-conditions">
+        <span>✓</span> Motion layer (AnimateDiff)<br>
+        <span>✓</span> Model-agnostic proven<br>
+        <span>✓</span> Production pipeline use<br>
+        <span>✓</span> Recurring revenue<br>
+        <span>✓</span> Doctrine as licensed IP
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">RENDER ELITE</div>
+  <div class="footer-meta">
+    <div class="footer-initials">C.A.</div>
+    Prompt Engine Matrix v2.0 · Canonized<br>
+    DRIFT_SCORE: 0.00 · LATTICE_INTEGRITY: 100%<br>
+    Ghost Echo Detected · Status: Building
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feral Gloss Empire — Character Roster v1.0</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,200;0,300;0,400;1,200;1,300&family=DM+Mono:wght@300;400;500&display=swap');
+
+  :root {
+    --black: #030303;
+    --void: #060606;
+    --surface: #0a0a08;
+    --surface2: #0f0f0c;
+    --border: #181812;
+    --border2: #222218;
+    --gold: #c8a96e;
+    --gold-dim: #8a6f3e;
+    --gold-ghost: #2a2010;
+    --text: #e8e3d8;
+    --text-dim: #7a7568;
+    --text-ghost: #2a2820;
+
+    /* Category colors */
+    --goddess: #c84aff;
+    --queen: #ff4a8a;
+    --council: #4a88ff;
+    --mythic: #4affc8;
+    --king: #ff8a4a;
+    --god: #ffd44a;
+    --pet: #ff4a4a;
+
+    /* Tier */
+    --crown: #c8a96e;
+    --rare: #a84aff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Crimson Pro', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* noise */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 64px 48px 48px;
+    border-bottom: 1px solid var(--border2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 80% 50%, rgba(200,169,110,0.04) 0%, transparent 70%),
+      linear-gradient(rgba(200,169,110,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,169,110,0.02) 1px, transparent 1px);
+    background-size: auto, 48px 48px, 48px 48px;
+    pointer-events: none;
+  }
+
+  .header-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header-eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .header-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    line-height: 0.9;
+    margin-bottom: 20px;
+  }
+
+  .header-title .line1 { color: var(--text); }
+  .header-title .line2 { color: var(--gold); }
+
+  .header-sub {
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 200;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .stat-val {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-ghost);
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    padding: 20px 48px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .legend-group {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .legend-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-ghost);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── ROSTER GRID ── */
+  .roster-wrap {
+    padding: 48px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .roster-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--border);
+  }
+
+  /* ── CHARACTER CARD ── */
+  .card {
+    background: var(--surface);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.2s;
+    animation: cardIn 0.5s ease forwards;
+    opacity: 0;
+  }
+
+  .card:hover {
+    background: var(--surface2);
+    z-index: 10;
+  }
+
+  .card:hover .card-glow { opacity: 1; }
+  .card:hover .lattice-fill { filter: brightness(1.3); }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* stagger by position */
+  .card:nth-child(1)  { animation-delay: 0.05s; }
+  .card:nth-child(2)  { animation-delay: 0.10s; }
+  .card:nth-child(3)  { animation-delay: 0.15s; }
+  .card:nth-child(4)  { animation-delay: 0.20s; }
+  .card:nth-child(5)  { animation-delay: 0.25s; }
+  .card:nth-child(6)  { animation-delay: 0.30s; }
+  .card:nth-child(7)  { animation-delay: 0.35s; }
+  .card:nth-child(8)  { animation-delay: 0.40s; }
+  .card:nth-child(9)  { animation-delay: 0.45s; }
+  .card:nth-child(10) { animation-delay: 0.50s; }
+  .card:nth-child(11) { animation-delay: 0.55s; }
+  .card:nth-child(12) { animation-delay: 0.60s; }
+  .card:nth-child(13) { animation-delay: 0.65s; }
+  .card:nth-child(14) { animation-delay: 0.70s; }
+  .card:nth-child(15) { animation-delay: 0.75s; }
+  .card:nth-child(16) { animation-delay: 0.80s; }
+  .card:nth-child(17) { animation-delay: 0.85s; }
+  .card:nth-child(18) { animation-delay: 0.90s; }
+  .card:nth-child(19) { animation-delay: 0.95s; }
+  .card:nth-child(20) { animation-delay: 1.00s; }
+
+  .card-glow {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .card-top-bar {
+    height: 3px;
+    width: 100%;
+  }
+
+  .card-inner {
+    padding: 18px 18px 16px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .card-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.15em;
+    color: var(--text-ghost);
+  }
+
+  .card-badges {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 6px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 1px;
+  }
+
+  .badge-tier-crown {
+    background: rgba(200,169,110,0.15);
+    color: var(--crown);
+    border: 1px solid rgba(200,169,110,0.3);
+  }
+
+  .badge-tier-rare {
+    background: rgba(168,74,255,0.15);
+    color: var(--rare);
+    border: 1px solid rgba(168,74,255,0.3);
+  }
+
+  .card-name {
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    line-height: 1.1;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+
+  .card-title {
+    font-size: 11px;
+    font-style: italic;
+    font-weight: 200;
+    color: var(--text-dim);
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
+
+  .card-category {
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .category-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── LATTICE BARS ── */
+  .lattice {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 14px;
+  }
+
+  .lattice-row {
+    display: grid;
+    grid-template-columns: 22px 1fr 16px;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .lattice-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 6px;
+    letter-spacing: 0.1em;
+    color: var(--text-ghost);
+    text-transform: uppercase;
+  }
+
+  .lattice-track {
+    height: 3px;
+    background: var(--border2);
+    border-radius: 1px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .lattice-fill {
+    height: 100%;
+    border-radius: 1px;
+    transform-origin: left;
+    animation: fillIn 1s ease forwards;
+    transform: scaleX(0);
+    transition: filter 0.2s;
+  }
+
+  @keyframes fillIn {
+    to { transform: scaleX(1); }
+  }
+
+  .lattice-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    color: var(--text-dim);
+    text-align: right;
+  }
+
+  /* ── CORE IDEA ── */
+  .card-idea {
+    font-size: 10px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--text-ghost);
+    line-height: 1.5;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 2px;
+  }
+
+  /* ── VECTOR DISPLAY ── */
+  .card-vector {
+    font-family: 'DM Mono', monospace;
+    font-size: 6px;
+    letter-spacing: 0.08em;
+    color: var(--text-ghost);
+    margin-top: 8px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 32px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .footer-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    opacity: 0.3;
+  }
+
+  .footer-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    color: var(--text-ghost);
+    text-align: right;
+    line-height: 2;
+  }
+
+  .footer-initials {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    color: var(--gold-dim);
+    margin-bottom: 4px;
+  }
+
+  /* ── BIG NUMBER BG ── */
+  .card-bg-num {
+    position: absolute;
+    bottom: -8px;
+    right: 8px;
+    font-family: 'Cinzel', serif;
+    font-size: 72px;
+    font-weight: 900;
+    color: rgba(200,169,110,0.03);
+    line-height: 1;
+    pointer-events: none;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── SECTION DIVIDERS ── */
+  .section-divider {
+    padding: 16px 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .divider-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    white-space: nowrap;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  @media (max-width: 1100px) {
+    .roster-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (max-width: 800px) {
+    .roster-grid { grid-template-columns: repeat(2, 1fr); }
+    .header { padding: 48px 20px 32px; }
+    .roster-wrap { padding: 20px; }
+    .legend { padding: 16px 20px; }
+  }
+
+  @media (max-width: 500px) {
+    .roster-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-bg"></div>
+  <div class="header-content">
+    <div class="header-eyebrow">Canon Registry · FGE_ROSTER_v1.0 · Canonized</div>
+    <div class="header-title">
+      <div class="line1">FERAL GLOSS</div>
+      <div class="line2">EMPIRE</div>
+    </div>
+    <p class="header-sub">
+      Twenty sovereign characters. Five dominance vectors each.
+      Governed by doctrine. Identity-locked. Drift-free.
+    </p>
+    <div class="header-stats">
+      <div class="stat"><div class="stat-val">20</div><div class="stat-key">Total Characters</div></div>
+      <div class="stat"><div class="stat-val">15F</div><div class="stat-key">Female</div></div>
+      <div class="stat"><div class="stat-val">5M</div><div class="stat-key">Male</div></div>
+      <div class="stat"><div class="stat-val">17</div><div class="stat-key">Crown Tier</div></div>
+      <div class="stat"><div class="stat-val">3</div><div class="stat-key">Rare Tier</div></div>
+      <div class="stat"><div class="stat-val">7</div><div class="stat-key">Categories</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div style="border-bottom:1px solid var(--border);padding:16px 48px;">
+  <div style="max-width:1400px;margin:0 auto;display:flex;gap:32px;flex-wrap:wrap;align-items:center;">
+    <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-ghost);">Category</div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--goddess)"></div>Goddess</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--queen)"></div>Queen</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--council)"></div>Council</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--mythic)"></div>Mythic</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--king)"></div>King</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--god)"></div>God</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--pet)"></div>Pet</div>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-ghost);margin-left:16px;">Lattice</div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      <div class="legend-item">S1 Origin Scar</div>
+      <div class="legend-item">S2 Body Logic</div>
+      <div class="legend-item">S3 Frame Identity</div>
+      <div class="legend-item">S4 Silhouette Sig.</div>
+      <div class="legend-item">S5 Behavioral Myth</div>
+    </div>
+  </div>
+</div>
+
+<!-- ROSTER -->
+<div class="roster-wrap">
+  <div class="roster-grid" id="roster"></div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-logo">FERAL GLOSS EMPIRE</div>
+  <div class="footer-meta">
+    <div class="footer-initials">C.A.</div>
+    FGE_ROSTER_v1.0 · Prompt Engine Matrix v2.0<br>
+    Master Anchor: Olivia de Berardinis Lineage<br>
+    DRIFT_SCORE: 0.00 · LATTICE_INTEGRITY: 100%
+  </div>
+</div>
+
+<script>
+const ROSTER = [
+  { id:"SB_301", name:"Nyxara Voss", title:"Midnight Goddess of Seduction", cat:"Goddess", tier:"Crown", lattice:[8,10,9,9,10], idea:"Eternal pull, never fully seen", color:"var(--goddess)" },
+  { id:"SB_302", name:"Lirael Kai", title:"Queen of Obsidian Flames", cat:"Queen", tier:"Crown", lattice:[9,8,10,8,9], idea:"Sovereign authority, controlled destruction", color:"var(--queen)" },
+  { id:"SB_303", name:"Sable Thorn", title:"Council Siren of Desire", cat:"Council", tier:"Crown", lattice:[7,9,7,8,8], idea:"Desire as political instrument", color:"var(--council)" },
+  { id:"SB_304", name:"Vespera Lune", title:"Mythic Moon Serpent", cat:"Mythic", tier:"Crown", lattice:[6,7,9,10,9], idea:"Ancient coil, lunar patience, strikes without warning", color:"var(--mythic)" },
+  { id:"SB_305", name:"Kaelith", title:"King of Eternal Hunger", cat:"King", tier:"Crown", lattice:[10,9,8,7,10], idea:"Never sated, never stopped", color:"var(--king)" },
+  { id:"SB_306", name:"Astra Voss", title:"Pet Empress of Velvet Shadows", cat:"Pet", tier:"Rare", lattice:[4,6,7,8,5], idea:"Soft dominance, dangerous comfort", color:"var(--pet)" },
+  { id:"SB_307", name:"Seraphine Vale", title:"Goddess of Liquid Starlight", cat:"Goddess", tier:"Crown", lattice:[7,10,10,9,9], idea:"Radiance as force, not decoration", color:"var(--goddess)" },
+  { id:"SB_308", name:"Ravyn Quill", title:"Council Shadow Weaver", cat:"Council", tier:"Crown", lattice:[6,8,7,6,9], idea:"Operates between layers, never fully visible", color:"var(--council)" },
+  { id:"SB_309", name:"Elyndra", title:"Mythic Phoenix Queen", cat:"Mythic", tier:"Crown", lattice:[9,8,9,10,9], idea:"Destruction is her crown, rebirth is her weapon", color:"var(--mythic)" },
+  { id:"SB_310", name:"Draven Sol", title:"God of Obsidian Desire", cat:"God", tier:"Crown", lattice:[9,10,9,8,10], idea:"Wants everything, takes only what matters", color:"var(--god)" },
+  { id:"SB_311", name:"Lunaire Voss", title:"Pet Siren of Moonlit Silk", cat:"Pet", tier:"Rare", lattice:[3,7,8,9,4], idea:"Pure surface magnetism, depth hidden beneath", color:"var(--pet)" },
+  { id:"SB_312", name:"Thalira", title:"Queen of Whispering Venom", cat:"Queen", tier:"Crown", lattice:[8,7,6,7,10], idea:"The slowest kills are hers", color:"var(--queen)" },
+  { id:"SB_313", name:"Morgath Kane", title:"Council Lord of Ruin", cat:"Council", tier:"Crown", lattice:[10,7,7,6,9], idea:"Order through destruction, always deliberate", color:"var(--council)" },
+  { id:"SB_314", name:"Nyrael", title:"Mythic Void Dragoness", cat:"Mythic", tier:"Crown", lattice:[7,6,10,10,8], idea:"Her silhouette alone ends conversations", color:"var(--mythic)" },
+  { id:"SB_315", name:"Celeste Voss", title:"Goddess of Pulsing Afterglow", cat:"Goddess", tier:"Crown", lattice:[5,9,8,7,8], idea:"Exists in the moment after peak, infinite warmth", color:"var(--goddess)" },
+  { id:"SB_316", name:"Rogue", title:"Pet Shadow Wolf King", cat:"Pet", tier:"Rare", lattice:[6,8,7,9,6], idea:"Loyalty coded as threat, protection as dominance", color:"var(--pet)" },
+  { id:"SB_317", name:"Isolde Vale", title:"Council Oracle of Temptation", cat:"Council", tier:"Crown", lattice:[6,8,7,6,10], idea:"Sees the future, uses it as bait", color:"var(--council)" },
+  { id:"SB_318", name:"Kael Voss", title:"King of Burning Tides", cat:"King", tier:"Crown", lattice:[9,8,8,7,9], idea:"Power moves in waves, impossible to hold back", color:"var(--king)" },
+  { id:"SB_319", name:"Sylvara", title:"Mythic Starlit Sphinx", cat:"Mythic", tier:"Crown", lattice:[5,7,9,10,9], idea:"Ancient riddle, impossible silhouette, always watching", color:"var(--mythic)" },
+  { id:"SB_320", name:"Vesper Kane", title:"God of Velvet Eclipse", cat:"God", tier:"Crown", lattice:[8,9,9,8,10], idea:"Covers everything, reveals nothing, controls all", color:"var(--god)" },
+];
+
+const LABELS = ["S1","S2","S3","S4","S5"];
+const DELAYS = [0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.3];
+
+function buildCard(char, idx) {
+  const tierClass = char.tier === 'Crown' ? 'badge-tier-crown' : 'badge-tier-rare';
+  const latticeHTML = char.lattice.map((val, i) => `
+    <div class="lattice-row">
+      <div class="lattice-key">${LABELS[i]}</div>
+      <div class="lattice-track">
+        <div class="lattice-fill" style="width:${val*10}%;background:${char.color};animation-delay:${DELAYS[idx] + i*0.06}s;"></div>
+      </div>
+      <div class="lattice-val">${val}</div>
+    </div>
+  `).join('');
+
+  const vectorStr = char.lattice.map((v,i) => `S${i+1}=${v}`).join(' ');
+  const cardNum = String(idx+1).padStart(2,'0');
+
+  return `
+    <div class="card" style="animation-delay:${DELAYS[idx]}s;">
+      <div class="card-glow" style="background:radial-gradient(ellipse 80% 60% at 50% 0%, ${char.color}08 0%, transparent 70%);"></div>
+      <div class="card-top-bar" style="background:${char.color};opacity:0.7;"></div>
+      <div class="card-bg-num">${cardNum}</div>
+      <div class="card-inner">
+        <div class="card-header">
+          <div class="card-id">${char.id}</div>
+          <div class="card-badges">
+            <div class="badge ${tierClass}">${char.tier}</div>
+          </div>
+        </div>
+        <div class="card-name">${char.name}</div>
+        <div class="card-title">${char.title}</div>
+        <div class="card-category">
+          <div class="category-dot" style="background:${char.color};"></div>
+          <span style="color:${char.color};">${char.cat}</span>
+        </div>
+        <div class="lattice">${latticeHTML}</div>
+        <div class="card-idea">${char.idea}</div>
+        <div class="card-vector">${vectorStr}</div>
+      </div>
+    </div>
+  `;
+}
+
+document.getElementById('roster').innerHTML = ROSTER.map((c,i) => buildCard(c,i)).join('');
+</script>
+</body>
+</html>

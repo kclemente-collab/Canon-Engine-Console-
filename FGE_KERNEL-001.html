@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KERNEL-001 — FERAL GLOSS EMPIRE</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap');
+
+  :root {
+    --void: #040406;
+    --deep: #080810;
+    --carbon: #0e0d16;
+    --ash: #161520;
+    --smoke: #201e2c;
+    --bone: #bdb5c8;
+    --ivory: #e2dce8;
+    --gold: #c9a84c;
+    --pulse: rgba(201,168,76,0.08);
+    --freq: #7a6fa0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--ivory);
+    font-family: 'Playfair Display', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* FREQUENCY FIELD BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(122,111,160,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 48px 120px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    padding-bottom: 24px;
+    margin-bottom: 80px;
+  }
+
+  .mod-id {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    line-height: 2.2;
+  }
+
+  .house-id {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: rgba(201,168,76,0.35);
+    text-align: right;
+    line-height: 2.2;
+  }
+
+  /* TITLE */
+  .title-block {
+    margin-bottom: 100px;
+    text-align: center;
+  }
+
+  .title-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    color: var(--freq);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 15vw, 144px);
+    line-height: 0.85;
+    letter-spacing: 0.04em;
+    color: var(--ivory);
+    margin-bottom: 6px;
+  }
+
+  h1 em {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(201,168,76,0.25);
+    font-style: normal;
+  }
+
+  .title-def {
+    font-size: 15px;
+    font-style: italic;
+    color: var(--bone);
+    line-height: 1.9;
+    max-width: 480px;
+    margin: 28px auto 0;
+  }
+
+  /* DOCTRINE CARD */
+  .doctrine {
+    background: var(--carbon);
+    border-top: 1px solid var(--gold);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    padding: 40px 48px;
+    margin-bottom: 80px;
+    text-align: center;
+  }
+
+  .doctrine p {
+    font-size: 18px;
+    font-style: italic;
+    line-height: 1.9;
+    color: var(--ivory);
+  }
+
+  .doctrine p + p {
+    margin-top: 14px;
+    font-size: 14px;
+    color: var(--bone);
+  }
+
+  /* KERNEL LAWS */
+  .laws-block {
+    margin-bottom: 80px;
+  }
+
+  .laws-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(201,168,76,0.12);
+  }
+
+  .law-row {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 20px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.06);
+    align-items: start;
+  }
+
+  .law-n {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: rgba(201,168,76,0.4);
+    padding-top: 3px;
+  }
+
+  .law-text {
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--bone);
+  }
+
+  .law-text strong {
+    color: var(--ivory);
+    font-style: normal;
+  }
+
+  /* KERNEL REGISTRY */
+  .registry-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(201,168,76,0.12);
+  }
+
+  /* INDIVIDUAL KERNEL ENTRY */
+  .kernel-entry {
+    margin-bottom: 4px;
+    background: var(--ash);
+    padding: 32px 40px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: center;
+    border-left: 3px solid transparent;
+    transition: border-color 0.25s, background 0.25s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kernel-entry::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    background: linear-gradient(90deg, var(--pulse), transparent);
+    transition: width 0.4s ease;
+  }
+
+  .kernel-entry:hover {
+    border-left-color: var(--gold);
+    background: var(--smoke);
+  }
+
+  .kernel-entry:hover::before {
+    width: 100%;
+  }
+
+  .kernel-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.4em;
+    color: var(--freq);
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .kernel-signal {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ivory);
+    line-height: 1.3;
+    position: relative;
+    z-index: 1;
+  }
+
+  .kernel-meta {
+    text-align: right;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+
+  .kernel-rank {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .kernel-register {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: rgba(122,111,160,0.7);
+  }
+
+  /* BLANK KERNEL — for user to fill */
+  .kernel-entry.blank {
+    border-left-color: rgba(201,168,76,0.1);
+    opacity: 0.4;
+  }
+
+  .kernel-entry.blank .kernel-signal {
+    color: rgba(226,220,232,0.2);
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    font-style: normal;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* WRITING LAW */
+  .writing-law {
+    background: var(--carbon);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 48px 48px;
+    margin: 80px 0;
+  }
+
+  .writing-law h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.08em;
+    color: var(--ivory);
+    margin-bottom: 28px;
+  }
+
+  .test-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .test-item {
+    background: var(--ash);
+    padding: 18px 24px;
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 16px;
+  }
+
+  .test-glyph {
+    color: var(--gold);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding-top: 2px;
+  }
+
+  .test-rule {
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.7;
+    color: var(--bone);
+  }
+
+  .test-rule strong {
+    color: var(--ivory);
+    font-style: normal;
+  }
+
+  /* EXAMPLE ANATOMY */
+  .anatomy-block {
+    background: var(--carbon);
+    padding: 40px 44px;
+    margin-bottom: 80px;
+    border-top: 2px solid var(--freq);
+  }
+
+  .anatomy-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: var(--freq);
+    margin-bottom: 24px;
+  }
+
+  .anatomy-sentence {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: var(--ivory);
+    line-height: 1.4;
+    margin-bottom: 32px;
+  }
+
+  .anatomy-breakdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+  }
+
+  .anatomy-part {
+    background: var(--ash);
+    padding: 20px 20px;
+  }
+
+  .anatomy-part-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .anatomy-part-word {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ivory);
+    margin-bottom: 6px;
+  }
+
+  .anatomy-part-why {
+    font-size: 12px;
+    color: rgba(189,181,200,0.6);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid rgba(201,168,76,0.15);
+    padding-top: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .footer-note {
+    font-style: italic;
+    font-size: 15px;
+    color: var(--bone);
+    line-height: 1.8;
+    max-width: 380px;
+  }
+
+  .footer-stamp {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    color: rgba(201,168,76,0.3);
+    text-align: right;
+    line-height: 2.2;
+  }
+
+  /* ANIMATE */
+  @keyframes emerge {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .page > * {
+    animation: emerge 0.6s ease forwards;
+    opacity: 0;
+  }
+
+  .page > *:nth-child(1)  { animation-delay: 0.05s; }
+  .page > *:nth-child(2)  { animation-delay: 0.1s; }
+  .page > *:nth-child(3)  { animation-delay: 0.15s; }
+  .page > *:nth-child(4)  { animation-delay: 0.2s; }
+  .page > *:nth-child(5)  { animation-delay: 0.25s; }
+  .page > *:nth-child(6)  { animation-delay: 0.3s; }
+  .page > *:nth-child(7)  { animation-delay: 0.35s; }
+  .page > *:nth-child(8)  { animation-delay: 0.4s; }
+  .page > *:nth-child(9)  { animation-delay: 0.45s; }
+
+  @media (max-width: 640px) {
+    .page { padding: 48px 24px 80px; }
+    .kernel-entry { grid-template-columns: 1fr; gap: 16px; }
+    .kernel-meta { text-align: left; }
+    .anatomy-breakdown { grid-template-columns: 1fr; }
+    .footer { flex-direction: column; gap: 28px; }
+    h1 { font-size: clamp(56px, 18vw, 100px); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="mod-id">
+      MODULE — KERNEL-001 — v1.0<br>
+      VIBE KERNEL REGISTRY<br>
+      COMPANION TO ASCEND-001 + COLLIDE-001
+    </div>
+    <div class="house-id">
+      FERAL GLOSS EMPIRE<br>
+      ARTICLE XV<br>
+      2026
+    </div>
+  </header>
+
+  <!-- TITLE -->
+  <div class="title-block">
+    <div class="title-eyebrow">Pre-verbal Signal Architecture</div>
+    <h1>VIBE<br><em>KERNEL</em></h1>
+    <p class="title-def">The irreducible frequency a character emits before the brain engages. Not identity. Not archetype. The one thing felt before anything is known. It survives rank, collapse, billet change, and time. It cannot be designed away.</p>
+  </div>
+
+  <!-- DOCTRINE -->
+  <div class="doctrine">
+    <p>Identity can drift. Archetype can be reassigned. Rank can collapse. The Vibe Kernel cannot change.</p>
+    <p>It is not what she is. It is what the room feels the moment she enters — before she has spoken, moved, or been introduced. One sentence. Ten words maximum. The frequency beneath everything else.</p>
+  </div>
+
+  <!-- THE LAWS -->
+  <div class="laws-block">
+    <div class="laws-label">The Five Kernel Laws</div>
+
+    <div class="law-row">
+      <div class="law-n">01</div>
+      <div class="law-text"><strong>One sentence. Ten words maximum.</strong> If it takes more than ten words, it is not a Vibe Kernel — it is a character description. Kernels are compression, not summary.</div>
+    </div>
+    <div class="law-row">
+      <div class="law-n">02</div>
+      <div class="law-text"><strong>It must be felt, not understood.</strong> A Vibe Kernel that requires explanation has already failed. The right sentence lands before the mind processes it.</div>
+    </div>
+    <div class="law-row">
+      <div class="law-n">03</div>
+      <div class="law-text"><strong>It must survive collapse.</strong> If the character loses everything — rank, material, billet — the Kernel remains true. It is what she was before she earned anything and what she will be after she loses it.</div>
+    </div>
+    <div class="law-row">
+      <div class="law-n">04</div>
+      <div class="law-text"><strong>No two Kernels may use the same structural tension.</strong> If two characters both carry the form "X that the room suspects is Y" — one must be rewritten. Kernel collision is the deepest form of archetype cannibalism.</div>
+    </div>
+    <div class="law-row">
+      <div class="law-n">05</div>
+      <div class="law-text"><strong>The Kernel is written last, not first.</strong> You discover it after the character exists — not before. It is extracted from what is already true, never imposed from outside.</div>
+    </div>
+  </div>
+
+  <!-- ANATOMY OF A KERNEL -->
+  <div class="anatomy-block">
+    <div class="anatomy-label">Anatomy Of A Kernel — Dissection</div>
+    <div class="anatomy-sentence">"Warmth that the room suspects is a weapon."</div>
+    <div class="anatomy-breakdown">
+      <div class="anatomy-part">
+        <div class="anatomy-part-label">THE SURFACE SIGNAL</div>
+        <div class="anatomy-part-word">"Warmth"</div>
+        <p class="anatomy-part-why">What the room receives first. Disarming. Safe register. The brain relaxes.</p>
+      </div>
+      <div class="anatomy-part">
+        <div class="anatomy-part-label">THE SUSPENSION</div>
+        <div class="anatomy-part-word">"that the room suspects"</div>
+        <p class="anatomy-part-why">Not confirmed. Not denied. The uncertainty is the hook. The room is held in unresolved tension.</p>
+      </div>
+      <div class="anatomy-part">
+        <div class="anatomy-part-label">THE HIDDEN FREQUENCY</div>
+        <div class="anatomy-part-word">"is a weapon"</div>
+        <p class="anatomy-part-why">The sacred/feral inversion. The thing beneath the surface signal. Makes the warmth retroactively dangerous.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE REGISTRY -->
+  <div class="registry-label">The Kernel Registry — Active Entries</div>
+
+  <!-- DEMO KERNELS — archetypes for the user to replace/populate -->
+  <div class="kernel-entry">
+    <div>
+      <div class="kernel-name">CHARACTER SLOT 01</div>
+      <div class="kernel-signal">Warmth that the room suspects is a weapon.</div>
+    </div>
+    <div class="kernel-meta">
+      <div class="kernel-rank">RANK — III</div>
+      <div class="kernel-register">SACRED / FERAL</div>
+    </div>
+  </div>
+
+  <div class="kernel-entry">
+    <div>
+      <div class="kernel-name">CHARACTER SLOT 02</div>
+      <div class="kernel-signal">Stillness so complete it reads as a threat.</div>
+    </div>
+    <div class="kernel-meta">
+      <div class="kernel-rank">RANK — V</div>
+      <div class="kernel-register">APEX / SACRED</div>
+    </div>
+  </div>
+
+  <div class="kernel-entry">
+    <div>
+      <div class="kernel-name">CHARACTER SLOT 03</div>
+      <div class="kernel-signal">Beauty that arrived from somewhere difficult.</div>
+    </div>
+    <div class="kernel-meta">
+      <div class="kernel-rank">RANK — II</div>
+      <div class="kernel-register">FERAL / EARNED</div>
+    </div>
+  </div>
+
+  <div class="kernel-entry">
+    <div>
+      <div class="kernel-name">CHARACTER SLOT 04</div>
+      <div class="kernel-signal">The kind of calm that only follows a decision.</div>
+    </div>
+    <div class="kernel-meta">
+      <div class="kernel-rank">RANK — IV</div>
+      <div class="kernel-register">SOVEREIGN / FERAL</div>
+    </div>
+  </div>
+
+  <div class="kernel-entry">
+    <div>
+      <div class="kernel-name">CHARACTER SLOT 05</div>
+      <div class="kernel-signal">Softness that has already survived the worst.</div>
+    </div>
+    <div class="kernel-meta">
+      <div class="kernel-rank">RANK — IV</div>
+      <div class="kernel-register">SACRED / DEEP</div>
+    </div>
+  </div>
+
+  <div class="kernel-entry">
+    <div>
+      <div class="kernel-name">CHARACTER SLOT 06</div>
+      <div class="kernel-signal">Precision that feels like it has a preference for you.</div>
+    </div>
+    <div class="kernel-meta">
+      <div class="kernel-rank">RANK — VI</div>
+      <div class="kernel-register">APEX / SOVEREIGN</div>
+    </div>
+  </div>
+
+  <div class="kernel-entry">
+    <div>
+      <div class="kernel-name">CHARACTER SLOT 07</div>
+      <div class="kernel-signal">Danger wearing the face of someone's answered prayer.</div>
+    </div>
+    <div class="kernel-meta">
+      <div class="kernel-rank">RANK — V</div>
+      <div class="kernel-register">FERAL / SACRED</div>
+    </div>
+  </div>
+
+  <div class="kernel-entry">
+    <div>
+      <div class="kernel-name">CHARACTER SLOT 08</div>
+      <div class="kernel-signal">The silence before she speaks is already a verdict.</div>
+    </div>
+    <div class="kernel-meta">
+      <div class="kernel-rank">RANK — VI</div>
+      <div class="kernel-register">SOVEREIGN / PURE</div>
+    </div>
+  </div>
+
+  <!-- BLANK SLOTS -->
+  <div class="kernel-entry blank">
+    <div>
+      <div class="kernel-name">CHARACTER SLOT 09</div>
+      <div class="kernel-signal">— KERNEL NOT YET EXTRACTED —</div>
+    </div>
+    <div class="kernel-meta">
+      <div class="kernel-rank">RANK — ?</div>
+      <div class="kernel-register">REGISTER — ?</div>
+    </div>
+  </div>
+
+  <div class="kernel-entry blank">
+    <div>
+      <div class="kernel-name">CHARACTER SLOT 10</div>
+      <div class="kernel-signal">— KERNEL NOT YET EXTRACTED —</div>
+    </div>
+    <div class="kernel-meta">
+      <div class="kernel-rank">RANK — ?</div>
+      <div class="kernel-register">REGISTER — ?</div>
+    </div>
+  </div>
+
+  <!-- HOW TO WRITE A KERNEL -->
+  <div class="writing-law">
+    <h3>How To Extract A Kernel</h3>
+    <div class="test-list">
+      <div class="test-item">
+        <div class="test-glyph">→</div>
+        <div class="test-rule"><strong>Ask: what does the room feel before she speaks?</strong> Not what she looks like. Not what she does. What is the pre-verbal signal — the thing that arrives before language?</div>
+      </div>
+      <div class="test-item">
+        <div class="test-glyph">→</div>
+        <div class="test-rule"><strong>Find the tension inside it.</strong> The strongest Kernels carry a contradiction — something that is two things at once. Sacred and feral. Soft and dangerous. Still and inevitable. The tension is the hook.</div>
+      </div>
+      <div class="test-item">
+        <div class="test-glyph">→</div>
+        <div class="test-rule"><strong>Test it against her worst moment.</strong> If the Kernel is still true when she has collapsed, lost everything, and is starting again from nothing — it is a real Kernel. If it only works when she is powerful — it is a status description, not a frequency.</div>
+      </div>
+      <div class="test-item">
+        <div class="test-glyph">→</div>
+        <div class="test-rule"><strong>Say it out loud.</strong> A Vibe Kernel that works on paper but doesn't land when spoken is not finished. It must feel like a frequency when heard — not just a sentence when read.</div>
+      </div>
+      <div class="test-item">
+        <div class="test-glyph">→</div>
+        <div class="test-rule"><strong>Check it against all active Kernels.</strong> Run the Collision Map on AX-04 (sacred/feral register). If two Kernels carry the same structural tension — one must be rewritten before the character is canonized.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-note">
+      "She walked in and the room already knew something about her it couldn't name."<br><br>
+      That unnamed thing is the Kernel.<br>
+      Build until every character has one.
+    </div>
+    <div class="footer-stamp">
+      KERNEL-001 — FERAL GLOSS EMPIRE<br>
+      ARTICLE XV — VIBE KERNEL LAW<br>
+      STACK: CON + ASCEND + COLLIDE + KERNEL<br>
+      AUTHORITY: ET-CON-000001<br>
+      2026 — THE FREQUENCY HOLDS
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
