@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FERAL GLOSS VAULT · Canon Engine v2.1</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --deep: #111111;
+    --panel: #161616;
+    --border: #232323;
+    --border-hi: #2e2e2e;
+    --green: #00ff9d;
+    --green-dim: #00cc7a;
+    --green-ghost: rgba(0,255,157,0.08);
+    --green-glow: rgba(0,255,157,0.15);
+    --amber: #f5a623;
+    --red: #ff4444;
+    --text: #d4d4d4;
+    --text-dim: #666;
+    --text-muted: #444;
+    --mono: 'DM Mono', monospace;
+    --display: 'Bebas Neue', sans-serif;
+    --serif: 'Fraunces', serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    background: var(--deep);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-bar {
+    width: 3px;
+    height: 36px;
+    background: var(--green);
+    flex-shrink: 0;
+    box-shadow: 0 0 8px var(--green);
+  }
+
+  .header-brand {
+    flex: 1;
+  }
+
+  .brand-name {
+    font-family: var(--display);
+    font-size: 18px;
+    letter-spacing: 0.12em;
+    color: var(--green);
+    line-height: 1;
+  }
+
+  .brand-sub {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 16px;
+    text-align: right;
+  }
+
+  .stat-item {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  .stat-val {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--green);
+    display: block;
+    line-height: 1;
+  }
+
+  .stat-label {
+    color: var(--text-dim);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* ─── STEP INDICATOR ─── */
+  .step-bar {
+    background: var(--deep);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 16px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .step-bar::-webkit-scrollbar { display: none; }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px 4px 0;
+    white-space: nowrap;
+    opacity: 0.35;
+    transition: opacity 0.2s;
+  }
+  .step.active { opacity: 1; }
+  .step.done { opacity: 0.6; }
+
+  .step-num {
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--border-hi);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+  .step.active .step-num {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-ghost);
+  }
+  .step.done .step-num {
+    border-color: var(--green-dim);
+    background: var(--green-ghost);
+    color: var(--green-dim);
+  }
+
+  .step-text {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .step.active .step-text { color: var(--text); }
+
+  .step-arrow {
+    color: var(--text-muted);
+    margin-left: 8px;
+    font-size: 9px;
+  }
+
+  /* ─── MAIN CONTENT ─── */
+  .main {
+    padding: 0 0 100px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  /* ─── SECTION BLOCKS ─── */
+  .section {
+    padding: 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .section-num {
+    font-family: var(--display);
+    font-size: 28px;
+    color: var(--green);
+    line-height: 1;
+    opacity: 0.3;
+  }
+
+  .section-title {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .section-desc {
+    font-family: var(--serif);
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-bottom: 14px;
+    line-height: 1.5;
+    padding-left: 36px;
+  }
+
+  /* ─── CHARACTER SELECTOR ─── */
+  .char-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .char-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .char-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--border-hi);
+    transition: background 0.15s;
+  }
+
+  .char-card.selected {
+    border-color: var(--green);
+    background: var(--green-ghost);
+  }
+  .char-card.selected::before { background: var(--green); }
+
+  .char-card:active { transform: scale(0.98); }
+
+  .char-name {
+    font-family: var(--display);
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    line-height: 1;
+  }
+  .char-card.selected .char-name { color: var(--green); }
+
+  .char-role {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  .char-invariants {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* ─── EVAL MODE ─── */
+  .mode-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .mode-btn {
+    flex: 1;
+    min-width: 80px;
+    padding: 8px 10px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+    font-family: var(--mono);
+  }
+
+  .mode-btn.selected {
+    border-color: var(--green);
+    background: var(--green-ghost);
+  }
+
+  .mode-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: block;
+  }
+  .mode-btn.selected .mode-label { color: var(--green); }
+
+  .mode-desc {
+    font-size: 9px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    display: block;
+  }
+
+  /* ─── PROMPT INPUT ─── */
+  .prompt-field {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    width: 100%;
+    padding: 12px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 120px;
+    transition: border-color 0.15s;
+    outline: none;
+  }
+
+  .prompt-field:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 1px var(--green-ghost);
+  }
+
+  .prompt-field::placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .field-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+  }
+
+  .char-count {
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  .field-hint {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* ─── ACTIVE RUBRIC ─── */
+  .rubric-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 0;
+    user-select: none;
+  }
+
+  .rubric-icon {
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--border-hi);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: var(--green);
+    transition: all 0.15s;
+  }
+
+  .rubric-toggle-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .rubric-panel {
+    display: none;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .rubric-panel.open { display: block; }
+
+  .rubric-dim {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .rubric-dim:last-child { border-bottom: none; }
+
+  .rubric-score {
+    font-family: var(--display);
+    font-size: 20px;
+    color: var(--green);
+    opacity: 0.4;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 20px;
+  }
+
+  .rubric-content {}
+
+  .rubric-name {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .rubric-criteria {
+    font-size: 10px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* ─── SUBMIT CTA ─── */
+  .submit-section {
+    padding: 20px 16px;
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(to top, var(--black) 80%, transparent);
+    z-index: 50;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--green);
+    border: none;
+    border-radius: 2px;
+    font-family: var(--display);
+    font-size: 18px;
+    letter-spacing: 0.15em;
+    color: var(--black);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .submit-btn:disabled {
+    background: var(--border-hi);
+    color: var(--text-muted);
+    cursor: not-allowed;
+  }
+
+  .submit-btn:not(:disabled):active {
+    transform: scale(0.99);
+    background: var(--green-dim);
+  }
+
+  .submit-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .submit-arrow {
+    font-size: 16px;
+    transition: transform 0.15s;
+  }
+  .submit-btn:not(:disabled):hover .submit-arrow { transform: translateX(4px); }
+
+  .submit-meta {
+    text-align: center;
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* ─── RESULTS ─── */
+  #results-section {
+    display: none;
+    padding: 0 16px 20px;
+  }
+
+  #results-section.visible { display: block; }
+
+  .results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  .results-title {
+    font-family: var(--display);
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    color: var(--green);
+  }
+
+  .results-meta {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: right;
+  }
+
+  .verdict-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-family: var(--display);
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+  }
+
+  .verdict-pass {
+    background: rgba(0,255,157,0.12);
+    border: 1px solid var(--green);
+    color: var(--green);
+  }
+
+  .verdict-review {
+    background: rgba(245,166,35,0.1);
+    border: 1px solid var(--amber);
+    color: var(--amber);
+  }
+
+  .verdict-reject {
+    background: rgba(255,68,68,0.1);
+    border: 1px solid var(--red);
+    color: var(--red);
+  }
+
+  .score-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .score-cell {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 8px;
+    text-align: center;
+  }
+
+  .score-val {
+    font-family: var(--display);
+    font-size: 22px;
+    color: var(--green);
+    line-height: 1;
+  }
+
+  .score-dim {
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .result-body {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+
+  .result-body h2, .result-body h3 {
+    font-family: var(--display);
+    letter-spacing: 0.1em;
+    color: var(--green);
+    margin: 14px 0 6px;
+    font-weight: 400;
+  }
+
+  .result-body h2 { font-size: 18px; }
+  .result-body h3 { font-size: 14px; }
+
+  .result-body strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .result-body em {
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .result-body ul, .result-body ol {
+    padding-left: 16px;
+    margin: 6px 0;
+  }
+
+  .result-body li { margin: 3px 0; }
+
+  .action-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .action-btn {
+    padding: 10px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .action-btn:hover {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-ghost);
+  }
+
+  .action-btn.primary {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-ghost);
+  }
+
+  /* ─── LOADING ─── */
+  .loading-state {
+    display: none;
+    padding: 40px 16px;
+    text-align: center;
+  }
+
+  .loading-state.visible { display: block; }
+
+  .loading-bar {
+    width: 100%;
+    height: 2px;
+    background: var(--border);
+    border-radius: 1px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .loading-bar-fill {
+    height: 100%;
+    background: var(--green);
+    width: 0%;
+    animation: loadFill 3s ease-in-out infinite;
+    box-shadow: 0 0 8px var(--green);
+  }
+
+  @keyframes loadFill {
+    0% { width: 0%; opacity: 1; }
+    70% { width: 85%; opacity: 1; }
+    100% { width: 95%; opacity: 0.5; }
+  }
+
+  .loading-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--panel);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 8px 16px;
+    border-radius: 2px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    transition: all 0.2s;
+    z-index: 200;
+    white-space: nowrap;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ─── ERROR ─── */
+  .error-block {
+    background: rgba(255,68,68,0.06);
+    border: 1px solid rgba(255,68,68,0.3);
+    border-radius: 2px;
+    padding: 12px;
+    font-size: 11px;
+    color: var(--red);
+    display: none;
+    margin: 0 16px 16px;
+  }
+  .error-block.visible { display: block; }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 16px;
+  }
+
+  /* ─── COUNTER BADGE ─── */
+  .counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+  .counter-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-bar"></div>
+  <div class="header-brand">
+    <div class="brand-name">FERAL GLOSS VAULT</div>
+    <div class="brand-sub">Canon Engine v2.1 · Production Console</div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-item">
+      <span class="stat-val" id="stat-vault">0</span>
+      <span class="stat-label">Vault<br>Ready</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-val" id="stat-review">0</span>
+      <span class="stat-label">In<br>Review</span>
+    </div>
+  </div>
+</header>
+
+<!-- STEP BAR -->
+<div class="step-bar">
+  <div class="step active" id="step-1">
+    <div class="step-num">1</div>
+    <div class="step-text">Character</div>
+    <div class="step-arrow">›</div>
+  </div>
+  <div class="step" id="step-2">
+    <div class="step-num">2</div>
+    <div class="step-text">Mode</div>
+    <div class="step-arrow">›</div>
+  </div>
+  <div class="step" id="step-3">
+    <div class="step-num">3</div>
+    <div class="step-text">Prompt</div>
+    <div class="step-arrow">›</div>
+  </div>
+  <div class="step" id="step-4">
+    <div class="step-num">4</div>
+    <div class="step-text">Evaluate</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- STEP 1: CHARACTER -->
+  <div class="section" id="section-char">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-title">Select Character</div>
+    </div>
+    <div class="section-desc">Which canon identity is this render for? Invariants load automatically.</div>
+    <div class="char-grid">
+      <div class="char-card" data-char="isolde" onclick="selectChar(this)">
+        <div class="char-name">ISOLDE VOSS</div>
+        <div class="char-role">Shadow Twin</div>
+        <div class="char-invariants">Obsidian hair · Aurora green eyes · Same bone structure as Calista</div>
+      </div>
+      <div class="char-card" data-char="calista" onclick="selectChar(this)">
+        <div class="char-name">CALISTA VOSS</div>
+        <div class="char-role">Primary</div>
+        <div class="char-invariants">Platinum-silver hair · Green eyes · 170cm · Gospel-enforced</div>
+      </div>
+      <div class="char-card" data-char="raven" onclick="selectChar(this)">
+        <div class="char-name">RAVEN VOSS</div>
+        <div class="char-role">Lean Muse</div>
+        <div class="char-invariants">157cm · Bronzed Latina · Lean Elegant Muse Governor v1.0</div>
+      </div>
+      <div class="char-card" data-char="marcus" onclick="selectChar(this)">
+        <div class="char-name">MARCUS KANE</div>
+        <div class="char-role">The Boss</div>
+        <div class="char-invariants">193cm · Italian heritage · Salt-pepper hair · Armani pinstripe</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: MODE -->
+  <div class="section" id="section-mode">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-title">Evaluation Mode</div>
+    </div>
+    <div class="section-desc">How deep should the Canon Engine go?</div>
+    <div class="mode-row">
+      <div class="mode-btn selected" data-mode="standard" onclick="selectMode(this)">
+        <span class="mode-label">Standard</span>
+        <span class="mode-desc">Identity + drift check</span>
+      </div>
+      <div class="mode-btn" data-mode="deep" onclick="selectMode(this)">
+        <span class="mode-label">Deep</span>
+        <span class="mode-desc">Full doctrine audit</span>
+      </div>
+      <div class="mode-btn" data-mode="obsession" onclick="selectMode(this)">
+        <span class="mode-label">Obsession</span>
+        <span class="mode-desc">Every invariant verified</span>
+      </div>
+      <div class="mode-btn" data-mode="variation" onclick="selectMode(this)">
+        <span class="mode-label">Variation</span>
+        <span class="mode-desc">Alternate prompt paths</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: PROMPT -->
+  <div class="section" id="section-prompt">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-title">Render Prompt</div>
+    </div>
+    <div class="section-desc">Paste your complete Grok render prompt. The engine evaluates it against the selected character's locked invariants and Canon doctrine.</div>
+    <textarea
+      class="prompt-field"
+      id="promptInput"
+      placeholder="Paste your Grok render prompt here…&#10;&#10;Example: A cinematic portrait of Isolde Voss, obsidian black hair falling across her left eye, aurora green eyes reflecting cold neon light, pale cool complexion, natural iris physics — light reflected not emitted, limbic ring visible, corneal specular at 2 o'clock position…"
+      oninput="onPromptInput()"
+    ></textarea>
+    <div class="field-meta">
+      <span class="char-count" id="charCount">0 characters</span>
+      <span class="field-hint">Tip: include lighting, iris, and proportion language</span>
+    </div>
+  </div>
+
+  <!-- RUBRIC PREVIEW -->
+  <div class="section" id="section-rubric">
+    <div class="rubric-toggle" onclick="toggleRubric()">
+      <div class="rubric-icon" id="rubricIcon">+</div>
+      <div class="rubric-toggle-label">View Active Scoring Rubric</div>
+      <div style="margin-left: auto; font-size:10px; color: var(--text-muted);" id="rubricCharLabel"></div>
+    </div>
+    <div class="rubric-panel" id="rubricPanel">
+      <div class="rubric-dim">
+        <div class="rubric-score">1</div>
+        <div class="rubric-content">
+          <div class="rubric-name">Identity Lock</div>
+          <div class="rubric-criteria">All hard invariants present and correctly specified. Hair color, eye color, height/proportion markers, and gospel-enforced anchors must be verbatim or functionally equivalent.</div>
+        </div>
+      </div>
+      <div class="rubric-dim">
+        <div class="rubric-score">2</div>
+        <div class="rubric-content">
+          <div class="rubric-name">Iris Physics</div>
+          <div class="rubric-criteria">Natural iris physics language present ("light reflected not emitted"). Limbic ring specified. Corneal specular position called. No glow-based eye language.</div>
+        </div>
+      </div>
+      <div class="rubric-dim">
+        <div class="rubric-score">3</div>
+        <div class="rubric-content">
+          <div class="rubric-name">Light Source Discipline</div>
+          <div class="rubric-criteria">Light sources match character doctrine. Cool-spectrum characters must exclude warm-amber sources. Directional specular on materials must be present for fabric/surface calls.</div>
+        </div>
+      </div>
+      <div class="rubric-dim">
+        <div class="rubric-score">4</div>
+        <div class="rubric-content">
+          <div class="rubric-name">Proportion Governor</div>
+          <div class="rubric-criteria">For Lean Elegant Muse characters: Lean Muse Governor v1.0 language or equivalent must be present. No over-generation language. Proportions must be spec-consistent.</div>
+        </div>
+      </div>
+      <div class="rubric-dim">
+        <div class="rubric-score">5</div>
+        <div class="rubric-content">
+          <div class="rubric-name">Feral Gloss Signal</div>
+          <div class="rubric-criteria">Primal–luxury texture balance present. Atmosphere tier called. Olivia de Berardinis amplifier language for Rookie Card renders. No generic AI aesthetic language.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading-state" id="loadingState">
+    <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+    <div class="loading-label" id="loadingLabel">Canon Engine evaluating…</div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-block" id="errorBlock"></div>
+
+  <!-- RESULTS -->
+  <div id="results-section">
+    <div class="results-header">
+      <div class="results-title">EVALUATION RESULT</div>
+      <div class="results-meta" id="resultsMeta"></div>
+    </div>
+    <div id="verdictBadge"></div>
+    <div class="score-row" id="scoreRow"></div>
+    <div class="result-body" id="resultsBody"></div>
+    <div class="action-row">
+      <div class="action-btn primary" onclick="markVaultReady()">✓ Mark Vault-Ready</div>
+      <div class="action-btn" onclick="markInReview()">⚠ Flag for Review</div>
+      <div class="action-btn" onclick="copyResult()">Copy Result</div>
+      <div class="action-btn" onclick="resetForm()">New Evaluation</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- STICKY SUBMIT -->
+<div class="submit-section">
+  <button class="submit-btn" id="submitBtn" onclick="runEvaluation()" disabled>
+    SUBMIT TO CANON ENGINE
+    <span class="submit-arrow">→</span>
+  </button>
+  <div class="submit-meta" id="submitMeta">Select a character to enable evaluation</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+let selectedChar = null;
+let selectedMode = 'standard';
+let lastResult = '';
+let vaultCount = 0;
+let reviewCount = 0;
+
+const charData = {
+  isolde: {
+    name: 'Isolde Voss',
+    invariants: 'Obsidian black hair. Aurora-saturated green eyes (same bone structure as Calista). Pale cool complexion — zero warmth. Natural iris physics mandatory. Cool-only light sources.',
+    rubricNote: 'Shadow twin spec — bone structure match with Calista is a hard invariant.'
+  },
+  calista: {
+    name: 'Calista Voss',
+    invariants: 'Platinum-silver hair (immutable gospel). Green eyes (immutable gospel). 170cm. 32-point centimeter facial geometry locked.',
+    rubricNote: 'Platinum/green combination is gospel-enforced — any deviation is a hard reject.'
+  },
+  raven: {
+    name: 'Raven Voss',
+    invariants: 'Bronzed Latina complexion. 157cm. Lean athletic frame. Lean Elegant Muse Governor v1.0 active — strict proportion enforcement.',
+    rubricNote: 'Lean Muse Governor language must appear or proportion drift is likely.'
+  },
+  marcus: {
+    name: 'Marcus Kane',
+    invariants: '193cm. Italian heritage. Salt-and-pepper hair. Armani pinstripe suit. Monte Cristo cigar. Locked facial measurements.',
+    rubricNote: 'Commanding masculine presence — over-softening is a doctrine violation.'
+  }
+};
+
+const modeData = {
+  standard: { label: 'Standard Evaluation', depth: 'Checks identity lock and primary drift vectors. Returns pass/review/reject verdict with flagged phrases.' },
+  deep: { label: 'Deep Doctrine Audit', depth: 'Full Canon Engine pass: all 5 rubric dimensions scored individually. Detailed phrase-level analysis. Revision suggestions included.' },
+  obsession: { label: 'Obsession Mode', depth: 'Every invariant verified against the complete character spec. No tolerance for partial compliance. Strict pass/fail per dimension.' },
+  variation: { label: 'Variation Mapping', depth: 'Evaluates the prompt AND generates 2 alternate prompt paths that score higher while maintaining canon identity.' }
+};
+
+function selectChar(el) {
+  document.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedChar = el.dataset.char;
+
+  document.getElementById('rubricCharLabel').textContent = charData[selectedChar].name;
+
+  updateSteps();
+  updateSubmitState();
+
+  // Update step 1 to done
+  document.getElementById('step-1').classList.remove('active');
+  document.getElementById('step-1').classList.add('done');
+  document.getElementById('step-2').classList.add('active');
+}
+
+function selectMode(el) {
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMode = el.dataset.mode;
+  updateSubmitState();
+}
+
+function onPromptInput() {
+  const val = document.getElementById('promptInput').value;
+  document.getElementById('charCount').textContent = val.length + ' characters';
+
+  if (val.length > 20) {
+    document.getElementById('step-3').classList.remove('active');
+    document.getElementById('step-3').classList.add('done');
+    document.getElementById('step-4').classList.add('active');
+  }
+
+  updateSubmitState();
+}
+
+function updateSubmitState() {
+  const btn = document.getElementById('submitBtn');
+  const meta = document.getElementById('submitMeta');
+  const prompt = document.getElementById('promptInput').value.trim();
+
+  if (!selectedChar) {
+    btn.disabled = true;
+    meta.textContent = 'Select a character to enable evaluation';
+  } else if (prompt.length < 20) {
+    btn.disabled = true;
+    meta.textContent = charData[selectedChar].name + ' selected · Add your render prompt';
+  } else {
+    btn.disabled = false;
+    meta.textContent = charData[selectedChar].name + ' · ' + modeData[selectedMode].label;
+  }
+}
+
+function updateSteps() {}
+
+function toggleRubric() {
+  const panel = document.getElementById('rubricPanel');
+  const icon = document.getElementById('rubricIcon');
+  const isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open');
+  icon.textContent = isOpen ? '+' : '−';
+}
+
+async function runEvaluation() {
+  const prompt = document.getElementById('promptInput').value.trim();
+  if (!prompt || !selectedChar) return;
+
+  const char = charData[selectedChar];
+  const mode = modeData[selectedMode];
+
+  // Hide results, show loading
+  document.getElementById('results-section').classList.remove('visible');
+  document.getElementById('errorBlock').classList.remove('visible');
+  document.getElementById('loadingState').classList.add('visible');
+  document.getElementById('submitBtn').disabled = true;
+
+  const loadingPhrases = [
+    'Checking identity invariants…',
+    'Running iris physics audit…',
+    'Verifying light source doctrine…',
+    'Scoring Feral Gloss signal…',
+    'Computing canon verdict…'
+  ];
+  let phraseIdx = 0;
+  const phraseInterval = setInterval(() => {
+    phraseIdx = (phraseIdx + 1) % loadingPhrases.length;
+    document.getElementById('loadingLabel').textContent = loadingPhrases[phraseIdx];
+  }, 1200);
+
+  const systemPrompt = `You are the Canon Engine v2.1 — the quality evaluation system for Feral Gloss Empire, a Las Vegas lifestyle RPG/APG generative system.
+
+Your function: evaluate render prompts for canon compliance against locked character doctrine. No flattery. Honest scoring. Actionable flags.
+
+CHARACTER BEING EVALUATED: ${char.name}
+LOCKED INVARIANTS: ${char.invariants}
+EVALUATION MODE: ${mode.label} — ${mode.depth}
+RUBRIC NOTE: ${char.rubricNote}
+
+SCORING DIMENSIONS (score each 1-5):
+1. IDENTITY LOCK — All hard invariants present and correctly specified
+2. IRIS PHYSICS — Natural iris physics language ("light reflected not emitted"), limbic ring, corneal specular. No glow language.
+3. LIGHT SOURCE DISCIPLINE — Light sources match character doctrine. Cool characters = cool-spectrum only.
+4. PROPORTION GOVERNOR — Correct body/proportion language for the character. Lean Muse Governor where applicable.
+5. FERAL GLOSS SIGNAL — Primal-luxury atmosphere present. On-brand texture language. No generic AI aesthetic phrasing.
+
+VERDICT THRESHOLDS:
+- VAULT-READY: All 5 dimensions ≥ 4, no hard invariant failures
+- IN REVIEW: Any dimension 3, or minor invariant drift present
+- REJECT: Any dimension ≤ 2, or any hard invariant violated
+
+OUTPUT FORMAT — respond in this exact structure:
+
+OVERALL VERDICT: [VAULT-READY / IN REVIEW / REJECT]
+SCORES: Identity:[x] | Iris:[x] | Light:[x] | Proportion:[x] | FeralGloss:[x]
+
+## DIMENSION BREAKDOWN
+
+### Identity Lock [x/5]
+[Analysis]
+→ [Action: Accept / Revise phrase: "xxx" → "yyy"]
+
+### Iris Physics [x/5]
+[Analysis]
+→ [Action]
+
+### Light Source Discipline [x/5]
+[Analysis]
+→ [Action]
+
+### Proportion Governor [x/5]
+[Analysis]
+→ [Action]
+
+### Feral Gloss Signal [x/5]
+[Analysis]
+→ [Action]
+
+## FLAGGED PHRASES
+[List any specific phrases that are doctrine violations or drift risks]
+
+## CANON VERDICT
+[1-2 sentence summary. What ships. What must change before vault.]`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: `Evaluate this render prompt:\n\n${prompt}` }]
+      })
+    });
+
+    clearInterval(phraseInterval);
+    document.getElementById('loadingState').classList.remove('visible');
+
+    if (!response.ok) throw new Error(`API error ${response.status}`);
+
+    const data = await response.json();
+    const text = data.content.map(b => b.text || '').join('');
+    lastResult = text;
+
+    renderResult(text);
+
+  } catch (err) {
+    clearInterval(phraseInterval);
+    document.getElementById('loadingState').classList.remove('visible');
+    document.getElementById('errorBlock').textContent = 'Canon Engine unreachable. Check your connection or API access. Error: ' + err.message;
+    document.getElementById('errorBlock').classList.add('visible');
+    document.getElementById('submitBtn').disabled = false;
+  }
+}
+
+function renderResult(text) {
+  // Parse verdict
+  const verdictMatch = text.match(/OVERALL VERDICT:\s*(VAULT-READY|IN REVIEW|REJECT)/i);
+  const verdict = verdictMatch ? verdictMatch[1].toUpperCase() : 'IN REVIEW';
+
+  // Parse scores
+  const scoreMatch = text.match(/SCORES:\s*Identity:(\d)\s*\|\s*Iris:(\d)\s*\|\s*Light:(\d)\s*\|\s*Proportion:(\d)\s*\|\s*FeralGloss:(\d)/i);
+  const scores = scoreMatch ? [scoreMatch[1], scoreMatch[2], scoreMatch[3], scoreMatch[4], scoreMatch[5]] : null;
+
+  // Verdict badge
+  const badgeEl = document.getElementById('verdictBadge');
+  const badgeClass = verdict === 'VAULT-READY' ? 'verdict-pass' : verdict === 'IN REVIEW' ? 'verdict-review' : 'verdict-reject';
+  badgeEl.innerHTML = `<div class="verdict-badge ${badgeClass}">${verdict}</div>`;
+
+  // Score row
+  const scoreEl = document.getElementById('scoreRow');
+  if (scores) {
+    const labels = ['Identity', 'Iris', 'Light', 'Prop', 'Feral'];
+    scoreEl.innerHTML = scores.map((s, i) => `
+      <div class="score-cell">
+        <div class="score-val" style="color: ${s >= 4 ? 'var(--green)' : s === 3 ? 'var(--amber)' : 'var(--red)'}">${s}</div>
+        <div class="score-dim">${labels[i]}</div>
+      </div>
+    `).join('');
+  } else {
+    scoreEl.innerHTML = '';
+  }
+
+  // Body — strip the first two lines (verdict + scores) and render markdown-ish
+  const bodyText = text
+    .replace(/OVERALL VERDICT:.*\n?/i, '')
+    .replace(/SCORES:.*\n?/i, '')
+    .trim();
+
+  document.getElementById('resultsBody').innerHTML = renderMarkdown(bodyText);
+
+  // Meta
+  const now = new Date();
+  document.getElementById('resultsMeta').innerHTML = `${charData[selectedChar].name}<br>${now.toLocaleTimeString()}`;
+
+  document.getElementById('results-section').classList.add('visible');
+
+  // Scroll to results
+  setTimeout(() => {
+    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+
+  document.getElementById('submitBtn').disabled = false;
+  updateSubmitState();
+}
+
+function renderMarkdown(text) {
+  return text
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^→ (.+)$/gm, '<div style="color:var(--green-dim);margin:4px 0 8px;font-size:11px;">→ $1</div>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>');
+}
+
+function markVaultReady() {
+  vaultCount++;
+  document.getElementById('stat-vault').textContent = vaultCount;
+  showToast('Marked Vault-Ready ✓');
+}
+
+function markInReview() {
+  reviewCount++;
+  document.getElementById('stat-review').textContent = reviewCount;
+  showToast('Flagged for Review ⚠');
+}
+
+function copyResult() {
+  navigator.clipboard.writeText(lastResult).then(() => showToast('Result copied'));
+}
+
+function resetForm() {
+  document.getElementById('results-section').classList.remove('visible');
+  document.getElementById('promptInput').value = '';
+  document.getElementById('charCount').textContent = '0 characters';
+  selectedChar = null;
+  document.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.step').forEach(s => { s.classList.remove('active', 'done'); });
+  document.getElementById('step-1').classList.add('active');
+  document.getElementById('rubricCharLabel').textContent = '';
+  updateSubmitState();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+</script>
+</body>
+</html>

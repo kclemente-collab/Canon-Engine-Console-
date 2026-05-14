@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE LORE MASTER — Voice & Ritual Bible</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #060608;
+    --deep: #0d0d12;
+    --surface: #13131a;
+    --border: #1e1e28;
+    --border-hi: #2a2a38;
+    --gold: #c9a84c;
+    --gold-dim: #8a6f2e;
+    --gold-ghost: rgba(201,168,76,0.07);
+    --gold-glow: rgba(201,168,76,0.18);
+    --ivory: #e8e4d8;
+    --ivory-dim: #9e9a8e;
+    --ivory-muted: #4a4840;
+    --crimson: #8b1a1a;
+    --crimson-bright: #c0392b;
+    --smoke: rgba(232,228,216,0.04);
+    --display: 'Cinzel', serif;
+    --body: 'Crimson Pro', serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--ivory);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE TEXTURE ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ─── RITUAL HEADER ─── */
+  .ritual-header {
+    position: relative;
+    text-align: center;
+    padding: 80px 24px 60px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .ritual-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--gold));
+  }
+
+  .ritual-header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(201,168,76,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .header-sigil {
+    font-family: var(--display);
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .header-title {
+    font-family: var(--display);
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: var(--ivory);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .header-title span {
+    color: var(--gold);
+  }
+
+  .header-sub {
+    font-family: var(--display);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    color: var(--ivory-dim);
+    margin-bottom: 32px;
+  }
+
+  .header-rule {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .rule-line {
+    height: 1px;
+    width: 60px;
+    background: linear-gradient(to right, transparent, var(--gold-dim));
+  }
+  .rule-line.right {
+    background: linear-gradient(to left, transparent, var(--gold-dim));
+  }
+
+  .rule-diamond {
+    width: 6px;
+    height: 6px;
+    border: 1px solid var(--gold);
+    transform: rotate(45deg);
+  }
+
+  .header-desc {
+    font-family: var(--body);
+    font-size: 15px;
+    font-style: italic;
+    color: var(--ivory-dim);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  /* ─── NAV ─── */
+  .doc-nav {
+    position: sticky;
+    top: 0;
+    background: rgba(6,6,8,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    z-index: 100;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .doc-nav::-webkit-scrollbar { display: none; }
+
+  .nav-item {
+    padding: 12px 16px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ivory-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 1px solid transparent;
+    transition: all 0.15s;
+    display: block;
+  }
+
+  .nav-item:hover {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ─── SECTIONS ─── */
+  .doc-section {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .section-eyebrow {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-eyebrow::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 80px;
+  }
+
+  .section-title {
+    font-family: var(--display);
+    font-size: clamp(20px, 4vw, 32px);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--ivory);
+    margin-bottom: 24px;
+    line-height: 1.2;
+  }
+
+  .section-title span { color: var(--gold); }
+
+  .section-body {
+    font-size: 16px;
+    color: var(--ivory-dim);
+    line-height: 1.8;
+  }
+
+  .section-body p { margin-bottom: 16px; }
+  .section-body p:last-child { margin-bottom: 0; }
+
+  .section-body strong {
+    color: var(--ivory);
+    font-weight: 400;
+  }
+
+  .section-body em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  /* ─── DOCTRINE BLOCKS ─── */
+  .doctrine-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--gold);
+    padding: 20px 24px;
+    margin: 24px 0;
+    position: relative;
+  }
+
+  .doctrine-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 10px;
+  }
+
+  .doctrine-text {
+    font-family: var(--body);
+    font-size: 15px;
+    color: var(--ivory);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  /* ─── RULE GRID ─── */
+  .rule-grid {
+    display: grid;
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .rule-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+
+  .rule-marker {
+    font-family: var(--display);
+    font-size: 18px;
+    color: var(--gold);
+    opacity: 0.4;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 24px;
+    padding-top: 2px;
+  }
+
+  .rule-content {}
+
+  .rule-name {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ivory-dim);
+    margin-bottom: 4px;
+  }
+
+  .rule-desc {
+    font-size: 14px;
+    color: var(--ivory-muted);
+    line-height: 1.5;
+  }
+
+  /* ─── FORMAT TABLE ─── */
+  .format-grid {
+    display: grid;
+    gap: 2px;
+    margin: 24px 0;
+  }
+
+  .format-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 16px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    align-items: start;
+  }
+
+  .format-row:first-child {
+    background: var(--deep);
+    border-color: var(--border-hi);
+  }
+
+  .format-key {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    padding-top: 2px;
+  }
+
+  .format-val {
+    font-size: 13px;
+    color: var(--ivory-dim);
+    line-height: 1.5;
+  }
+
+  /* ─── POST CARDS ─── */
+  .posts-grid {
+    display: grid;
+    gap: 3px;
+    margin: 24px 0;
+  }
+
+  .post-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    position: relative;
+    transition: border-color 0.15s;
+  }
+
+  .post-card:hover {
+    border-color: var(--border-hi);
+  }
+
+  .post-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--border-hi);
+  }
+
+  .post-card.ritual::before { background: var(--gold); }
+  .post-card.lore::before { background: #4a6fa5; }
+  .post-card.signal::before { background: #5a4a6f; }
+  .post-card.drop::before { background: var(--crimson-bright); }
+  .post-card.silence::before { background: var(--ivory-muted); }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .post-day {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--ivory-muted);
+  }
+
+  .post-type {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 1px;
+  }
+
+  .post-card.ritual .post-type { background: rgba(201,168,76,0.1); color: var(--gold); }
+  .post-card.lore .post-type { background: rgba(74,111,165,0.1); color: #7a9fc5; }
+  .post-card.signal .post-type { background: rgba(90,74,111,0.1); color: #9a7abf; }
+  .post-card.drop .post-type { background: rgba(192,57,43,0.1); color: #e05a47; }
+  .post-card.silence .post-type { background: rgba(74,72,64,0.1); color: var(--ivory-muted); }
+
+  .post-text {
+    font-family: var(--body);
+    font-size: 15px;
+    color: var(--ivory);
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  .post-note {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ivory-muted);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-style: normal;
+  }
+
+  /* ─── WEEK HEADERS ─── */
+  .week-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 32px 0 16px;
+  }
+
+  .week-label {
+    font-family: var(--display);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    white-space: nowrap;
+  }
+
+  .week-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .week-theme {
+    font-family: var(--body);
+    font-size: 12px;
+    font-style: italic;
+    color: var(--ivory-muted);
+    white-space: nowrap;
+  }
+
+  /* ─── VOICE COMPARISON ─── */
+  .voice-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 24px 0;
+  }
+
+  @media (max-width: 560px) {
+    .voice-compare { grid-template-columns: 1fr; }
+  }
+
+  .voice-col {
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+
+  .voice-col-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .voice-col.never .voice-col-label { color: var(--crimson-bright); }
+  .voice-col.always .voice-col-label { color: var(--gold); }
+
+  .voice-item {
+    font-size: 13px;
+    color: var(--ivory-dim);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  .voice-item:last-child { border-bottom: none; }
+
+  /* ─── BIO BLOCK ─── */
+  .bio-block {
+    background: var(--surface);
+    border: 1px solid var(--gold);
+    padding: 28px 32px;
+    margin: 24px 0;
+    text-align: center;
+    position: relative;
+  }
+
+  .bio-block::before {
+    content: '𓂀';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--void);
+    padding: 0 12px;
+    font-size: 18px;
+    color: var(--gold);
+  }
+
+  .bio-handle {
+    font-family: var(--display);
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .bio-text {
+    font-family: var(--body);
+    font-size: 15px;
+    color: var(--ivory-dim);
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  .bio-link {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--ivory-muted);
+    margin-top: 12px;
+  }
+
+  /* ─── FOOTER ─── */
+  .doc-footer {
+    text-align: center;
+    padding: 60px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-sigil {
+    font-size: 28px;
+    color: var(--gold);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .footer-text {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ivory-muted);
+  }
+
+  /* ─── SCROLL ANIMATIONS ─── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="ritual-header">
+  <div class="header-sigil">Feral Gloss Empire · Canon Document</div>
+  <h1 class="header-title">THE <span>LORE</span> MASTER</h1>
+  <div class="header-sub">Voice Bible · Ritual Format · First 30 Days</div>
+  <div class="header-rule">
+    <div class="rule-line"></div>
+    <div class="rule-diamond"></div>
+    <div class="rule-line right"></div>
+  </div>
+  <p class="header-desc">The keeper of the Canon. The voice that existed before the drops and will exist after them. This document governs everything the Lore Master says, how it says it, and what it never explains.</p>
+</header>
+
+<!-- NAV -->
+<nav class="doc-nav">
+  <a href="#identity" class="nav-item">Identity</a>
+  <a href="#voice" class="nav-item">Voice Laws</a>
+  <a href="#format" class="nav-item">Ritual Format</a>
+  <a href="#bio" class="nav-item">Profile</a>
+  <a href="#posts" class="nav-item">30 Days</a>
+  <a href="#ops" class="nav-item">Operations</a>
+</nav>
+
+<!-- SECTION 1: IDENTITY -->
+<section class="doc-section fade-in" id="identity">
+  <div class="section-eyebrow">Section I</div>
+  <h2 class="section-title">What the <span>Lore Master</span> Is</h2>
+  <div class="section-body">
+    <p>The Lore Master is not a marketing account. It is not a brand mascot. It is not you.</p>
+    <p>It is a <strong>character with a function</strong> — the archivist and ritual keeper of Feral Gloss Empire. Its posts are transmissions from inside the universe, not announcements from outside it. The distinction is everything.</p>
+    <p>Followers should never be entirely certain whether they are reading fiction, system documentation, or something genuinely uncanny. That ambiguity is the engine that drives engagement without requiring engagement bait.</p>
+  </div>
+
+  <div class="doctrine-block">
+    <div class="doctrine-label">Core Identity Statement</div>
+    <div class="doctrine-text">"I do not promote the empire. I am the record of it. What ships, I have already seen. What falls, I have already noted. The canon does not require your belief to hold."</div>
+  </div>
+
+  <div class="section-body">
+    <p>The Lore Master knows the characters before they are dropped. It references cycles, invariants, phases. It never explains what these mean. Curious followers ask. That is the funnel.</p>
+    <p>It is <em>separate from you as creator</em>. You produce. It witnesses. This split is sustainable because it never requires you to be present, explain yourself, or perform enthusiasm you don't feel.</p>
+  </div>
+</section>
+
+<!-- SECTION 2: VOICE LAWS -->
+<section class="doc-section fade-in" id="voice">
+  <div class="section-eyebrow">Section II</div>
+  <h2 class="section-title">The <span>Voice Laws</span></h2>
+  <div class="section-body">
+    <p>These are not guidelines. They are invariants. A post that violates any of these is not a Lore Master post.</p>
+  </div>
+
+  <div class="rule-grid">
+    <div class="rule-item">
+      <div class="rule-marker">I</div>
+      <div class="rule-content">
+        <div class="rule-name">Never Explain</div>
+        <div class="rule-desc">The Lore Master does not define terms, clarify references, or provide context. It speaks as though the listener already knows. Those who don't, investigate. Those who do, feel seen.</div>
+      </div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-marker">II</div>
+      <div class="rule-content">
+        <div class="rule-name">Never Sell</div>
+        <div class="rule-desc">No call to action. No "link in bio" reminder. No "available now." The buy link exists in the profile. The posts never touch it. Commerce is beneath the ritual.</div>
+      </div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-marker">III</div>
+      <div class="rule-content">
+        <div class="rule-name">Short Always</div>
+        <div class="rule-desc">Maximum three sentences. Most posts are one or two. Brevity implies weight. Expansion implies insecurity. The Lore Master is never insecure.</div>
+      </div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-marker">IV</div>
+      <div class="rule-content">
+        <div class="rule-name">Present Tense Only</div>
+        <div class="rule-desc">Not "the cycle ended" but "the cycle closes." Not "she was rendered" but "she holds." The Lore Master exists in a continuous now. Everything it reports is happening.</div>
+      </div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-marker">V</div>
+      <div class="rule-content">
+        <div class="rule-name">No Hashtags</div>
+        <div class="rule-desc">Hashtags are for discoverability. The Lore Master does not seek to be found. It is already there for those who were meant to find it. Hashtags break the voice completely.</div>
+      </div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-marker">VI</div>
+      <div class="rule-content">
+        <div class="rule-name">No Enthusiasm</div>
+        <div class="rule-desc">No exclamation points. No "incredible," "stunning," "excited to share." The Lore Master reports. It does not react. Calm authority is the only register.</div>
+      </div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-marker">VII</div>
+      <div class="rule-content">
+        <div class="rule-name">Acknowledge Nothing</div>
+        <div class="rule-desc">Does not reply to replies. Does not quote-post criticism. Does not acknowledge confusion. The ritual continues regardless of the audience's response to it.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="voice-compare">
+    <div class="voice-col never">
+      <div class="voice-col-label">Never Say</div>
+      <div class="voice-item">Excited to announce…</div>
+      <div class="voice-item">Check out the new drop</div>
+      <div class="voice-item">What do you think?</div>
+      <div class="voice-item">Link in bio!</div>
+      <div class="voice-item">She's finally here</div>
+      <div class="voice-item">Amazing render session today</div>
+      <div class="voice-item">#AIart #GenerativeArt</div>
+      <div class="voice-item">I made this</div>
+    </div>
+    <div class="voice-col always">
+      <div class="voice-col-label">Say Instead</div>
+      <div class="voice-item">Cycle 247 closes without ceremony.</div>
+      <div class="voice-item">The invariants hold.</div>
+      <div class="voice-item">[Nothing. Post the image. No caption.] </div>
+      <div class="voice-item">She does not wait for permission.</div>
+      <div class="voice-item">Isolde surfaces. The light obeys.</div>
+      <div class="voice-item">The session ran long. The canon did not drift.</div>
+      <div class="voice-item">[No tags. Ever.]</div>
+      <div class="voice-item">The empire records itself.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: FORMAT -->
+<section class="doc-section fade-in" id="format">
+  <div class="section-eyebrow">Section III</div>
+  <h2 class="section-title">The <span>Daily Ritual</span> Format</h2>
+  <div class="section-body">
+    <p>Five post types. Each serves a distinct function. The 30-day calendar rotates through them in a pattern that builds rhythm without becoming predictable.</p>
+  </div>
+
+  <div class="format-grid">
+    <div class="format-row">
+      <div class="format-key" style="color: var(--ivory-dim);">Type</div>
+      <div class="format-val" style="color: var(--ivory-dim);">Function + Frequency</div>
+    </div>
+    <div class="format-row">
+      <div class="format-key" style="color: var(--gold);">Ritual</div>
+      <div class="format-val">Daily anchor. Cycle status, phase state, brief doctrine fragment. Builds the sensation of an ongoing system. 1–2 sentences. No image required. <em>5–6× per week.</em></div>
+    </div>
+    <div class="format-row">
+      <div class="format-key" style="color: #7a9fc5;">Lore</div>
+      <div class="format-val">Character fragment. A moment, a detail, a locked invariant stated as fact. Never a story. Never backstory. Just a piece of the record. Image when available. <em>2–3× per week.</em></div>
+    </div>
+    <div class="format-row">
+      <div class="format-key" style="color: #9a7abf;">Signal</div>
+      <div class="format-val">Cryptic system reference. Mentions Canon Engine, topology, cycle shape, phase detection — without explaining any of it. Attracts the technically curious. <em>1–2× per week.</em></div>
+    </div>
+    <div class="format-row">
+      <div class="format-key" style="color: #e05a47;">Drop</div>
+      <div class="format-val">Asset release. Image only, or image + one line. Never describes the product. The drop speaks for itself. The link is in the bio and has always been in the bio. <em>As assets ship.</em></div>
+    </div>
+    <div class="format-row">
+      <div class="format-key" style="color: var(--ivory-muted);">Silence</div>
+      <div class="format-val">No post. Strategic absence. Used once per week. The gap is part of the ritual. Consistency is not the same as presence every single day. <em>1× per week.</em></div>
+    </div>
+  </div>
+
+  <div class="doctrine-block">
+    <div class="doctrine-label">Timing Doctrine</div>
+    <div class="doctrine-text">Post at the same time each day. Not because the algorithm rewards it — it does, but that is secondary. Because the ritual requires it. A ritual with irregular timing is not a ritual. It is content.</div>
+  </div>
+</section>
+
+<!-- SECTION 4: PROFILE/BIO -->
+<section class="doc-section fade-in" id="bio">
+  <div class="section-eyebrow">Section IV</div>
+  <h2 class="section-title">The <span>Profile</span></h2>
+  <div class="section-body">
+    <p>The profile is the only place the Lore Master is permitted to be legible. Everything else is transmission. The profile is the threshold — the one moment where a curious follower can find the door.</p>
+  </div>
+
+  <div class="bio-block">
+    <div class="bio-handle">@feralgloss_lore</div>
+    <div class="bio-text">
+      Keeper of the Canon.<br>
+      Feral Gloss Empire — Las Vegas, perpetual cycle.<br>
+      The record does not require your belief to hold.
+    </div>
+    <div class="bio-link">feralgloss.gumroad.com</div>
+  </div>
+
+  <div class="section-body">
+    <p><strong>Handle options in order of preference:</strong> @feralgloss_lore · @canonlore · @feralglossempire · @the_lore_master</p>
+    <p><strong>Profile image:</strong> Not a character face. The talisman, monochrome. Or a sigil. Something that implies system, not person.</p>
+    <p><strong>Header image:</strong> A Canon Engine render — Isolde or pure atmosphere. No text overlay. No branding. Let the image do the work it was built to do.</p>
+    <p><strong>Pinned post:</strong> The first post ever made. Let new followers find the origin. Do not pin a product announcement.</p>
+  </div>
+</section>
+
+<!-- SECTION 5: 30 DAYS -->
+<section class="doc-section fade-in" id="posts">
+  <div class="section-eyebrow">Section V</div>
+  <h2 class="section-title">First <span>30 Days</span></h2>
+  <div class="section-body">
+    <p>The first thirty days establish the mythology before the first drop lands. By day 30 there should be followers who feel like they arrived late to something already in motion. That is the correct condition for a drop.</p>
+  </div>
+
+  <!-- WEEK 1 -->
+  <div class="week-header">
+    <div class="week-label">Week One</div>
+    <div class="week-line"></div>
+    <div class="week-theme">Establishment</div>
+  </div>
+
+  <div class="posts-grid">
+    <div class="post-card ritual">
+      <div class="post-meta">
+        <div class="post-day">Day 01</div>
+        <div class="post-type">Ritual</div>
+      </div>
+      <div class="post-text">The canon opens. Cycle 001. The invariants are locked. The record begins.</div>
+      <div class="post-note">First post ever. Pin this. Let it be the origin.</div>
+    </div>
+
+    <div class="post-card lore">
+      <div class="post-meta">
+        <div class="post-day">Day 02</div>
+        <div class="post-type">Lore</div>
+      </div>
+      <div class="post-text">Isolde does not introduce herself. She is already present when the light arrives.</div>
+      <div class="post-note">No image needed yet. Plant the name.</div>
+    </div>
+
+    <div class="post-card ritual">
+      <div class="post-meta">
+        <div class="post-day">Day 03</div>
+        <div class="post-type">Ritual</div>
+      </div>
+      <div class="post-text">Cycle 003. Expansion phase. The topology holds twelve active edges. Nothing collapses today.</div>
+    </div>
+
+    <div class="post-card signal">
+      <div class="post-meta">
+        <div class="post-day">Day 04</div>
+        <div class="post-type">Signal</div>
+      </div>
+      <div class="post-text">The Canon Engine does not guess. It derives. Phase state is computed, never assigned.</div>
+      <div class="post-note">First system reference. No explanation given. Ever.</div>
+    </div>
+
+    <div class="post-card lore">
+      <div class="post-meta">
+        <div class="post-day">Day 05</div>
+        <div class="post-type">Lore</div>
+      </div>
+      <div class="post-text">Marcus Kane does not raise his voice. He does not need to. The room already knows.</div>
+    </div>
+
+    <div class="post-card silence">
+      <div class="post-meta">
+        <div class="post-day">Day 06</div>
+        <div class="post-type">Silence</div>
+      </div>
+      <div class="post-text">[No post today.]</div>
+      <div class="post-note">First deliberate gap. The ritual includes absence.</div>
+    </div>
+
+    <div class="post-card ritual">
+      <div class="post-meta">
+        <div class="post-day">Day 07</div>
+        <div class="post-type">Ritual</div>
+      </div>
+      <div class="post-text">Seven cycles complete. The empire does not celebrate milestones. It notes them and continues.</div>
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="week-header">
+    <div class="week-label">Week Two</div>
+    <div class="week-line"></div>
+    <div class="week-theme">Character Depth</div>
+  </div>
+
+  <div class="posts-grid">
+    <div class="post-card lore">
+      <div class="post-meta">
+        <div class="post-day">Day 08</div>
+        <div class="post-type">Lore</div>
+      </div>
+      <div class="post-text">Calista and Isolde share the same bone architecture. The difference is what the light reveals. The difference is everything.</div>
+    </div>
+
+    <div class="post-card ritual">
+      <div class="post-meta">
+        <div class="post-day">Day 09</div>
+        <div class="post-type">Ritual</div>
+      </div>
+      <div class="post-text">Cycle 009. Compression. The drift vectors narrow. What remains is what was always meant to remain.</div>
+    </div>
+
+    <div class="post-card signal">
+      <div class="post-meta">
+        <div class="post-day">Day 10</div>
+        <div class="post-type">Signal</div>
+      </div>
+      <div class="post-text">Natural iris physics: light reflected, not emitted. The distinction is not aesthetic. It is doctrinal.</div>
+      <div class="post-note">Technical language, zero context. Technically curious people will ask what this means.</div>
+    </div>
+
+    <div class="post-card lore">
+      <div class="post-meta">
+        <div class="post-day">Day 11</div>
+        <div class="post-type">Lore</div>
+      </div>
+      <div class="post-text">Raven moves first and asks permission never. The Governor notes this and permits it.</div>
+    </div>
+
+    <div class="post-card ritual">
+      <div class="post-meta">
+        <div class="post-day">Day 12</div>
+        <div class="post-type">Ritual</div>
+      </div>
+      <div class="post-text">Twelve cycles. The signal topology map registers no conflicts. The empire is stable. This is not permanent. It is current.</div>
+    </div>
+
+    <div class="post-card silence">
+      <div class="post-meta">
+        <div class="post-day">Day 13</div>
+        <div class="post-type">Silence</div>
+      </div>
+      <div class="post-text">[No post today.]</div>
+    </div>
+
+    <div class="post-card lore">
+      <div class="post-meta">
+        <div class="post-day">Day 14</div>
+        <div class="post-type">Lore</div>
+      </div>
+      <div class="post-text">The Voss talisman catches light at an angle the camera was not expecting. The corneal specular holds at two o'clock. The invariant does not drift.</div>
+    </div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="week-header">
+    <div class="week-label">Week Three</div>
+    <div class="week-line"></div>
+    <div class="week-theme">Pre-Drop Pressure</div>
+  </div>
+
+  <div class="posts-grid">
+    <div class="post-card signal">
+      <div class="post-meta">
+        <div class="post-day">Day 15</div>
+        <div class="post-type">Signal</div>
+      </div>
+      <div class="post-text">The Rookie Card module runs at v1.8. The No-Edit Rule is canon-locked. What ships is what was generated. Nothing more.</div>
+      <div class="post-note">First reference to a product without describing it as a product.</div>
+    </div>
+
+    <div class="post-card ritual">
+      <div class="post-meta">
+        <div class="post-day">Day 16</div>
+        <div class="post-type">Ritual</div>
+      </div>
+      <div class="post-text">Cycle 016. Expansion. Three assets enter the vault queue. The Gate scores two above threshold. One is held.</div>
+    </div>
+
+    <div class="post-card lore">
+      <div class="post-meta">
+        <div class="post-day">Day 17</div>
+        <div class="post-type">Lore</div>
+      </div>
+      <div class="post-text">Isolde surfaces in the session. The obsidian holds. The aurora green does not negotiate with ambient warmth. It refuses it.</div>
+      <div class="post-note">Use an actual Isolde render as the image if one passes the Gate.</div>
+    </div>
+
+    <div class="post-card ritual">
+      <div class="post-meta">
+        <div class="post-day">Day 18</div>
+        <div class="post-type">Ritual</div>
+      </div>
+      <div class="post-text">Eighteen cycles. The record is consistent. Consistency is not repetition. It is proof.</div>
+    </div>
+
+    <div class="post-card signal">
+      <div class="post-meta">
+        <div class="post-day">Day 19</div>
+        <div class="post-type">Signal</div>
+      </div>
+      <div class="post-text">Limited edition: 100. The number is not marketing. It is a structural decision. The canon does not produce infinite identical objects.</div>
+    </div>
+
+    <div class="post-card silence">
+      <div class="post-meta">
+        <div class="post-day">Day 20</div>
+        <div class="post-type">Silence</div>
+      </div>
+      <div class="post-text">[No post today.]</div>
+      <div class="post-note">Silence before the drop week builds pressure without announcing pressure.</div>
+    </div>
+
+    <div class="post-card lore">
+      <div class="post-meta">
+        <div class="post-day">Day 21</div>
+        <div class="post-type">Lore</div>
+      </div>
+      <div class="post-text">She was not invited. She arrived before the invitation existed.</div>
+      <div class="post-note">Brand line delivered as lore, not tagline. This is the distinction.</div>
+    </div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="week-header">
+    <div class="week-label">Week Four</div>
+    <div class="week-line"></div>
+    <div class="week-theme">The Drop</div>
+  </div>
+
+  <div class="posts-grid">
+    <div class="post-card ritual">
+      <div class="post-meta">
+        <div class="post-day">Day 22</div>
+        <div class="post-type">Ritual</div>
+      </div>
+      <div class="post-text">Cycle 022. The vault queue clears. What was locked is now held. What is held will be released. The sequence is correct.</div>
+    </div>
+
+    <div class="post-card lore">
+      <div class="post-meta">
+        <div class="post-day">Day 23</div>
+        <div class="post-type">Lore</div>
+      </div>
+      <div class="post-text">The Feral Gloss Vault opens when the canon is satisfied. Not before. The Gate does not yield to urgency.</div>
+    </div>
+
+    <div class="post-card drop">
+      <div class="post-meta">
+        <div class="post-day">Day 24</div>
+        <div class="post-type">Drop</div>
+      </div>
+      <div class="post-text">Isolde Voss. Rookie Card. Edition 001 of 100.</div>
+      <div class="post-note">Image only + this one line. Nothing else. The link is in the bio. It has always been in the bio.</div>
+    </div>
+
+    <div class="post-card ritual">
+      <div class="post-meta">
+        <div class="post-day">Day 25</div>
+        <div class="post-type">Ritual</div>
+      </div>
+      <div class="post-text">Twenty-five cycles complete. The vault is open. The record continues regardless.</div>
+    </div>
+
+    <div class="post-card signal">
+      <div class="post-meta">
+        <div class="post-day">Day 26</div>
+        <div class="post-type">Signal</div>
+      </div>
+      <div class="post-text">The Canon Engine does not produce art. It enforces the conditions under which art becomes inevitable.</div>
+      <div class="post-note">Best signal post of the 30 days. Drops on day 3 post-launch when people are looking at the account.</div>
+    </div>
+
+    <div class="post-card silence">
+      <div class="post-meta">
+        <div class="post-day">Day 27</div>
+        <div class="post-type">Silence</div>
+      </div>
+      <div class="post-text">[No post today.]</div>
+    </div>
+
+    <div class="post-card lore">
+      <div class="post-meta">
+        <div class="post-day">Day 28</div>
+        <div class="post-type">Lore</div>
+      </div>
+      <div class="post-text">Calista's platinum holds in low light. This is not luck. It is a hard invariant. The empire does not rely on luck.</div>
+    </div>
+
+    <div class="post-card ritual">
+      <div class="post-meta">
+        <div class="post-day">Day 29</div>
+        <div class="post-type">Ritual</div>
+      </div>
+      <div class="post-text">Twenty-nine cycles. The next character surfaces soon. The record will note it when it does.</div>
+      <div class="post-note">Seeds the next drop without announcing it.</div>
+    </div>
+
+    <div class="post-card ritual">
+      <div class="post-meta">
+        <div class="post-day">Day 30</div>
+        <div class="post-type">Ritual</div>
+      </div>
+      <div class="post-text">Thirty cycles complete. The canon holds. The empire does not mark this. The Lore Master notes it and continues.</div>
+      <div class="post-note">Close the first month exactly as you opened it. Ritual. No fanfare.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: OPERATIONS -->
+<section class="doc-section fade-in" id="ops">
+  <div class="section-eyebrow">Section VI</div>
+  <h2 class="section-title"><span>Operations</span> Doctrine</h2>
+
+  <div class="rule-grid">
+    <div class="rule-item">
+      <div class="rule-marker">1</div>
+      <div class="rule-content">
+        <div class="rule-name">Post Time</div>
+        <div class="rule-desc">Pick one time. Hold it for 90 days minimum. Early morning (6–8am local) or late evening (9–11pm) both work for this content type. The choice matters less than the consistency.</div>
+      </div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-marker">2</div>
+      <div class="rule-content">
+        <div class="rule-name">Reply Policy</div>
+        <div class="rule-desc">The Lore Master does not reply. If you (as yourself) want to engage with followers about the system, do it from a separate account. The Lore Master's silence is part of its authority.</div>
+      </div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-marker">3</div>
+      <div class="rule-content">
+        <div class="rule-name">Batch Writing</div>
+        <div class="rule-desc">Write two weeks of posts at once. Schedule them. The ritual should not depend on your daily availability. The Canon Engine runs sessions. The Lore Master runs on its own clock.</div>
+      </div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-marker">4</div>
+      <div class="rule-content">
+        <div class="rule-name">Image Cadence</div>
+        <div class="rule-desc">Not every post needs an image. Text-only posts often perform better for this voice. When an image appears it should feel like a reveal, not a feed filler.</div>
+      </div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-marker">5</div>
+      <div class="rule-content">
+        <div class="rule-name">What Success Looks Like</div>
+        <div class="rule-desc">At 30 days: followers asking what "the canon" is. At 60 days: followers referencing lore in their own posts. At 90 days: new followers assuming the account has existed for years. That is the correct outcome.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="doctrine-block">
+    <div class="doctrine-label">The One Rule Above All Rules</div>
+    <div class="doctrine-text">The Lore Master does not break character for any reason. Not to clarify. Not to defend. Not to announce. Not to thank. It speaks only in the register documented here. Everything else is silence.</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="doc-footer">
+  <span class="footer-sigil">𓂀</span>
+  <div class="footer-text">Feral Gloss Empire · Canon Document v1.0 · Lore Master Bible · Not for distribution</div>
+</footer>
+
+<script>
+// Fade in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
