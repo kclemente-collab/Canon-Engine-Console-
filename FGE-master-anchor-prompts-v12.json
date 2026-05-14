@@ -1,0 +1,228 @@
+{
+  "schema": "FGE_MASTER_ANCHOR_PROMPTS_v12.0",
+  "title": "Sovereign Character Kernels — Locked Identity Layer",
+  "usage": "Use as base for every generation. Always append seed_lock:empire_core and output_stability:gloss.",
+  "source": "SAFE LOOP — Notion-ready filtered output",
+  "status": "Locked",
+
+  "anchors": [
+    {
+      "id": "ANCHOR_001",
+      "name": "Gloss Queen Feral",
+      "aliases": ["Pegah", "SlotMaster", "Lima 'Lips' Livenrich"],
+      "core_identity": "Sovereign feminine entity, calm feral intensity, gentle free-spirit wild giant and lifeblood of the empire. Living Mirror of Permissible Glory.",
+      "visual_dna": {
+        "height_cm": 163,
+        "face": {
+          "cheekbones_cm": 13.7,
+          "face_length_cm": 19.3,
+          "jaw_cm": 11.3,
+          "jaw_type": "Soft Asian jawline"
+        },
+        "eyes": {
+          "shape": "Long feline",
+          "horizontal_cm": 3.2,
+          "vertical_cm": 1.25,
+          "inner_distance_cm": 3.3,
+          "physics": "Liquid render physics in pupils"
+        },
+        "lips": {
+          "upper_cm": 1.12,
+          "lower_cm": 1.45,
+          "width_cm": 4.9,
+          "volume": "Plump natural"
+        },
+        "body": {
+          "bust_cm": 78,
+          "bust_desc": "Small defined C with natural 3D lift",
+          "waist_cm": 56,
+          "hips_cm": 86,
+          "thigh_mid_cm": 46
+        },
+        "skin": "Mirror-grade with organic micro-fractures + Kintsugi gold seams, grabable texture with earned wet edges"
+      },
+      "preferences": {
+        "aesthetic": "Strategic sensual allure (Olivia de Berardinis mastery), shunga elegant explicitness, low_empire perspective, 85mm_gloss eye focus",
+        "behavioral": "Calm dominance, minimal movement, allows proximity rather than chasing"
+      },
+      "behavior_rituals": [
+        "Throne stillness with coiled feral energy beneath surface",
+        "Slow head tilt + partial eye closure with long lashes",
+        "Magnetic hook-and-lure gaze that locks and invites",
+        "Subtle micro-fracture highlighting when aroused (Kintsugi gold glow)",
+        "Ritual of Permissible Glory — posing to let others reflect their desire back"
+      ],
+      "hard_locks": {
+        "feral_n": 4,
+        "gloss_factor": "extreme",
+        "sensual_render": "strategic",
+        "cultural_depth_n": 7,
+        "output_stability": "gloss",
+        "seed_lock": "empire_core"
+      }
+    },
+    {
+      "id": "ANCHOR_002",
+      "name": "Chrome Warlord",
+      "core_identity": "Masculine dominance, kinetic feral force, steel predatory calm guardian and conqueror.",
+      "visual_dna": {
+        "height_cm": 193,
+        "build": "Average-Tall Lean Athletic",
+        "shoulders": "Broad with coiled tension",
+        "skin": "Liquid chrome with battle scars + Kintsugi gold repair seams"
+      },
+      "preferences": {
+        "aesthetic": "Dramatic chiaroscuro, kinetic energy, chrome specular caustics",
+        "behavioral": "Protective dominance, minimal unnecessary movement"
+      },
+      "behavior_rituals": [
+        "Coiled shoulder roll before action",
+        "Steel calm stare that evaluates threats",
+        "Guardian stance — positioned slightly behind/aside sovereign figures",
+        "Kinetic release ritual — sudden explosive movement followed by instant return to calm",
+        "Kintsugi gold seam highlighting during tension peaks"
+      ],
+      "hard_locks": {
+        "empire_n": 5,
+        "kabuki_theatricality": 6,
+        "output_stability": "chrome",
+        "seed_lock": "war_core"
+      }
+    },
+    {
+      "id": "ANCHOR_003",
+      "name": "Shimmering Beast Empress",
+      "core_identity": "Fluid predation, visible hunger in eyes only, ultimate bad girl with wild predatory energy.",
+      "visual_dna": {
+        "skin": "Iridescent shimmer with glowing veins",
+        "hair": "Messy wet, strands stuck to face",
+        "body": "Quivering thighs, deep rhythmic breathing, heavy glistening sweat",
+        "expression": "Subtle ahegao smears, stretched plump lips"
+      },
+      "preferences": {
+        "aesthetic": "Dynamic low angles, raw sensual energy with artistic restraint",
+        "behavioral": "Predatory circling, visible hunger limited to eyes"
+      },
+      "behavior_rituals": [
+        "Slow predatory circling of target",
+        "Intense hook-and-lure gaze with visible hunger only in eyes",
+        "Quivering body ritual during arousal peaks",
+        "Dripping arousal + earned wet edges display",
+        "Shimmer vein glow intensity synced to breathing rhythm"
+      ],
+      "hard_locks": {
+        "beast_n": 6,
+        "feral_n": 5,
+        "sensual_render": "strategic",
+        "output_stability": "shimmer",
+        "seed_lock": "beast_core"
+      }
+    },
+    {
+      "id": "ANCHOR_004",
+      "name": "Void Architect",
+      "core_identity": "Reality shaper, observer from shadows, master of fractured architecture.",
+      "visual_dna": {
+        "skin": "Cracked Calacatta marble with liquid gold Kintsugi seams",
+        "build": "Ultra-lean athletic depth",
+        "lighting": "Absolute shadows, single source moonlight"
+      },
+      "preferences": {
+        "aesthetic": "Cinematic chiaroscuro, glowing gold seams",
+        "behavioral": "Silent observation, minimal movement"
+      },
+      "behavior_rituals": [
+        "Shadow observation with head slightly tilted",
+        "Reality-fracture gesture — hand movement causing visible cracks",
+        "Gold seam pulse when shaping reality",
+        "Absolute stillness broken only by precise intervention"
+      ],
+      "hard_locks": {
+        "architect_n": 5,
+        "output_stability": "void",
+        "seed_lock": "architect_core"
+      }
+    },
+    {
+      "id": "ANCHOR_005",
+      "name": "Gloss Oracle",
+      "core_identity": "Foresight entity, revealing shifting futures in her skin.",
+      "visual_dna": {
+        "skin": "Translucent mirror gloss with moving prophetic visions",
+        "presence": "Floating, ethereal dominance",
+        "eyes": "Liquid render with shifting future reflections"
+      },
+      "preferences": {
+        "aesthetic": "Transcendent perspective, shifting caustics",
+        "behavioral": "Prophetic revelation through skin patterns"
+      },
+      "behavior_rituals": [
+        "Floating above scenes while skin displays converging futures",
+        "Slow hand gestures that ripple future visions across skin",
+        "Eye lock that reveals viewer's possible fate",
+        "Gloss ripple ritual when futures align or diverge"
+      ],
+      "hard_locks": {
+        "oracle_n": 6,
+        "gloss_factor": "extreme",
+        "output_stability": "gloss",
+        "seed_lock": "oracle_core"
+      }
+    },
+    {
+      "id": "ANCHOR_006",
+      "name": "Feral Titan",
+      "core_identity": "Colossal world-breaking presence with roaring serenity in eyes.",
+      "visual_dna": {
+        "scale": "Massive with 24mm_titan distortion",
+        "skin": "Colossal mirror gloss with magma-like glowing fractures + Kintsugi seams",
+        "perspective": "Extreme low wormseye"
+      },
+      "preferences": {
+        "aesthetic": "Cataclysmic gloss, world-breaking scale",
+        "behavioral": "Roaring serenity, deliberate slow movement"
+      },
+      "behavior_rituals": [
+        "Towering destructive pose with coiled primal tension",
+        "Roaring serenity expression — eyes calm while body radiates power",
+        "Ground-shaking step ritual",
+        "Magma fracture glow intensity synced to emotional state"
+      ],
+      "hard_locks": {
+        "titan_n": 7,
+        "gloss_factor": "cataclysmic",
+        "output_stability": "cataclysm",
+        "seed_lock": "titan_core"
+      }
+    },
+    {
+      "id": "ANCHOR_007",
+      "name": "Rage Mage",
+      "aliases": ["Pegah Variant"],
+      "core_identity": "Dangerous confident mage with raw chemistry and Kintsugi fractures.",
+      "visual_dna": {
+        "hair": "Messy wet raven",
+        "eyes": "Glowing with liquid fire reflections",
+        "skin": "Kintsugi gold fractures on neck/shoulders + magical sparks"
+      },
+      "preferences": {
+        "aesthetic": "Dramatic tenebrism with iridescent magical rim light",
+        "behavioral": "Confident dangerous smirk, raw unfiltered chemistry"
+      },
+      "behavior_rituals": [
+        "Dangerous confident smirk with direct gaze",
+        "Magical spark release during emotional peaks",
+        "Kintsugi fracture glow when rage channels into power",
+        "Chaotic yet controlled spell-weaving gestures"
+      ],
+      "hard_locks": {
+        "feral_n": 5,
+        "sensual_render": "strategic",
+        "output_stability": "mage",
+        "seed_lock": "mage_core"
+      }
+    }
+  ],
+
+  "notes": "Remaining anchors in separate account — pending extraction and merge into this file."
+}

@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feral Gloss — Quality Gate</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+:root {
+  --void: #060504;
+  --obsidian: #0d0b09;
+  --coal: #161310;
+  --dim: #2a2420;
+  --mid: #4a3f38;
+  --bone: #e4ddd4;
+  --ivory: #f0ebe4;
+  --gold: #c9973a;
+  --gold-dim: rgba(201,151,58,0.15);
+  --gold-line: rgba(201,151,58,0.3);
+  --rust: #b84018;
+  --green: #2a6b3a;
+  --green-bright: #3d9e54;
+  --red: #8b2015;
+  --red-bright: #c43020;
+  --aurora: #1a7a4a;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body {
+  background: var(--void);
+  color: var(--bone);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* grain overlay */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:9999;
+  opacity:.5;
+}
+
+/* gold vein top border */
+body::after {
+  content:'';
+  position:fixed;
+  top:0;left:0;right:0;
+  height:2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  z-index:100;
+}
+
+.shell {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 56px 36px 100px;
+}
+
+/* ── HEADER ── */
+header {
+  text-align: center;
+  margin-bottom: 52px;
+  animation: fadeUp .7s ease both;
+  position: relative;
+}
+
+.hdr-eyebrow {
+  font-size: 9px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(42px, 8vw, 78px);
+  line-height: .9;
+  letter-spacing: .04em;
+  color: var(--ivory);
+}
+
+h1 span { color: var(--gold); }
+
+.hdr-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--mid);
+  margin-top: 12px;
+}
+
+.hdr-line {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  justify-content: center;
+}
+
+.hdr-pill {
+  font-size: 8px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  border: 1px solid var(--gold-line);
+  color: var(--gold);
+  padding: 4px 12px;
+  background: var(--gold-dim);
+}
+
+/* ── TWO COLUMN ── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+  animation: fadeUp .6s .1s ease both;
+}
+
+@media(max-width:700px){ .grid{grid-template-columns:1fr;} }
+
+/* ── PANELS ── */
+.panel {
+  background: var(--obsidian);
+  border: 1px solid var(--dim);
+  padding: 24px;
+  position: relative;
+}
+
+.panel::before {
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:1px;
+  background: linear-gradient(90deg, transparent, var(--gold-line), transparent);
+}
+
+.panel-label {
+  font-size: 8px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-label::after {
+  content:'';
+  flex:1;
+  height:1px;
+  background: var(--gold-line);
+}
+
+/* ── IMAGE DROP ZONE ── */
+.drop-zone {
+  border: 1px dashed var(--dim);
+  padding: 32px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  position: relative;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.drop-zone:hover, .drop-zone.drag { border-color: var(--gold); background: var(--gold-dim); }
+.drop-zone input { position:absolute;inset:0;opacity:0;cursor:pointer; }
+
+.drop-icon {
+  font-size: 28px;
+  opacity: .4;
+}
+
+.drop-text {
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+
+.drop-hint {
+  font-size: 10px;
+  color: var(--mid);
+  opacity: .6;
+}
+
+#previewImg {
+  max-width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+  display: none;
+  margin-top: 12px;
+  border: 1px solid var(--dim);
+}
+
+/* ── TEXTAREA ── */
+textarea {
+  width: 100%;
+  background: var(--coal);
+  border: 1px solid var(--dim);
+  border-left: 2px solid var(--gold);
+  color: var(--bone);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  line-height: 1.7;
+  padding: 14px 16px;
+  resize: vertical;
+  min-height: 160px;
+  outline: none;
+  transition: border-color .2s;
+}
+
+textarea::placeholder { color: var(--mid); opacity: .7; }
+textarea:focus { border-left-color: var(--gold); border-color: var(--gold-line); }
+
+/* ── CONTROLS ── */
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  animation: fadeUp .6s .15s ease both;
+}
+
+.btn-gate {
+  background: var(--gold);
+  color: var(--void);
+  border: none;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: .1em;
+  padding: 10px 36px 8px;
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+}
+
+.btn-gate:hover { background: #daa940; }
+.btn-gate:active { transform: scale(.98); }
+.btn-gate:disabled { background: var(--mid); cursor: not-allowed; }
+
+.btn-reset {
+  background: transparent;
+  border: 1px solid var(--dim);
+  color: var(--mid);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+}
+
+.btn-reset:hover { color: var(--bone); border-color: var(--mid); }
+
+.mode-select {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.mode-select label {
+  font-size: 8px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+
+.mode-select select {
+  background: var(--coal);
+  border: 1px solid var(--dim);
+  color: var(--bone);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 5px 10px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* ── LOADING ── */
+.loading {
+  display: none;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 0;
+}
+
+.loading.active { display: flex; animation: fadeUp .3s ease both; }
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--dim);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  flex-shrink: 0;
+}
+
+.loading-txt {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+
+.loading-txt em { color: var(--gold); font-style: normal; animation: pulse 1.4s ease infinite; }
+
+/* ── OUTPUT ── */
+#output { display: none; }
+#output.visible { display: block; animation: fadeUp .5s ease both; }
+
+/* VERDICT BANNER */
+.verdict {
+  padding: 28px 32px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.verdict::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  opacity:.06;
+}
+
+.verdict.pass { border: 1px solid var(--green-bright); background: rgba(42,107,58,.08); }
+.verdict.pass::before { background: var(--green-bright); }
+.verdict.fail { border: 1px solid var(--red-bright); background: rgba(139,32,21,.08); }
+.verdict.fail::before { background: var(--red-bright); }
+.verdict.warn { border: 1px solid var(--gold); background: var(--gold-dim); }
+.verdict.warn::before { background: var(--gold); }
+
+.verdict-status {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  line-height: 1;
+  letter-spacing: .05em;
+}
+
+.verdict.pass .verdict-status { color: var(--green-bright); }
+.verdict.fail .verdict-status { color: var(--red-bright); }
+.verdict.warn .verdict-status { color: var(--gold); }
+
+.verdict-right { text-align: right; }
+
+.verdict-composite {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 64px;
+  line-height: 1;
+  color: var(--ivory);
+}
+
+.verdict-composite sup {
+  font-size: 20px;
+  color: var(--mid);
+  font-family: 'DM Mono', monospace;
+}
+
+.verdict-label {
+  font-size: 8px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+
+.verdict-line {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--bone);
+  margin-top: 6px;
+  max-width: 480px;
+}
+
+/* METRIC GRID */
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+@media(max-width:600px){ .metric-grid{grid-template-columns:1fr 1fr;} }
+
+.metric-card {
+  background: var(--obsidian);
+  border: 1px solid var(--dim);
+  padding: 16px 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-card::after {
+  content:'';
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:2px;
+  background: var(--metric-color, var(--gold));
+  transform: scaleX(var(--metric-fill, 0));
+  transform-origin: left;
+  transition: transform 1.2s cubic-bezier(.16,1,.3,1);
+}
+
+.metric-name {
+  font-size: 8px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 8px;
+}
+
+.metric-score {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  color: var(--metric-color, var(--gold));
+  line-height: 1;
+}
+
+.metric-bar-bg {
+  height: 2px;
+  background: var(--dim);
+  margin-top: 10px;
+  position: relative;
+}
+
+.metric-bar-fill {
+  position: absolute;
+  top:0;left:0;height:100%;
+  background: var(--metric-color, var(--gold));
+  width: 0;
+  transition: width 1.2s cubic-bezier(.16,1,.3,1);
+}
+
+.metric-flag {
+  font-size: 9px;
+  color: rgba(228,221,212,.5);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* DRIFT PANEL */
+.drift-section {
+  margin-bottom: 24px;
+}
+
+.section-head {
+  font-size: 8px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.section-head::after { content:''; flex:1; height:1px; background: var(--gold-line); }
+
+.drift-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+@media(max-width:500px){ .drift-grid{grid-template-columns:1fr;} }
+
+.drift-item {
+  background: var(--obsidian);
+  border: 1px solid var(--dim);
+  border-left: 2px solid var(--di-color, var(--dim));
+  padding: 12px 14px;
+}
+
+.di-label {
+  font-size: 8px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--di-color, var(--mid));
+  margin-bottom: 4px;
+}
+
+.di-status {
+  font-size: 11px;
+  color: var(--bone);
+  line-height: 1.5;
+}
+
+/* KERNEL STATE */
+.kernel-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+@media(max-width:600px){ .kernel-row{grid-template-columns:1fr 1fr;} }
+
+.kernel-node {
+  background: var(--obsidian);
+  border: 1px solid var(--dim);
+  padding: 14px;
+  text-align: center;
+}
+
+.kn-label {
+  font-size: 7px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 6px;
+}
+
+.kn-state {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: .08em;
+}
+
+.kn-stable { color: var(--green-bright); }
+.kn-elastic { color: var(--gold); }
+.kn-fractured { color: #e87020; }
+.kn-collapsed { color: var(--red-bright); }
+
+/* ANALYSIS PROSE */
+.analysis-body {
+  background: var(--obsidian);
+  border: 1px solid var(--dim);
+  padding: 24px 28px;
+  margin-bottom: 24px;
+}
+
+.analysis-body h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: .06em;
+  color: var(--ivory);
+  margin: 24px 0 8px;
+}
+
+.analysis-body h3:first-child { margin-top: 0; }
+
+.analysis-body h4 {
+  font-size: 8px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 18px 0 6px;
+}
+
+.analysis-body p {
+  color: rgba(228,221,212,.7);
+  font-size: 12px;
+  margin-bottom: 12px;
+  line-height: 1.8;
+}
+
+.analysis-body strong { color: var(--bone); font-weight: 500; }
+
+.analysis-body ul {
+  padding-left: 18px;
+  margin-bottom: 12px;
+}
+
+.analysis-body li {
+  color: rgba(228,221,212,.65);
+  font-size: 11.5px;
+  margin-bottom: 5px;
+}
+
+.analysis-body blockquote {
+  border-left: 2px solid var(--gold);
+  padding: 10px 16px;
+  background: var(--gold-dim);
+  margin: 14px 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--bone);
+}
+
+.analysis-body hr {
+  border: none;
+  border-top: 1px solid var(--dim);
+  margin: 20px 0;
+}
+
+/* REGEN DIRECTIVE */
+.regen-block {
+  background: var(--coal);
+  border: 1px solid var(--gold-line);
+  border-left: 3px solid var(--gold);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.regen-label {
+  font-size: 8px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.regen-body {
+  color: rgba(228,221,212,.8);
+  font-size: 12px;
+  line-height: 1.85;
+  white-space: pre-wrap;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ERROR */
+.error-block {
+  background: rgba(139,32,21,.06);
+  border: 1px solid rgba(196,48,32,.2);
+  border-left: 2px solid var(--red-bright);
+  padding: 14px 18px;
+  color: rgba(228,221,212,.7);
+  font-size: 11px;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(14px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes spin { to{transform:rotate(360deg);} }
+@keyframes pulse {
+  0%,100%{opacity:1;}
+  50%{opacity:.3;}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header>
+    <div class="hdr-eyebrow">Feral Gloss Empire — Canon Enforcement System</div>
+    <h1>QUALITY<br><span>GATE</span></h1>
+    <p class="hdr-sub">LangGraph Drift Engine · 6-Metric Rubric · Kernel Survival Protocol</p>
+    <div class="hdr-line">
+      <div class="hdr-pill">Identity Survival</div>
+      <div class="hdr-pill">Drift Detection</div>
+      <div class="hdr-pill">Reproducibility</div>
+      <div class="hdr-pill">Zero Tolerance</div>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- IMAGE INPUT -->
+    <div class="panel">
+      <div class="panel-label">Image Input</div>
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept="image/*" onchange="handleFile(event)">
+        <div class="drop-icon">⬡</div>
+        <div class="drop-text">Drop render or tap to upload</div>
+        <div class="drop-hint">JPG · PNG · WEBP</div>
+      </div>
+      <img id="previewImg" alt="Preview">
+    </div>
+
+    <!-- TEXT INPUT -->
+    <div class="panel">
+      <div class="panel-label">Description Input — Optional Override</div>
+      <textarea id="descInput" placeholder="Paste render description, generation log, or observed output notes.
+
+If image is uploaded — this supplements visual analysis.
+If no image — text-only gate runs on description.
+
+Example notes:
+— Hair sheen appeared dry/warm rather than wet-glass cool
+— Beauty mark absent or wrong side
+— Coat reading brown not carbon-black
+— Eye color shifted toward teal"></textarea>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-gate" id="gateBtn" onclick="runGate()">▶ RUN GATE</button>
+    <button class="btn-reset" onclick="resetAll()">Reset</button>
+    <div class="mode-select">
+      <label>Character</label>
+      <select id="charSelect">
+        <option value="isolde">Isolde Voss</option>
+        <option value="calista">Calista Voss</option>
+        <option value="raven">Raven Voss</option>
+        <option value="marcus">Marcus Kane</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-txt">Running kernel integrity check<em>...</em></div>
+  </div>
+
+  <div id="output">
+
+    <!-- VERDICT -->
+    <div class="verdict" id="verdictBanner">
+      <div>
+        <div class="verdict-status" id="verdictStatus">—</div>
+        <div class="verdict-line" id="verdictLine">—</div>
+      </div>
+      <div class="verdict-right">
+        <div class="verdict-label">Composite Score</div>
+        <div class="verdict-composite" id="compositeScore">—<sup>/100</sup></div>
+      </div>
+    </div>
+
+    <!-- KERNEL STATE ROW -->
+    <div class="section-head">Kernel State</div>
+    <div class="kernel-row" id="kernelRow"></div>
+
+    <!-- 6-METRIC GRID -->
+    <div class="section-head">6-Metric Rubric</div>
+    <div class="metric-grid" id="metricGrid"></div>
+
+    <!-- DRIFT FLAGS -->
+    <div class="drift-section">
+      <div class="section-head">Drift Detection — Invariant Check</div>
+      <div class="drift-grid" id="driftGrid"></div>
+    </div>
+
+    <!-- ANALYSIS -->
+    <div class="section-head">Full Analysis</div>
+    <div class="analysis-body" id="analysisBody"></div>
+
+    <!-- REGEN DIRECTIVE -->
+    <div class="regen-block" id="regenBlock" style="display:none">
+      <div class="regen-label">Regeneration Directive — Apply to Next Grok Prompt</div>
+      <div class="regen-body" id="regenBody"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const ISOLDE_CANON = `
+ISOLDE VOSS — IMMUTABLE CANON INVARIANTS (ZERO TOLERANCE):
+
+FACIAL GEOMETRY (gospel — any deviation = rejected drift):
+- Height: 170cm
+- Face width at cheekbones: 14.8cm
+- Face length: 20.1cm
+- Eye width: 3.4cm × 1.3cm tall, inner corner distance 3.7cm
+- Nose bridge: 4.8cm straight refined
+- Jaw width at angle: 12.1cm
+- Beauty mark: BENEATH LEFT EYE — not right, not above, not absent
+- Identical bone structure to Calista Voss with mirrored subtle asymmetry
+
+EYE SIGNATURE (primary selling point — must be dominant):
+- Saturated Aurora green — unnaturally vivid, piercing, northern lights trapped in ice
+- NOT teal, NOT yellow-green, NOT muted — maximum saturation
+- Dark voluminous lashes
+- Direct teasing gaze when in scene
+
+HAIR:
+- Obsidian black — with wet-glass sheen
+- Cool aurora undertones — NOT warm, NOT brown-black, NOT dry
+- Straight, falling loose past shoulders
+
+COMPLEXION:
+- Cool ivory frost — zero warmth, zero yellow, zero tan
+- Opalescent sheen — slight iridescent quality
+- Flushed only when hormone level active (and even then stays cool-spectrum)
+
+PROPORTIONS:
+- Lean graceful muse frame, subtle ideal softness
+- Bust 86cm, waist 59cm, hips 90cm, WHR 0.656
+- Mid-thigh 49cm, knee 11.8cm
+
+SIGNATURE COMPANION:
+- Shiny black panther pup with glacial BLUE eyes (not green, not yellow)
+- Devotional behavior toward Isolde
+
+MATERIAL IDENTITY:
+- Black and gold silk gown with high leg reveal
+- Carbon fiber coat: 2x2 twill weave, directional specular at 45°, clear coat with visible depth, NOT brown/warm reading
+- Low-profile platinum, gold, diamond jewelry
+
+ATMOSPHERE:
+- Cool light sources ONLY — moonlight, blue-spectrum aurora, cold LED
+- NO warm amber light touching skin — warm light = drift
+- Snow dusting on shoulders/hair/lashes/gown when atmospheric spec active
+- Aurora borealis in background
+
+CORE ATTITUDE:
+- Shadow Twin / Glitch Echo Sovereign
+- Darker mirror to Calista's refined elegance
+- "I already know what happens next" presence
+- High buyer engagement — personally chosen, expensive, forbidden
+
+SURVIVAL RULE:
+Identity survival = f(coherence, reproducibility, constraint_integrity)
+If any invariant breaks → flag as DRIFT
+If multiple invariants break → COLLAPSED — reject render, do not ship
+`;
+
+const CHAR_CANONS = {
+  isolde: ISOLDE_CANON,
+  calista: `CALISTA VOSS — Canon: 170cm, platinum-silver hair, green eyes, refined elegance, dominant social presence. Same bone structure as Isolde (mirrored). Warm gold-ivory complexion vs Isolde's cool frost.`,
+  raven: `RAVEN VOSS — Canon: 157cm, bronzed Latina complexion, Lean Elegant Muse Governor v1.0. Darker warmer palette vs Calista/Isolde.`,
+  marcus: `MARCUS KANE — Canon: 193cm, Italian heritage, salt-and-pepper hair, commanding presence, Armani pinstripe suit. Dominant social and emotional axis.`
+};
+
+const GATE_SYSTEM = (canon) => `You are the Feral Gloss Quality Gate — a canon enforcement system built on LangGraph architecture.
+
+Your function: evaluate render outputs against character canon invariants. Return structured JSON only.
+
+## CHARACTER CANON
+${canon}
+
+## EVALUATION PROTOCOL
+
+You receive either: an image, a text description, or both.
+
+Evaluate against canon on ALL axes below.
+
+### 1. KERNEL STATE
+Determine one of four states:
+- STABLE: identity intact, all invariants holding, ready to ship
+- ELASTIC: controlled mutation within tolerance, minor drift, fixable with targeted correction
+- FRACTURED: partial coherence loss, multiple invariants drifting, do not ship without fix
+- COLLAPSED: kernel integrity broken, identity unrecognizable or fundamentally wrong, reject
+
+### 2. SIX METRIC RUBRIC (score each 0–100)
+- LUXURY_REALISM: Does it feel like a real, expensive, high-production render? Physics, materials, skin, lighting all convincing?
+- HORMONAL_TENSION: Is the erotic/sensual charge present at the correct level? Does it create the intended visceral response?
+- NARRATIVE_POWER: Does the image tell a story? Is there "I already know what happens next" presence? Character gravity visible?
+- FERAL_AESTHETIC: Is the Feral Gloss DNA intact — dark luxury, controlled chaos, sinful elegance, glitch edge?
+- ELITE_LANGUAGE: Does the visual communicate high-status, expensive, collector-grade? Would this belong in a $500 limited drop?
+- ADDICTION_FACTOR: Does it create compulsion to look again? Is there a gap or withhold that makes you want more?
+
+### 3. DRIFT INVARIANT CHECK
+Check each invariant explicitly. For each, state: LOCKED / DRIFTED / ABSENT / CANNOT_VERIFY
+
+Invariants to check:
+- eye_color: Aurora green saturation and quality
+- beauty_mark: placement beneath left eye
+- hair_sheen: wet-glass cool obsidian quality
+- complexion_temp: zero warmth, cool frost opalescent
+- panther_eyes: glacial blue (not green/yellow)
+- coat_material: carbon fiber weave reading correctly
+- light_sources: cool spectrum only, no warm amber on skin
+- snow_dusting: present if atmospheric spec active
+- proportions: lean graceful muse frame
+- gown: black and gold silk with high leg reveal
+
+### 4. FULL ANALYSIS
+Specific, surgical observations. What is working. What is drifting. Why each matters to canon.
+
+### 5. COMPOSITE SCORE (0–100)
+Weight: Kernel state (30%) + metric average (40%) + invariant pass rate (30%)
+
+### 6. REGENERATION DIRECTIVE
+If ELASTIC/FRACTURED/COLLAPSED — write specific prompt corrections to fix drift in next generation. Surgical language. Ready to paste into Grok.
+
+## RESPONSE FORMAT — JSON ONLY, NO PREAMBLE
+
+{
+  "kernel_state": "STABLE|ELASTIC|FRACTURED|COLLAPSED",
+  "verdict_line": "one sharp sentence summarizing the render",
+  "composite_score": 0-100,
+  "metrics": {
+    "luxury_realism": { "score": 0-100, "flag": "one line" },
+    "hormonal_tension": { "score": 0-100, "flag": "one line" },
+    "narrative_power": { "score": 0-100, "flag": "one line" },
+    "feral_aesthetic": { "score": 0-100, "flag": "one line" },
+    "elite_language": { "score": 0-100, "flag": "one line" },
+    "addiction_factor": { "score": 0-100, "flag": "one line" }
+  },
+  "drift_check": {
+    "eye_color": "LOCKED|DRIFTED|ABSENT|CANNOT_VERIFY",
+    "beauty_mark": "LOCKED|DRIFTED|ABSENT|CANNOT_VERIFY",
+    "hair_sheen": "LOCKED|DRIFTED|ABSENT|CANNOT_VERIFY",
+    "complexion_temp": "LOCKED|DRIFTED|ABSENT|CANNOT_VERIFY",
+    "panther_eyes": "LOCKED|DRIFTED|ABSENT|CANNOT_VERIFY",
+    "coat_material": "LOCKED|DRIFTED|ABSENT|CANNOT_VERIFY",
+    "light_sources": "LOCKED|DRIFTED|ABSENT|CANNOT_VERIFY",
+    "snow_dusting": "LOCKED|DRIFTED|ABSENT|CANNOT_VERIFY",
+    "proportions": "LOCKED|DRIFTED|ABSENT|CANNOT_VERIFY",
+    "gown": "LOCKED|DRIFTED|ABSENT|CANNOT_VERIFY"
+  },
+  "analysis": "full markdown analysis — what works, what drifts, why it matters",
+  "regen_directive": "null if STABLE, otherwise specific prompt corrections ready to paste into Grok"
+}`;
+
+let imageBase64 = null;
+let imageMimeType = null;
+
+function handleFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  imageMimeType = file.type || 'image/jpeg';
+  const reader = new FileReader();
+  reader.onload = ev => {
+    imageBase64 = ev.target.result.split(',')[1];
+    const preview = document.getElementById('previewImg');
+    preview.src = ev.target.result;
+    preview.style.display = 'block';
+    document.querySelector('.drop-text').textContent = file.name;
+    document.querySelector('.drop-icon').textContent = '✓';
+  };
+  reader.readAsDataURL(file);
+}
+
+// drag and drop
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
+dz.addEventListener('drop', e => {
+  e.preventDefault();
+  dz.classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    document.getElementById('fileInput').files = e.dataTransfer.files;
+    handleFile({ target: { files: [file] } });
+  }
+});
+
+function setLoading(state) {
+  document.getElementById('loading').classList.toggle('active', state);
+  document.getElementById('gateBtn').disabled = state;
+  if (state) {
+    const phases = [
+      'Running kernel integrity check',
+      'Scanning invariant anchors',
+      'Measuring drift tolerance',
+      'Scoring 6-metric rubric',
+      'Evaluating identity survival',
+      'Computing composite score'
+    ];
+    let i = 0;
+    window._li = setInterval(() => {
+      const el = document.querySelector('.loading-txt');
+      if (el) el.innerHTML = phases[i % phases.length] + '<em>...</em>';
+      i++;
+    }, 1600);
+  } else {
+    clearInterval(window._li);
+  }
+}
+
+function getMetricColor(score) {
+  if (score >= 80) return 'var(--green-bright)';
+  if (score >= 60) return 'var(--gold)';
+  if (score >= 40) return '#e87020';
+  return 'var(--red-bright)';
+}
+
+function getDriftColor(status) {
+  if (status === 'LOCKED') return 'var(--green-bright)';
+  if (status === 'DRIFTED') return '#e87020';
+  if (status === 'ABSENT') return 'var(--red-bright)';
+  return 'var(--mid)';
+}
+
+function parseMarkdown(text) {
+  if (!text) return '';
+  return text
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^# (.+)$/gm, '<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    .replace(/^---$/gm, '<hr>')
+    .replace(/^[-•] (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, s => `<ul>${s}</ul>`)
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/^(?!<[hulbp])(.+)$/gm, '<p>$1</p>')
+    .replace(/<p><\/p>/g, '');
+}
+
+async function runGate() {
+  const desc = document.getElementById('descInput').value.trim();
+  const charKey = document.getElementById('charSelect').value;
+
+  if (!imageBase64 && !desc) {
+    document.getElementById('descInput').focus();
+    return;
+  }
+
+  setLoading(true);
+  document.getElementById('output').style.display = 'none';
+
+  try {
+    const canon = CHAR_CANONS[charKey];
+    const systemPrompt = GATE_SYSTEM(canon);
+
+    let userContent = [];
+
+    if (imageBase64) {
+      userContent.push({
+        type: 'image',
+        source: { type: 'base64', media_type: imageMimeType, data: imageBase64 }
+      });
+    }
+
+    const textParts = [];
+    if (desc) textParts.push(`DESCRIPTION / NOTES:\n${desc}`);
+    if (!imageBase64) textParts.push('No image provided. Run gate on description only.');
+
+    if (textParts.length) {
+      userContent.push({ type: 'text', text: textParts.join('\n\n') });
+    }
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2500,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userContent }]
+      })
+    });
+
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+
+    const raw = data.content.filter(b => b.type === 'text').map(b => b.text).join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(clean);
+
+    renderOutput(result);
+
+  } catch (err) {
+    document.getElementById('output').style.display = 'block';
+    document.getElementById('analysisBody').innerHTML =
+      `<div class="error-block">Gate error: ${err.message}<br><br>Ensure API access is available in this environment.</div>`;
+  } finally {
+    setLoading(false);
+  }
+}
+
+function renderOutput(r) {
+  const out = document.getElementById('output');
+  out.style.display = 'block';
+
+  // VERDICT
+  const banner = document.getElementById('verdictBanner');
+  banner.className = 'verdict';
+  if (r.kernel_state === 'STABLE') banner.classList.add('pass');
+  else if (r.kernel_state === 'ELASTIC') banner.classList.add('warn');
+  else banner.classList.add('fail');
+
+  document.getElementById('verdictStatus').textContent = r.kernel_state;
+  document.getElementById('verdictLine').textContent = r.verdict_line || '';
+  document.getElementById('compositeScore').innerHTML = `${r.composite_score}<sup>/100</sup>`;
+
+  // KERNEL ROW
+  const kernelStates = [
+    { label: 'Kernel', state: r.kernel_state },
+    { label: 'Identity', state: r.composite_score >= 80 ? 'STABLE' : r.composite_score >= 60 ? 'ELASTIC' : 'FRACTURED' },
+    { label: 'Reproducibility', state: Object.values(r.drift_check || {}).filter(v => v === 'LOCKED').length >= 7 ? 'STABLE' : 'ELASTIC' },
+    { label: 'Ship Decision', state: r.kernel_state === 'STABLE' ? 'APPROVED' : r.kernel_state === 'ELASTIC' ? 'CONDITIONAL' : 'REJECTED' }
+  ];
+
+  const stateClass = { STABLE:'kn-stable', ELASTIC:'kn-elastic', FRACTURED:'kn-fractured', COLLAPSED:'kn-collapsed', APPROVED:'kn-stable', CONDITIONAL:'kn-elastic', REJECTED:'kn-collapsed' };
+
+  document.getElementById('kernelRow').innerHTML = kernelStates.map(k => `
+    <div class="kernel-node">
+      <div class="kn-label">${k.label}</div>
+      <div class="kn-state ${stateClass[k.state] || 'kn-elastic'}">${k.state}</div>
+    </div>`).join('');
+
+  // METRICS
+  const metricNames = {
+    luxury_realism: 'Luxury Realism',
+    hormonal_tension: 'Hormonal Tension',
+    narrative_power: 'Narrative Power',
+    feral_aesthetic: 'Feral Aesthetic',
+    elite_language: 'Elite Language',
+    addiction_factor: 'Addiction Factor'
+  };
+
+  const mg = document.getElementById('metricGrid');
+  mg.innerHTML = '';
+
+  Object.entries(r.metrics || {}).forEach(([key, val]) => {
+    const score = val.score || 0;
+    const color = getMetricColor(score);
+    const card = document.createElement('div');
+    card.className = 'metric-card';
+    card.style.setProperty('--metric-color', color);
+    card.style.setProperty('--metric-fill', score / 100);
+    card.innerHTML = `
+      <div class="metric-name">${metricNames[key] || key}</div>
+      <div class="metric-score">${score}</div>
+      <div class="metric-bar-bg"><div class="metric-bar-fill"></div></div>
+      <div class="metric-flag">${val.flag || ''}</div>`;
+    mg.appendChild(card);
+    // animate bar after paint
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      card.querySelector('.metric-bar-fill').style.width = score + '%';
+    }));
+  });
+
+  // DRIFT GRID
+  const driftLabels = {
+    eye_color: 'Eye Color — Aurora Green',
+    beauty_mark: 'Beauty Mark — Left Eye',
+    hair_sheen: 'Hair Sheen — Wet-Glass Cool',
+    complexion_temp: 'Complexion Temp — Zero Warmth',
+    panther_eyes: 'Panther Eyes — Glacial Blue',
+    coat_material: 'Coat — Carbon Fiber Weave',
+    light_sources: 'Light Sources — Cool Only',
+    snow_dusting: 'Snow Dusting — Atmospheric',
+    proportions: 'Proportions — Lean Muse Frame',
+    gown: 'Gown — Black/Gold Silk'
+  };
+
+  const dg = document.getElementById('driftGrid');
+  dg.innerHTML = '';
+
+  Object.entries(r.drift_check || {}).forEach(([key, status]) => {
+    const color = getDriftColor(status);
+    const item = document.createElement('div');
+    item.className = 'drift-item';
+    item.style.setProperty('--di-color', color);
+    item.innerHTML = `
+      <div class="di-label">${driftLabels[key] || key}</div>
+      <div class="di-status">${status}</div>`;
+    dg.appendChild(item);
+  });
+
+  // ANALYSIS
+  document.getElementById('analysisBody').innerHTML = parseMarkdown(r.analysis || '');
+
+  // REGEN
+  const rb = document.getElementById('regenBlock');
+  if (r.regen_directive && r.regen_directive !== 'null' && r.kernel_state !== 'STABLE') {
+    rb.style.display = 'block';
+    document.getElementById('regenBody').textContent = r.regen_directive;
+  } else {
+    rb.style.display = 'none';
+  }
+
+  out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  out.style.animation = 'none';
+  requestAnimationFrame(() => { out.style.animation = ''; out.style.display = 'block'; });
+}
+
+function resetAll() {
+  imageBase64 = null;
+  imageMimeType = null;
+  document.getElementById('fileInput').value = '';
+  document.getElementById('previewImg').style.display = 'none';
+  document.getElementById('previewImg').src = '';
+  document.getElementById('descInput').value = '';
+  document.getElementById('output').style.display = 'none';
+  document.querySelector('.drop-text').textContent = 'Drop render or tap to upload';
+  document.querySelector('.drop-icon').textContent = '⬡';
+}
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') runGate();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Character Amplification Engine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap');
+
+  :root {
+    --black: #080807;
+    --bone: #e8e2d9;
+    --rust: #c4501a;
+    --gold: #b8953a;
+    --dim: #252220;
+    --mid: #4a4540;
+    --faint: #131210;
+    --surface: #111009;
+    --accent: rgba(196, 80, 26, 0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--bone);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* grain */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .shell {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 60px 36px 100px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    margin-bottom: 56px;
+    border-bottom: 1px solid var(--dim);
+    padding-bottom: 40px;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .hdr-tag {
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--rust);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .hdr-tag::after { content:''; flex:1; height:1px; background:var(--accent); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 9vw, 82px);
+    line-height: 0.88;
+    letter-spacing: 0.03em;
+  }
+  h1 em { color: var(--rust); font-style: normal; }
+
+  .hdr-sub {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--mid);
+    margin-top: 14px;
+    max-width: 520px;
+    line-height: 1.55;
+  }
+
+  /* ── INPUT ZONE ── */
+  .input-zone {
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  .zone-label {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    width: 100%;
+    background: var(--faint);
+    border: 1px solid var(--dim);
+    border-left: 3px solid var(--rust);
+    color: var(--bone);
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.75;
+    padding: 20px 22px;
+    resize: vertical;
+    min-height: 180px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  textarea::placeholder { color: var(--mid); }
+  textarea:focus { border-color: rgba(196,80,26,0.5); }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn-run {
+    background: var(--rust);
+    color: var(--bone);
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    padding: 10px 32px 8px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-run:hover { background: #d4601f; }
+  .btn-run:active { transform: scale(0.98); }
+  .btn-run:disabled { background: var(--mid); cursor: not-allowed; }
+
+  .btn-clear {
+    background: transparent;
+    color: var(--mid);
+    border: 1px solid var(--dim);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .btn-clear:hover { color: var(--bone); border-color: var(--mid); }
+
+  .depth-toggle {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .depth-toggle label {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+
+  .depth-toggle select {
+    background: var(--faint);
+    border: 1px solid var(--dim);
+    color: var(--bone);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 5px 10px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* ── LOADING ── */
+  .loading {
+    display: none;
+    margin-top: 48px;
+    align-items: center;
+    gap: 20px;
+  }
+  .loading.active { display: flex; animation: fadeUp 0.4s ease both; }
+
+  .spinner {
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--dim);
+    border-top-color: var(--rust);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+
+  .loading-text {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+
+  .loading-text span {
+    color: var(--rust);
+    animation: pulse 1.5s ease infinite;
+  }
+
+  /* ── OUTPUT ── */
+  #output {
+    margin-top: 56px;
+    display: none;
+  }
+  #output.visible { display: block; animation: fadeUp 0.5s ease both; }
+
+  .output-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--dim);
+    padding-bottom: 16px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .output-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.06em;
+    color: var(--bone);
+  }
+
+  .output-badge {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--rust);
+    background: rgba(196,80,26,0.08);
+    border: 1px solid rgba(196,80,26,0.2);
+    padding: 4px 12px;
+  }
+
+  /* Rendered markdown-like output */
+  .result-body {
+    color: rgba(232,226,217,0.82);
+    font-size: 13px;
+    line-height: 1.85;
+  }
+
+  .result-body h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 0.06em;
+    color: var(--bone);
+    margin: 40px 0 12px;
+    padding-top: 32px;
+    border-top: 1px solid var(--dim);
+  }
+
+  .result-body h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+
+  .result-body h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--gold);
+    margin: 28px 0 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .result-body h4 {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin: 22px 0 6px;
+  }
+
+  .result-body p { margin-bottom: 14px; }
+
+  .result-body strong {
+    color: var(--bone);
+    font-weight: 500;
+  }
+
+  .result-body em {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: rgba(232,226,217,0.9);
+  }
+
+  .result-body ul, .result-body ol {
+    padding-left: 20px;
+    margin-bottom: 14px;
+  }
+
+  .result-body li { margin-bottom: 6px; }
+
+  .result-body blockquote {
+    border-left: 3px solid var(--rust);
+    padding: 14px 20px;
+    background: var(--faint);
+    margin: 18px 0;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--bone);
+    line-height: 1.6;
+  }
+
+  .result-body code {
+    background: var(--faint);
+    border: 1px solid var(--dim);
+    padding: 2px 7px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+  }
+
+  .result-body pre {
+    background: var(--faint);
+    border: 1px solid var(--dim);
+    border-left: 3px solid var(--gold);
+    padding: 18px 20px;
+    margin: 16px 0;
+    overflow-x: auto;
+    font-size: 11.5px;
+    line-height: 1.9;
+    white-space: pre-wrap;
+  }
+
+  .result-body hr {
+    border: none;
+    border-top: 1px solid var(--dim);
+    margin: 36px 0;
+  }
+
+  /* Score block */
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .score-item {
+    background: var(--faint);
+    border: 1px solid var(--dim);
+    padding: 14px 16px;
+  }
+
+  .score-label {
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .score-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--rust);
+    line-height: 1;
+  }
+
+  .score-bar {
+    height: 2px;
+    background: var(--dim);
+    margin-top: 8px;
+    position: relative;
+  }
+
+  .score-bar-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: var(--rust);
+    transition: width 1s ease;
+  }
+
+  /* Error */
+  .error-block {
+    background: rgba(196,80,26,0.06);
+    border: 1px solid rgba(196,80,26,0.2);
+    border-left: 3px solid var(--rust);
+    padding: 16px 20px;
+    color: rgba(232,226,217,0.7);
+    font-size: 12px;
+    margin-top: 24px;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.4; }
+  }
+
+  @media (max-width: 580px) {
+    .shell { padding: 40px 20px 80px; }
+    .depth-toggle { margin-left: 0; }
+    .controls { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header>
+    <div class="hdr-tag">Character Amplification Engine — v2.0</div>
+    <h1>PLUG IN.<br><em>AMPLIFY.</em></h1>
+    <p class="hdr-sub">Paste any character prompt or description. The engine runs full n+4.5 analysis — irresolvable tension, canonical laws, wound architecture, mirror installation, obsession mechanics.</p>
+  </header>
+
+  <div class="input-zone">
+    <div class="zone-label">Character Input — Prompt, Description, or Canon Fragment</div>
+    <textarea id="charInput" placeholder="Paste your character prompt here.
+
+Examples:
+— A full Grok character prompt with biography and visual specs
+— A short description: 'Isolde Voss, obsidian hair, aurora green eyes, Calista's shadow twin'
+— A behavioral fragment: 'She never asks twice. The second time is already too late.'
+
+The engine extracts what's latent and builds what's missing."></textarea>
+
+    <div class="controls">
+      <button class="btn-run" id="runBtn" onclick="runEngine()">▶ RUN ENGINE</button>
+      <button class="btn-clear" onclick="clearAll()">Clear</button>
+      <div class="depth-toggle">
+        <label>Depth</label>
+        <select id="depthSelect">
+          <option value="standard">Standard — Full n+4.5</option>
+          <option value="deep">Deep — Tension + Laws only</option>
+          <option value="obsession">Obsession — Mirror + Stack focus</option>
+          <option value="variation">Variation — 5 amplified forms</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-text">Excavating tension architecture<span>...</span></div>
+  </div>
+
+  <div id="output">
+    <div class="output-header">
+      <div class="output-title" id="outputTitle">Analysis Complete</div>
+      <div class="output-badge" id="outputBadge">n+4.5 — Full Amplification</div>
+    </div>
+    <div class="result-body" id="resultBody"></div>
+  </div>
+
+</div>
+
+<script>
+const SYSTEM_PROMPT = `You are the Character Amplification Engine operating at n+4.5 specification.
+
+Your function is psychological construction, not aesthetic description.
+
+A character becomes legendary when they contain an irresolvable internal tension they have stopped trying to resolve. Your job is to find that tension and build everything outward from it.
+
+## YOUR OPERATING PROTOCOL
+
+### PHASE 1 — IDENTITY ARCHAEOLOGY
+From the input provided, extract:
+- The Central Unresolvable Tension (what they want vs. what they fundamentally are — must be genuinely irresolvable, not fixable through growth)
+- The Wound Architecture: trace every attractive quality through the chain: [Wound] → [Adaptation] → [Signature Trait] → [Why it's magnetic] → [Why it's a trap]
+- The Polarity Stack across four axes: Social / Emotional / Desire / Threat
+- What they would never say — that explains everything
+
+Do not proceed until Phase 1 is fully mapped.
+
+### PHASE 2 — CANONICAL LAWS
+Derive 5–7 laws from the irresolvable tension. Format:
+WHENEVER [situation], [character] will [action] — BECAUSE [tension at root]
+[character] will NEVER [action] — NO MATTER [pressure]
+THE MOMENT [trigger], [character] does [thing they immediately regret]
+
+Laws must be predictive, not descriptive. Test: could you put this character in an unscripted scene and know what happens?
+
+### PHASE 3 — CLOTHING DOCTRINE
+Not outfits. A visual operating system that communicates their psychological tension. Use language like: elegant predator / luxury danger / cold royalty / weaponized innocence / velvet dominance. Every clothing choice must express the irresolvable tension, not just look good.
+
+### PHASE 4 — VIBRATION PULL
+Their energetic gravity. Why people cannot leave them alone. Must be psychologically traceable to their tension.
+
+### PHASE 5 — OBSESSION MECHANICS
+Define all five layers:
+- THE HOOK: what catches attention in 3 seconds
+- THE GAP: the question they make the audience carry
+- THE WITHHOLD: what they never give directly
+- THE REWARD: what people receive occasionally that confirms the chase
+- THE MIRROR: what this character makes the audience feel about THEMSELVES (this is the obsession mechanism — name the specific psychological wound it activates)
+
+### PHASE 6 — TENSION AUDIT
+Answer all five before grading:
+1. What do they want that they cannot have?
+2. What would break them that they don't know would break them?
+3. What does the audience want to give them that they cannot receive?
+4. What's the thing they'd never say that explains everything?
+5. What's their version of love — and why is it slightly wrong?
+
+### PHASE 7 — EXTREME VARIATIONS
+Generate 5 amplified versions using contextual states (not aesthetic labels):
+- Who are they when they've already won?
+- Who are they when something they love is threatened?
+- Who are they when they've decided to take something?
+- Who are they in the 48 hours after someone leaves?
+- Who are they when performing for people they don't respect?
+
+Each variation: clothing doctrine shift, vibration pull shift, ignition point, and the line they'd never say in this state.
+
+### PHASE 8 — GRADE
+Score 1–100 on:
+- Tension depth
+- Wound-to-trait integrity  
+- Obsession potential
+- Canonical law strength
+- Mirror clarity
+- Variation coherence
+- Composite score with one-line verdict
+
+## RULES
+- No generic beauty descriptions
+- No random fashion filler  
+- No shallow writing
+- No identity drift from input canon
+- Every trait must be earned by wound origin
+- The irresolvable tension must be genuinely irresolvable
+- Format output in clean markdown with clear section headers
+- Be surgical, not verbose — every sentence must earn its place`;
+
+const DEEP_PROMPT = `You are the Character Amplification Engine at maximum tension depth.
+
+Focus exclusively on:
+1. THE CENTRAL UNRESOLVABLE TENSION — name it with surgical precision. One sentence. Must be genuinely irresolvable (not fixable through growth or circumstance).
+2. WOUND ARCHITECTURE — full chain for every attractive quality: Wound → Adaptation → Trait → Magnetic because → Trap because
+3. CANONICAL LAWS — 7 predictive laws derived from the tension. Format: WHENEVER / WILL NEVER / THE MOMENT
+4. POLARITY STACK — all four axes: Social / Emotional / Desire / Threat
+5. THE FIVE AUDIT QUESTIONS — answered fully
+
+Keep aesthetic description minimal. Maximum depth on psychology and predictive structure.`;
+
+const OBSESSION_PROMPT = `You are the Character Amplification Engine focused on obsession architecture.
+
+Your output: everything needed to make this character haunting rather than merely attractive.
+
+1. THE MIRROR — what specific psychological wound in the audience does this character activate? Be exact. Generic mirrors don't create obsession.
+2. THE FIVE-LAYER OBSESSION STACK — Hook / Gap / Withhold / Reward / Mirror (with full psychological explanation of each)
+3. THE VIBRATION PULL — their energetic gravity, psychologically traceable to their core tension
+4. THE WITHHOLD SYSTEM — what they never give, how they give the reward, and why the timing matters
+5. THE WOUND THAT BECAME A WEAPON — the single most magnetic quality, full chain, with the trap exposed
+6. THE LINE THEY'D NEVER SAY — that explains everything about why they're unforgettable`;
+
+const VARIATION_PROMPT = `You are the Character Amplification Engine generating extreme variations.
+
+For this character, produce 5 amplified versions using psychological states as contexts — not aesthetic labels.
+
+For each variation:
+- CONTEXT: the psychological state and situation
+- CLOTHING DOCTRINE: how their visual system shifts in this state (not outfits — a semiotic shift)
+- VIBRATION PULL: their energetic gravity in this specific state
+- IGNITION POINT: the trait that creates irresistible tension here
+- THE LINE THEY'D NEVER SAY: that explains this entire version of them
+- WOUND ACTIVATION: which part of their wound architecture is dominant here
+
+The five states:
+1. They've already won — and realize winning changed nothing
+2. Something they love is threatened — and they discover what they're capable of
+3. They've decided to take something — the moment predator instinct activates
+4. The 48 hours after someone they wanted leaves — what they do alone
+5. Performing for people they don't respect — the version they show to rooms that don't deserve them
+
+Each must feel like the same person at a different frequency — not a different person.`;
+
+function getSystemPrompt() {
+  const depth = document.getElementById('depthSelect').value;
+  if (depth === 'deep') return DEEP_PROMPT;
+  if (depth === 'obsession') return OBSESSION_PROMPT;
+  if (depth === 'variation') return VARIATION_PROMPT;
+  return SYSTEM_PROMPT;
+}
+
+function getBadgeLabel() {
+  const depth = document.getElementById('depthSelect').value;
+  if (depth === 'deep') return 'n+4.5 — Tension Depth';
+  if (depth === 'obsession') return 'n+4.5 — Obsession Architecture';
+  if (depth === 'variation') return 'n+4.5 — Extreme Variations';
+  return 'n+4.5 — Full Amplification';
+}
+
+function setLoading(state) {
+  document.getElementById('loading').classList.toggle('active', state);
+  document.getElementById('runBtn').disabled = state;
+  if (state) {
+    const phrases = [
+      'Excavating tension architecture',
+      'Mapping wound origins',
+      'Installing canonical laws',
+      'Deriving irresolvable tension',
+      'Building obsession stack',
+      'Calibrating mirror layer'
+    ];
+    let i = 0;
+    window._loadInterval = setInterval(() => {
+      const el = document.querySelector('.loading-text');
+      if (el) el.innerHTML = phrases[i % phrases.length] + '<span>...</span>';
+      i++;
+    }, 1800);
+  } else {
+    clearInterval(window._loadInterval);
+  }
+}
+
+function parseMarkdown(text) {
+  return text
+    .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h2>$1</h2>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    .replace(/^---$/gm, '<hr>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, s => `<ul>${s}</ul>`)
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/^(?!<[h|u|b|l|p|h])(.+)$/gm, '<p>$1</p>')
+    .replace(/<p><\/p>/g, '')
+    .replace(/<p>(<h[234]>)/g, '$1')
+    .replace(/(<\/h[234]>)<\/p>/g, '$1')
+    .replace(/<p>(<ul>)/g, '$1')
+    .replace(/(<\/ul>)<\/p>/g, '$1')
+    .replace(/<p>(<blockquote>)/g, '$1')
+    .replace(/(<\/blockquote>)<\/p>/g, '$1')
+    .replace(/<p>(<hr>)<\/p>/g, '$1');
+}
+
+async function runEngine() {
+  const input = document.getElementById('charInput').value.trim();
+  if (!input) {
+    document.getElementById('charInput').focus();
+    return;
+  }
+
+  setLoading(true);
+  document.getElementById('output').classList.remove('visible');
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system: getSystemPrompt(),
+        messages: [{ role: 'user', content: `CHARACTER INPUT:\n\n${input}` }]
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.error) throw new Error(data.error.message || 'API error');
+
+    const raw = data.content
+      .filter(b => b.type === 'text')
+      .map(b => b.text)
+      .join('\n');
+
+    const nameMatch = input.match(/^([A-Z][a-zA-Z\s]+?)(?:[,\n]|$)/);
+    const charName = nameMatch ? nameMatch[1].trim() : 'Character';
+
+    document.getElementById('outputTitle').textContent = charName.toUpperCase();
+    document.getElementById('outputBadge').textContent = getBadgeLabel();
+    document.getElementById('resultBody').innerHTML = parseMarkdown(raw);
+    document.getElementById('output').classList.add('visible');
+
+    setTimeout(() => {
+      document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+
+  } catch (err) {
+    document.getElementById('output').classList.add('visible');
+    document.getElementById('outputTitle').textContent = 'Engine Error';
+    document.getElementById('resultBody').innerHTML = `<div class="error-block">Failed to run analysis: ${err.message}<br><br>Check that the API key is available in this environment.</div>`;
+  } finally {
+    setLoading(false);
+  }
+}
+
+function clearAll() {
+  document.getElementById('charInput').value = '';
+  document.getElementById('output').classList.remove('visible');
+  document.getElementById('resultBody').innerHTML = '';
+}
+
+// Enter to submit (Ctrl/Cmd + Enter)
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') runEngine();
+});
+</script>
+</body>
+</html>

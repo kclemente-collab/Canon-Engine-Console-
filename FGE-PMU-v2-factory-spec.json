@@ -1,0 +1,171 @@
+{
+  "schema": "FGE_PMU_v2.0",
+  "title": "Modular Character Factory — PMU v2.0",
+  "subtitle": "Kintsugi Empire Science Fair v7.1 — Industrial Character Forge",
+  "status": "Locked — Canon v7.1",
+  "tagline": "Fracture is Evolution",
+
+  "active_modules": [
+    "KINTSUGI_REGENERATION_ENGINE_v2.1.5",
+    "KINTSUGI_COMPILER_v1.0",
+    "DETERMINISTIC_LEAN_PETITE_LOCK",
+    "BILATERAL_MODULAR_CHASSIS_v4.2",
+    "FEDERAL_LEDGER_v1.3",
+    "VEGAS_CHAOS_PARTY_PHYSICS_v1.0",
+    "ARNOLD_RANDOMWALK_v2_SSS",
+    "EARNED_PHYSICS_ENGINE",
+    "TOUCHPOINT_REACT_BODY_SCIENCE_ENGINE",
+    "HORMONE_BIBLE_v3.0_n5",
+    "EVOLUTIONARY_MODULE_FORGE_MOD-EVO-001",
+    "EVOLUTION_ENGINE_v1.3-n3",
+    "POTENTIAL_SCORE_DARWINIAN_CALCULATOR",
+    "MODULAR_CHARACTER_FACTORY_PMU_v2.0",
+    "MASTER_ANCHOR_PROTOCOL_v3.0",
+    "SACRED_FINGERPRINT_GOSPEL",
+    "32CM_IDENTITY_LOCK",
+    "CHARACTER_MANAGER_v2.5",
+    "SHARE_SELF_HEALING_ENGINE",
+    "CHUNK_DOCTRINE",
+    "AUTO_FAIR_LOOP_v1",
+    "JUDGING_LAYER_RUBRIC",
+    "SCIENCE_FAIR_LEDGER_v1"
+  ],
+
+  "active_models": [
+    "Grok Imagine",
+    "Notion",
+    "Obsidian",
+    "Manus",
+    "Reality Engine 2.0",
+    "Kintsugi Compiler v7.1"
+  ],
+
+  "primary_core_anchors": [
+    "Marcus Kane / The Boss / Keith Anton",
+    "Vale",
+    "Calista Voss — companion: Silver Fox Kit",
+    "Isolde Voss — companion: Shiny Black Panther Pup",
+    "Raven Voss / Nikki D / Nikki Raven — companion: Majestic Leopard",
+    "Luna Voss — companion: Lynx Kit"
+  ],
+
+  "global_body_spec": {
+    "proportions": "Ultra-lean petite dancer proportions",
+    "kintsugi": "Mandatory visible glowing gold kintsugi repair lines — waist-to-hip, limbs, micro-drips, pulse points",
+    "fill": "Molten hormone glow + vein electric rim",
+    "lighting": "Vegas Chaos Party — neon + strobe + marble-gold + pearlescent synced to Feral Echo Pulse"
+  },
+
+  "generation_parameters": {
+    "ar": "9:16",
+    "stylize": 320,
+    "version": 6,
+    "quality": 3,
+    "degenerative_n": "VALUE — range 3-5 for production, max 8 with regeneration_strength >= 2.5",
+    "regeneration_strength": 2.0,
+    "dynamic_range": "maximum",
+    "color_separation": "extreme",
+    "identity_lock": "same synthetic identity"
+  },
+
+  "assembly_line_9_stages": [
+    {
+      "stage": 1,
+      "name": "Raw Card Input",
+      "inputs": ["Name", "Archetype", "Unique quality", "Pet", "Jewelry", "Hot metric", "Backstory seed"]
+    },
+    {
+      "stage": 2,
+      "name": "Validation + Identity Lock",
+      "process": "Sacred Fingerprint Gospel + 32 cm Identity Lock"
+    },
+    {
+      "stage": 3,
+      "name": "Deterministic Body Scheme",
+      "process": "Enforce ultra-lean petite dancer proportions + mandatory visible glowing gold kintsugi repair lines"
+    },
+    {
+      "stage": 4,
+      "name": "Hormone & Physics Layer",
+      "process": "Hormone Bible v3.0 n+5 + Earned Physics + pearlescent film"
+    },
+    {
+      "stage": 5,
+      "name": "Environmental Symbiosis",
+      "process": "Vegas Chaos Party lighting"
+    },
+    {
+      "stage": 6,
+      "name": "Variation Engine",
+      "process": "n+5 controlled diversity — degenerative_n 3-5"
+    },
+    {
+      "stage": 7,
+      "name": "Judgment Layer",
+      "process": "C.H.U.N.K. scoring"
+    },
+    {
+      "stage": 8,
+      "name": "Kintsugi Repair",
+      "process": "regeneration_strength 2.5 on any sub-9.0 element"
+    },
+    {
+      "stage": 9,
+      "name": "Canon Packaging",
+      "process": "Add to Federal Ledger. Generate anchor prompt + rookie card + pet devotional."
+    }
+  ],
+
+  "batch_protocol": {
+    "trigger": "Launch PMU Batch [NUMBER] n+5",
+    "input_template": {
+      "name": "[First Last]",
+      "archetype": "[e.g. Shadow Siren, Velvet Executor, Neon Oracle]",
+      "unique_quality": "[one signature trait — max intensified]",
+      "permanent_pet": "[e.g. Obsidian Raven, Ghost Fox]",
+      "jewelry_doctrine": "[specific gold/silver pieces]",
+      "hot_metric": "[e.g. quiet predatory grace]",
+      "backstory_seed": "[1-2 sentences]"
+    },
+    "generation_prompt_skeleton": "[KINTSUGI EMPIRE SCIENCE FAIR v7.1 n+5 PMU BATCH] [paste character seed] ultra-lean petite dancer, mandatory visible glowing gold kintsugi repair lines, Vegas Chaos Party lighting, Federal Ledger v1.3 Candidate, Master Anchor Protocol v3.0, ar 9:16, stylize 320, v 6, q 3, degenerative_n=4, regeneration_strength=2.5"
+  },
+
+  "scaling_strategy_100": {
+    "batch_size": "10-20 per run to avoid token limits",
+    "automation": "AUTO_FAIR_LOOP_v1 + Manus orchestration — 3 seeds per character → Harvest Cycle → promote winners",
+    "diversity_control": "Smart Matrix Codex v9.0 for archetype, coloring, and role variation",
+    "ledger_integration": "Auto-assign SBID + Potential Score + Notion/Obsidian graph nodes",
+    "quality_gate": {
+      "beauty_minimum": 9.3,
+      "repeatability_minimum": 0.92,
+      "rule": "Only characters scoring above threshold enter permanent canon"
+    },
+    "time_estimate": "5-8 full Harvest Cycles depending on manual vs assisted generation"
+  },
+
+  "failure_boundaries": [
+    "Skipping master header or locked anchors → massive drift — characters lose Lean Petite / gold kintsugi compliance",
+    "degenerative_n > 8 without regeneration_strength >= 2.5 → over-fracture creates incoherent identities",
+    "No structured input template → generic or low-variation output, low Synergy Count",
+    "Running full 100 without batching / Harvest Cycle → token overflow and quality collapse"
+  ],
+
+  "pilot_protocol": {
+    "batch_size": "5-10 characters",
+    "degenerative_n": 3,
+    "regeneration_strength": 2.5,
+    "validation": "Execute mini Harvest Cycle and score via Judgment Layer",
+    "checks": ["Lean Petite lock", "Gold seams", "Identity consistency", "Pet/jewelry doctrine"],
+    "scale_threshold": "Scale to 100 once pilot Potential Score > 450 average"
+  },
+
+  "expansion_path": [
+    "Launch PMU Batch 10 n+5 — first pilot",
+    "Provide 20 raw character seeds for batch processing",
+    "Generate full 100-unit PMU template spreadsheet",
+    "Execute Harvest Cycle on pilot batch",
+    "Map deeper — 500 character empire phase"
+  ],
+
+  "notes": "The factory is powered up. The gold is molten. 1000-character target requires ~10 full batch runs at 100 units each. Each run: 5-8 Harvest Cycles. Quality gate enforced at every stage."
+}

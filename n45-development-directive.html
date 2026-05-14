@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>n+4.5 Development Directive</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap');
+
+  :root {
+    --black: #0a0a0a;
+    --bone: #e8e2d9;
+    --rust: #c4501a;
+    --gold: #b8953a;
+    --dim: #2a2520;
+    --mid: #4a4540;
+    --faint: #1a1714;
+    --accent-line: rgba(196, 80, 26, 0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--bone);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.6;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 40px 120px;
+  }
+
+  .doc-header {
+    border-bottom: 1px solid var(--accent-line);
+    padding-bottom: 48px;
+    margin-bottom: 72px;
+    opacity: 0;
+    animation: reveal 0.8s ease 0.05s forwards;
+  }
+
+  .doc-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .doc-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--accent-line);
+  }
+
+  .doc-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 10vw, 96px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: var(--bone);
+  }
+
+  .doc-title span { color: var(--rust); }
+
+  .doc-subtitle {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--mid);
+    margin-top: 16px;
+    max-width: 560px;
+    line-height: 1.5;
+  }
+
+  .doc-meta {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .meta-item {
+    border-left: 2px solid var(--accent-line);
+    padding-left: 14px;
+  }
+
+  .meta-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .meta-value {
+    font-size: 11px;
+    color: var(--bone);
+    opacity: 0.7;
+  }
+
+  .module {
+    margin-bottom: 80px;
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: reveal 0.6s ease forwards;
+  }
+
+  .module:nth-child(2) { animation-delay: 0.15s; }
+  .module:nth-child(3) { animation-delay: 0.25s; }
+  .module:nth-child(4) { animation-delay: 0.35s; }
+  .module:nth-child(5) { animation-delay: 0.45s; }
+  .module:nth-child(6) { animation-delay: 0.55s; }
+  .module:nth-child(7) { animation-delay: 0.65s; }
+  .module:nth-child(8) { animation-delay: 0.75s; }
+
+  @keyframes reveal {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .module-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    color: var(--faint);
+    position: absolute;
+    right: -20px;
+    top: -30px;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .module-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .module-tag {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rust);
+    background: rgba(196, 80, 26, 0.08);
+    border: 1px solid rgba(196, 80, 26, 0.2);
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+
+  .module-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.05em;
+    color: var(--bone);
+    line-height: 1;
+  }
+
+  .lesson {
+    border-left: 1px solid var(--dim);
+    padding-left: 28px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .lesson::before {
+    content: '';
+    position: absolute;
+    left: -3px;
+    top: 8px;
+    width: 5px;
+    height: 5px;
+    background: var(--rust);
+    border-radius: 50%;
+  }
+
+  .lesson-id {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .lesson-title {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--bone);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .lesson-body {
+    color: rgba(232, 226, 217, 0.6);
+    font-size: 12.5px;
+    margin-bottom: 16px;
+    max-width: 640px;
+  }
+
+  .directive {
+    background: var(--faint);
+    border: 1px solid var(--dim);
+    border-left: 3px solid var(--rust);
+    padding: 18px 22px;
+    margin: 16px 0;
+  }
+
+  .directive-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 10px;
+  }
+
+  .directive p {
+    color: rgba(232, 226, 217, 0.8);
+    font-size: 12px;
+    line-height: 1.8;
+  }
+
+  .axiom {
+    margin: 24px 0;
+    padding: 24px 28px;
+    background: rgba(184, 149, 58, 0.04);
+    border: 1px solid rgba(184, 149, 58, 0.15);
+    position: relative;
+  }
+
+  .axiom::before {
+    content: 'AXIOM';
+    position: absolute;
+    top: -8px;
+    left: 20px;
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    background: var(--black);
+    padding: 0 8px;
+    color: var(--gold);
+  }
+
+  .axiom p {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--bone);
+    line-height: 1.6;
+  }
+
+  .formula {
+    background: #0f0e0c;
+    border: 1px solid var(--dim);
+    padding: 18px 22px;
+    margin: 16px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 11.5px;
+    color: rgba(232, 226, 217, 0.7);
+    line-height: 2;
+    white-space: pre-wrap;
+  }
+
+  .formula .key { color: var(--gold); }
+  .formula .val { color: rgba(232, 226, 217, 0.9); }
+  .formula .comment { color: var(--mid); font-style: italic; }
+
+  .test-block {
+    border: 1px solid var(--dim);
+    padding: 20px 24px;
+    margin: 16px 0;
+    position: relative;
+  }
+
+  .test-block::before {
+    content: 'PASS CONDITION';
+    position: absolute;
+    top: -8px;
+    left: 16px;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    background: var(--black);
+    padding: 0 8px;
+    color: var(--mid);
+  }
+
+  .test-block p {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(232, 226, 217, 0.75);
+    line-height: 1.8;
+  }
+
+  .level-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 12px;
+  }
+
+  .level-table th {
+    text-align: left;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--dim);
+  }
+
+  .level-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(42, 37, 32, 0.5);
+    color: rgba(232, 226, 217, 0.6);
+    vertical-align: top;
+  }
+
+  .level-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .level-table .hl td {
+    color: var(--bone);
+    background: rgba(196, 80, 26, 0.05);
+  }
+
+  .level-table td:first-child {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--rust);
+    white-space: nowrap;
+  }
+
+  .chain {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 20px 0;
+  }
+
+  .chain-node {
+    background: var(--faint);
+    border: 1px solid var(--dim);
+    padding: 8px 14px;
+    font-size: 11px;
+    color: var(--bone);
+    white-space: nowrap;
+  }
+
+  .chain-arrow {
+    font-size: 11px;
+    color: var(--rust);
+    padding: 0 8px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--dim);
+    margin: 60px 0;
+  }
+
+  .doc-footer {
+    margin-top: 100px;
+    padding-top: 32px;
+    border-top: 1px solid var(--dim);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0.35;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 48px 20px 80px; }
+    .doc-meta { grid-template-columns: 1fr 1fr; }
+    .module-number { font-size: 72px; right: 0; }
+    .chain { flex-direction: column; align-items: flex-start; }
+    .chain-arrow { padding: 2px 14px; }
+    .doc-footer { flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="doc-header">
+    <div class="doc-label">Development Directive — Master Curriculum</div>
+    <div class="doc-title">THE <span>n+4.5</span><br>DIRECTIVE</div>
+    <p class="doc-subtitle">A lesson architecture for building systems, characters, and projects that operate beyond authorial dependency.</p>
+    <div class="doc-meta">
+      <div class="meta-item">
+        <div class="meta-label">Classification</div>
+        <div class="meta-value">System Design / Character Architecture</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Prerequisite</div>
+        <div class="meta-value">Functional prompt literacy (n+1 baseline)</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Terminal Outcome</div>
+        <div class="meta-value">Authorship transfers to the system</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MODULE 0 -->
+  <div class="module">
+    <div class="module-number">0</div>
+    <div class="module-header">
+      <div class="module-tag">Foundation</div>
+      <div class="module-title">The Level Map</div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 0.1 — Where You Are</div>
+      <div class="lesson-title">Understanding the n-Stack</div>
+      <div class="lesson-body">Every system, prompt, character, or project operates at a level. Most operate at n or n+1. The goal of this curriculum is to understand what each level actually does — and why n+4.5 is not a better version of n+3, but a fundamentally different kind of thing.</div>
+
+      <table class="level-table">
+        <thead>
+          <tr><th>Level</th><th>What it does</th><th>Failure mode</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>n</td><td>Executes tasks</td><td>Breaks when context changes</td></tr>
+          <tr><td>n+1</td><td>Executes tasks clearly</td><td>Clear but still brittle</td></tr>
+          <tr><td>n+2</td><td>Understands what it's building</td><td>Understands but can't adapt</td></tr>
+          <tr><td>n+3</td><td>Operates from mechanism, not instruction</td><td>Still depends on correct framing</td></tr>
+          <tr><td>n+4</td><td>Designs its own architecture per problem</td><td>May optimize for the wrong problem</td></tr>
+          <tr class="hl"><td>n+4.5</td><td>Self-designs AND audits whether it's solving the right problem</td><td>Requires strong initial constraints</td></tr>
+          <tr><td>n+5</td><td>Identifies the real problem beneath the stated one</td><td>Can become paralytic without trust</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="axiom">
+      <p>The n+4.5 move is always the same: go upstream from the output you want until you find the mechanism that produces it — then build the system at that level.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- MODULE 1 -->
+  <div class="module">
+    <div class="module-number">1</div>
+    <div class="module-header">
+      <div class="module-tag">Module 01</div>
+      <div class="module-title">The Core Problem With Taxonomy Thinking</div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 1.1 — Axes vs. Mechanisms</div>
+      <div class="lesson-title">Why Slot-Filling Produces Flat Output</div>
+      <div class="lesson-body">A taxonomy engine asks: what does this character look like? It lists axes and requests outputs per axis. The problem is that outputs are downstream of mechanism. Filling slots produces describable things. Mechanisms produce inevitable things.</div>
+      <div class="directive">
+        <div class="directive-label">Directive 1.1</div>
+        <p>Before designing any output structure, identify the mechanism that makes the right output inevitable. The structure enforces conditions — it does not describe results.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 1.2 — Attraction vs. Haunting</div>
+      <div class="lesson-title">Two Different Goals, Two Different Architectures</div>
+      <div class="lesson-body">Attractive = people want to be near it. Haunting = people cannot stop thinking about it when they're alone. Attraction is built through surface quality. Haunting is built through irresolvable internal tension that the audience recognizes as true about desire and damage.</div>
+      <div class="axiom">
+        <p>People become obsessed with characters — and systems — that contain an irresolvable conflict they have stopped trying to resolve.</p>
+      </div>
+      <div class="directive">
+        <div class="directive-label">Directive 1.2</div>
+        <p>Identify whether your goal is attraction (quality) or haunting (generativity). They are not the same goal. They require different build strategies. Choose before proceeding.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 1.3 — Resolvable vs. Irresolvable Tension</div>
+      <div class="lesson-title">The Engine That Runs Forever</div>
+      <div class="lesson-body">Resolvable tension exhausts. Irresolvable tension generates forever — because every new context reactivates the same wound differently. Most characters have resolvable tension because writers instinctively move toward resolution. n+4.5 requires locating the genuinely irresolvable thing and protecting it from resolution.</div>
+
+      <div class="formula"><span class="comment">// Test your tension statement:</span>
+
+<span class="key">RESOLVABLE:</span>   <span class="val">"She wants love but pushes people away"</span>
+              <span class="comment">→ Resolved through growth. Exhausts.</span>
+
+<span class="key">IRRESOLVABLE:</span> <span class="val">"She is only capable of wanting people at the exact
+              moment they become unavailable — so availability
+              itself kills her desire, and she has no mechanism
+              to want what she can keep"</span>
+              <span class="comment">→ Cannot be resolved. Generates forever.</span></div>
+
+      <div class="directive">
+        <div class="directive-label">Directive 1.3</div>
+        <p>Write the core tension as a single sentence. Ask: can this be resolved through growth or circumstance? If yes — find the genuinely irresolvable version. Protect it from resolution permanently.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- MODULE 2 -->
+  <div class="module">
+    <div class="module-number">2</div>
+    <div class="module-header">
+      <div class="module-tag">Module 02</div>
+      <div class="module-title">Character Upgrade Protocol</div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 2.1 — Archaeology Before Revision</div>
+      <div class="lesson-title">Extract Before You Build</div>
+      <div class="lesson-body">Do not touch existing material first. The irresolvable tension is already present in what was built. Your job is to name it precisely — not invent it. Every upgrade begins here.</div>
+
+      <div class="formula"><span class="comment">// Run this extraction before any upgrade work:</span>
+
+<span class="key">01</span>  <span class="val">What do they want more than anything?</span>
+<span class="key">02</span>  <span class="val">What are they doing that prevents getting it?</span>
+<span class="key">03</span>  <span class="val">What do they believe about themselves that isn't true?</span>
+<span class="key">04</span>  <span class="val">What's true about them they've never said?</span>
+<span class="key">05</span>  <span class="val">What have they done they've never recovered from?</span>
+<span class="key">06</span>  <span class="val">What would they do if no one was watching?</span>
+<span class="key">07</span>  <span class="val">What would they never do even if no one was watching?</span>
+
+<span class="comment">// The irresolvable tension lives in the gap between these answers.</span>
+<span class="comment">// Name it precisely. Not generally.</span></div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 2.2 — Traits vs. Canonical Laws</div>
+      <div class="lesson-title">Installing Laws That Predict</div>
+      <div class="lesson-body">Traits describe. Canonical laws predict. A character is complete when you can put them in an unscripted scene and know — without being told — what happens. Laws are derived from irresolvable tension. If a law feels forced, it is not a real law.</div>
+
+      <div class="formula"><span class="comment">// Canonical Law format:</span>
+
+<span class="key">WHENEVER</span>   <span class="val">[situation]</span><span class="comment">,</span>
+<span class="key">[character]</span> <span class="val">will [action]</span>
+<span class="key">BECAUSE</span>    <span class="val">[tension at root]</span>
+
+<span class="key">[character]</span> <span class="val">will NEVER [action]</span>
+<span class="key">NO MATTER</span>  <span class="val">[pressure applied]</span>
+
+<span class="key">THE MOMENT</span> <span class="val">[trigger occurs]</span><span class="comment">,</span>
+<span class="key">[character]</span> <span class="val">does [thing they immediately regret]</span>
+
+<span class="comment">// Test: Does each law hold in 3 unscripted scenes?</span>
+<span class="comment">// True = canonical.  Mechanical = still a trait. Revise.</span></div>
+
+      <div class="directive">
+        <div class="directive-label">Directive 2.2</div>
+        <p>Write 5–7 canonical laws per character. Each must trace to the irresolvable tension. No law without a source. Test each in three unscripted scenes before locking.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 2.3 — Wound Architecture</div>
+      <div class="lesson-title">Every Attractive Quality Has a Root — and a Trap</div>
+      <div class="lesson-body">Traits without psychological origin produce admirable characters. Admirable characters don't haunt people. The wound-to-weapon chain traces how survival built the attractive quality — and exposes the trap inside it. The trap is what makes proximity dangerous. Danger + magnetism = obsession.</div>
+
+      <div class="chain">
+        <div class="chain-node">Wound</div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node">Adaptation</div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node">Signature Trait</div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node">Why It's Magnetic</div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node">Why It's a Trap</div>
+      </div>
+
+      <div class="directive">
+        <div class="directive-label">Directive 2.3</div>
+        <p>Complete the full chain for every attractive quality — including the trap. No trait without a wound origin. No wound without a trap. Without the trap, you have admiration, not obsession.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 2.4 — The Mirror Layer</div>
+      <div class="lesson-title">What the Character Does to the Audience</div>
+      <div class="lesson-body">Characters become obsessions when they make the audience feel something about themselves — not just about the character. The mirror is the specific audience wound this character activates. Without it, you have a compelling object. Once named, every scene, trait, and law gets tuned to resonate with that wound.</div>
+
+      <div class="directive">
+        <div class="directive-label">Directive 2.4</div>
+        <p>Name the audience wound this character activates. Not demographic — psychological. Specific. This is the mirror installation. Everything downstream gets tuned to it.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 2.5 — The Rebuild Test</div>
+      <div class="lesson-title">Authorship Transfer for Characters</div>
+      <div class="lesson-body">Write one unscripted scene. Apply no planning. The character is complete when you stop deciding what happens and start discovering it.</div>
+
+      <div class="test-block">
+        <p>Can you put this character in a scene you've never written and know — with confidence — what happens, without being told? If yes: authorship has transferred. The character is complete.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- MODULE 3 -->
+  <div class="module">
+    <div class="module-number">3</div>
+    <div class="module-header">
+      <div class="module-tag">Module 03</div>
+      <div class="module-title">Project Upgrade Protocol</div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 3.1 — The Real Problem Underneath</div>
+      <div class="lesson-title">Stated Problem vs. Actual Problem</div>
+      <div class="lesson-body">Every project has a stated problem and an actual problem underneath. Building on the stated problem without naming the actual one produces a project that solves the wrong thing correctly. The actual problem is revealed by what keeps recurring, what the project avoids, what failures repeat.</div>
+
+      <div class="directive">
+        <div class="directive-label">Directive 3.1</div>
+        <p>Ask: if this project succeeds completely — what problem will still exist that we haven't named? That unnamed problem is the actual mandate. Install it into the project core before any architecture decisions.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 3.2 — Goals vs. Generative Conditions</div>
+      <div class="lesson-title">The Finish Line vs. The Engine</div>
+      <div class="lesson-body">Goals are states you reach and then stop. Generative conditions are structural arrangements that keep producing the outcome without intervention. n+4.5 projects don't have finish lines — they have conditions that self-perpetuate.</div>
+
+      <div class="formula"><span class="key">GOAL VERSION:</span>
+<span class="val">"Create 5 compelling characters"</span>
+<span class="comment">→ Completed. Then what?</span>
+
+<span class="key">GENERATIVE CONDITION:</span>
+<span class="val">"Build an architecture where each character's tension
+creates demand for the others"</span>
+<span class="comment">→ Self-perpetuating. Cannot be completed.
+→ The system generates story without authorial input.</span></div>
+
+      <div class="directive">
+        <div class="directive-label">Directive 3.2</div>
+        <p>Rewrite every project goal as a generative condition. Test: does the condition keep producing after you stop working? If it stops when you stop — it's a goal, not a condition. Rebuild.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 3.3 — Interlock Architecture</div>
+      <div class="lesson-title">Elements That Create Each Other's Problems</div>
+      <div class="lesson-body">At n+3, elements are strong individually. At n+4.5, elements are structurally incomplete without each other. Each element's tension activates something in at least two others. The system generates conflict between elements without authorial intervention.</div>
+
+      <div class="formula"><span class="comment">// Interlock mapping:</span>
+
+<span class="key">Character A's wound</span>
+<span class="val">→ triggers Character B's defense mechanism</span>
+
+<span class="key">Character B's defense</span>
+<span class="val">→ confirms Character C's worst belief about people</span>
+
+<span class="key">Character C's belief</span>
+<span class="val">→ creates the exact dynamic Character A is trying to escape</span>
+
+<span class="comment">// Result: closed loop. Self-generating conflict.
+// The characters create each other's problems. You observe.</span></div>
+
+      <div class="directive">
+        <div class="directive-label">Directive 3.3</div>
+        <p>Map the interlock for every primary element. Each tension must activate at least two others. If an element is complete on its own — it's inventory, not architecture.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 3.4 — Authorship Transfer (Projects)</div>
+      <div class="lesson-title">Does It Know What It Is Without You</div>
+      <div class="lesson-body">The project passes n+4.5 when someone who didn't build it can put two elements together and correctly predict what the system produces — without your explanation. If the logic lives inside your head rather than inside the system, it will fail when you're absent.</div>
+
+      <div class="test-block">
+        <p>Can someone who didn't build this system place two elements in contact and correctly predict the output — without your explanation? If yes: authorship has transferred. The system is complete.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- MODULE 4 -->
+  <div class="module">
+    <div class="module-number">4</div>
+    <div class="module-header">
+      <div class="module-tag">Module 04</div>
+      <div class="module-title">The Polarity Stack</div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 4.1 — Four-Axis Polarity Mapping</div>
+      <div class="lesson-title">Beyond the Dom/Sub Binary</div>
+      <div class="lesson-body">Binary polarity produces flat archetypes. Real characters operate across simultaneous, often contradictory axes. The stack reveals the character's actual operating logic — not their label. Contradictions between axes are features, not problems.</div>
+
+      <table class="level-table">
+        <thead>
+          <tr><th>Axis</th><th>What it measures</th><th>Question to answer</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Social</td><td>How they command rooms</td><td>What do they take without asking?</td></tr>
+          <tr><td>Emotional</td><td>Who they surrender to and why</td><td>Who are they weak for — and do they know it?</td></tr>
+          <tr><td>Desire</td><td>What they chase vs. what they deny needing</td><td>What do they want that they'd never admit?</td></tr>
+          <tr><td>Threat</td><td>Where their danger actually lives</td><td>What do they do when something they love is threatened?</td></tr>
+        </tbody>
+      </table>
+
+      <div class="directive">
+        <div class="directive-label">Directive 4.1</div>
+        <p>Map all four axes per character. A character who is dominant socially and submissive emotionally is a different architecture than simply "dominant." Build the contradiction deliberately. It is the source of depth.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- MODULE 5 -->
+  <div class="module">
+    <div class="module-number">5</div>
+    <div class="module-header">
+      <div class="module-tag">Module 05</div>
+      <div class="module-title">Obsession Mechanics</div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 5.1 — The Five-Layer Stack</div>
+      <div class="lesson-title">Engineering Why People Return</div>
+      <div class="lesson-body">Obsession is not accident. It has a structural logic. Each layer must be designed explicitly — not assumed to emerge from quality alone. The Mirror is the mechanism. Everything else is delivery.</div>
+
+      <div class="formula"><span class="key">THE HOOK</span>
+<span class="val">The thing that catches attention in the first 3 seconds.</span>
+<span class="comment">// Surface. Earned. Not arbitrary.</span>
+
+<span class="key">THE GAP</span>
+<span class="val">The question they make the audience carry.</span>
+<span class="comment">// "What does she actually feel? What happened to him?"
+// Unanswered. Irresolvable. This is what people chase.</span>
+
+<span class="key">THE WITHHOLD</span>
+<span class="val">What they never give directly.</span>
+<span class="comment">// The thing people return to try to receive.</span>
+
+<span class="key">THE REWARD</span>
+<span class="val">What people receive occasionally that confirms the chase.</span>
+<span class="comment">// Rare enough to feel earned. Real enough to be believed.</span>
+
+<span class="key">THE MIRROR</span>
+<span class="val">What this character makes the audience feel about themselves.</span>
+<span class="comment">// This is the obsession mechanism. Not optional.
+// Without it: compelling object, not obsession engine.</span></div>
+
+      <div class="directive">
+        <div class="directive-label">Directive 5.1</div>
+        <p>Define all five layers explicitly. The Mirror must name the specific audience wound being activated. Generic mirrors produce generic obsession — which is not obsession at all.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 5.2 — The Tension Audit</div>
+      <div class="lesson-title">Five Questions That Reveal Completeness</div>
+      <div class="lesson-body">Grade nothing before running the Tension Audit. A character who scores high on surface metrics but fails the audit is incomplete — regardless of how strong the aesthetic layer is.</div>
+
+      <div class="formula"><span class="comment">// Five questions. All must be answerable before grading.</span>
+
+<span class="key">01</span>  <span class="val">What do they want that they cannot have?</span>
+     <span class="comment">   If the answer is simple → character is flat.</span>
+
+<span class="key">02</span>  <span class="val">What would break them that they don't know would break them?</span>
+
+<span class="key">03</span>  <span class="val">What does the audience want to give them that they cannot receive?</span>
+
+<span class="key">04</span>  <span class="val">What's the thing they'd never say that explains everything?</span>
+
+<span class="key">05</span>  <span class="val">What's their version of love — and why is it slightly wrong?</span>
+
+<span class="comment">// If any question is unanswerable → variation is incomplete.
+// Return to Module 2 before proceeding.</span></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- MODULE 6 -->
+  <div class="module">
+    <div class="module-number">6</div>
+    <div class="module-header">
+      <div class="module-tag">Module 06 — Terminal</div>
+      <div class="module-title">The Master Directive</div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 6.1 — Upgrade vs. Rebuild</div>
+      <div class="lesson-title">The Honest Assessment First</div>
+      <div class="lesson-body">Most projects and characters cannot be upgraded to n+4.5. They must be rebuilt from it. Upgrading adds better components to an existing structure. Rebuilding identifies what the structure was always trying to do — then builds the version that does that correctly. The first question is always which one is required.</div>
+
+      <div class="directive">
+        <div class="directive-label">Directive 6.1 — The Pre-Build Decision</div>
+        <p>Upgrade if: the core tension is already irresolvable and laws are already latent. Rebuild if: the tension is resolvable, the laws are actually traits, or the mirror is absent. Do not proceed without answering this honestly.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 6.2 — The Reduction</div>
+      <div class="lesson-title">What All of This Reduces To</div>
+      <div class="axiom">
+        <p>Stop designing outputs. Design the conditions that make the right outputs inevitable. That is n+4.5. Not better answers — a system that cannot produce bad ones.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-id">Lesson 6.3 — Completion Conditions</div>
+      <div class="lesson-title">How You Know It's Done</div>
+
+      <div class="test-block">
+        <p>
+          For a <strong>character</strong>: you stop deciding what happens and start discovering it.<br><br>
+          For a <strong>project</strong>: someone who didn't build it can predict what it produces.<br><br>
+          For a <strong>system</strong>: it operates correctly when you are not present.<br><br>
+          In all three cases — authorship has transferred. The work is complete.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="doc-footer">
+    <span>n+4.5 Development Directive</span>
+    <span>Character &amp; System Architecture</span>
+    <span>Feral Gloss Empire</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,140 @@
+{
+  "schema": "FGE_COMPANION_ROSTER_v1.0",
+  "title": "Companion Roster — Rank-Gated Collapse-Reactive Asset Layer",
+  "source": "SAFE LOOP — Companion System n+5 Expanded",
+  "status": "Locked",
+  "function": "Companions serve as prestige signal amplifiers and visual gravity anchors. Non-fakable markers of rank, billet influence, and collapse state. Extensions of canon identity — not accessories.",
+  "generation_prefix": "You are the Cinematographer for Feral Gloss Empire. Enforce all locked anchors + Kernel '[exact]'. Character [ID], Rank [X], Collapse State [ ]. Companion: [Name]. Apply exact visual deltas and n+5 escalation for this creature.",
+
+  "rank_tiers": [
+    {
+      "tier": "Rank I-II",
+      "label": "Initiate / Attendant",
+      "companions": [
+        {
+          "name": "Shadow Mink",
+          "description": "Sleek, nocturnal fur with subtle iridescence. Signals quiet survival.",
+          "visual_delta": "Adds soft peripheral texture, low material density",
+          "preferred_register": "Feral / Earned"
+        },
+        {
+          "name": "Veiled Dove",
+          "description": "Pale plumage, near-silent flight. Sacred purity marker.",
+          "visual_delta": "Soft high-key lighting halo, negative space emphasis",
+          "preferred_register": "Sacred"
+        },
+        {
+          "name": "Ash Serpent",
+          "variant": "juvenile",
+          "description": "Small scaled companion, coiled poise.",
+          "visual_delta": "Subtle line work on skin/clothing, tension in silhouette",
+          "preferred_register": "Feral"
+        }
+      ]
+    },
+    {
+      "tier": "Rank III-IV",
+      "label": "Trusted Hand / Inner Circle",
+      "companions": [
+        {
+          "name": "Obsidian Raven",
+          "description": "Gloss-black feathers with gold specular highlights. Memory holder symbol.",
+          "visual_delta": "Strong eye contact with viewer, reflective gloss boosts",
+          "preferred_register": "Sacred / Feral"
+        },
+        {
+          "name": "Blood Orchid Panther",
+          "variant": "tamed",
+          "description": "Elegant feline with faint patterned markings. Social predator alignment.",
+          "visual_delta": "Muscular silhouette extension, feral shadow play",
+          "preferred_register": "Feral"
+        },
+        {
+          "name": "Crystal-Boned Python",
+          "description": "Translucent scales over visible skeletal structure. Keeper of Secrets type.",
+          "visual_delta": "High texture density, refractive lighting interactions",
+          "preferred_register": "Sacred"
+        },
+        {
+          "name": "Gilded Scarab Swarm",
+          "variant": "controlled",
+          "description": "Living jewelry-like colony. Succession Guardian marker.",
+          "visual_delta": "Dynamic micro-movement suggestion, material density on body",
+          "preferred_register": "Sacred / Ceremonial"
+        }
+      ]
+    },
+    {
+      "tier": "Rank V-VI",
+      "label": "Apex / Sovereign",
+      "companions": [
+        {
+          "name": "Void Lioness",
+          "description": "Massive, near-black mane with inner gold glow. Commands entire frame.",
+          "visual_delta": "Extreme silhouette weight, room-reorganizing presence",
+          "preferred_register": "Sovereign"
+        },
+        {
+          "name": "Eternal White Tiger",
+          "variant": "ancestral",
+          "description": "Snow-white with ink-like stripe scars. Memory Holder / Apex.",
+          "visual_delta": "High contrast sacred lighting, legendary scale",
+          "preferred_register": "Sacred / Apex"
+        },
+        {
+          "name": "Thorned Imperial Dragonet",
+          "description": "Miniature dragon with living gem scales. Full legacy signal.",
+          "visual_delta": "Mythic gloss, peripheral gravity dominance",
+          "preferred_register": "Sovereign / Legacy"
+        },
+        {
+          "name": "Sable Eclipse Hound",
+          "description": "Ghostly large canine, shifts between solid and shadow.",
+          "visual_delta": "Chiaroscuro mastery, feral/sacred tension amplifier",
+          "preferred_register": "Feral / Sacred"
+        }
+      ]
+    }
+  ],
+
+  "collapse_state_deltas": {
+    "description": "Applied to any companion — n+5 escalation layer",
+    "states": [
+      {
+        "state": "Strip Everything",
+        "companion_treatment": "Released or absent — empty space implied",
+        "visual_delta": "Negative space, faint ghost silhouette",
+        "prestige_read": "Honorable loss / clean reset"
+      },
+      {
+        "state": "Keep the Wound",
+        "companion_treatment": "One scarred/aged survivor, visible injury",
+        "visual_delta": "Focal texture on companion wound, selective gloss",
+        "prestige_read": "Resilient truth"
+      },
+      {
+        "state": "Wear the Shame",
+        "companion_treatment": "Kept but altered — inverted markings, aggressive",
+        "visual_delta": "Cracked gloss, defiant pose, heavier shadows",
+        "prestige_read": "Dangerous legendary defiance"
+      }
+    ]
+  },
+
+  "failure_boundaries": [
+    "Treating companion as generic pet without rank/material binding → drift to cute accessory",
+    "Overloading multiple companions per image → visual noise. Rule: 1 primary + faint hints max.",
+    "Ignoring collapse delta on creature → canon violation"
+  ],
+
+  "expansion_path_n5": {
+    "loop_variable": "Companion lineage progression — juvenile → legendary → post-collapse myth",
+    "interaction_surface": "Companion × Billet × Collapse (e.g. Obsidian Raven + Keeper of Secrets + Keep the Wound = profound mystery frequency)",
+    "new_roster_layer": "Wild Card Companions — rare collision-breaking creatures for 20+ character threshold",
+    "system_variable": "Creature Signal Strength slider 0–1.0 — directly scales peripheral command and prestige"
+  },
+
+  "usage_rule": "1 primary companion + faint hints maximum per image",
+  "acquisition_rule": "Rank-gated. Collapse reversion risk applies.",
+  "notes": "Companions are not accessories. They are extensions of canon identity."
+}
